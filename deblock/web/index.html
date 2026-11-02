@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A little space to get unstuck. Follow one word into the next with deblock.">
+  <title>deblock — a little space to get unstuck</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/backdrop.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#word">Skip to writing</a>
+  <div class="atmosphere" aria-hidden="true">
+    <canvas id="field"></canvas><div class="shade"></div><div class="scanlines"></div><div class="scanner"></div>
+  </div>
+  <header class="masthead">
+    <a class="wordmark" href="/" aria-label="deblock home"><span class="mark" aria-hidden="true">d↗</span>deblock<span class="wordmark-dot">.</span></a>
+    <span class="tagline">A LITTLE SPACE TO GET UNSTUCK</span>
+    <button id="effects" class="effects" type="button" aria-pressed="false"><span class="status-dot" aria-hidden="true"></span><span id="effects-label">Motion off</span></button>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="intro-heading">
+      <div class="eyebrow"><span class="tiny-star" aria-hidden="true">✳</span> A PRACTICE IN LETTING GO</div>
+      <h1 id="intro-heading">Follow the<br><em>unexpected.</em></h1>
+      <p class="intro-copy">You don’t need a good idea.<br>Just a word. See where it takes you.</p>
+      <div class="exercise-note">
+        <div class="note-top"><span class="mono">EXERCISE 001</span><span class="small-arrow" aria-hidden="true">↗</span></div>
+        <h2 id="exercise-title">Loading your exercise…</h2>
+        <details>
+          <summary>How it works <span aria-hidden="true">+</span></summary>
+          <p id="instructions">Fetching the exercise instructions.</p>
+        </details>
+        <button id="retry" type="button" hidden>Try loading again</button>
+      </div>
+      <div class="privacy"><span aria-hidden="true">⌑</span><p>Just you and your words.<br><span>Kept only in this tab. Nothing is sent or saved.<br>Download your writing before closing or refreshing.</span></p></div>
+    </section>
+    <section class="workspace" aria-label="Your writing space">
+      <div class="workspace-top"><span class="mono"><span class="live-dot" aria-hidden="true"></span> FREE ASSOCIATION</span><span class="mono session-label" id="session-label">YOUR OWN PACE</span></div>
+      <div class="writing-area" id="writing-area">
+        <div class="prompt-label mono" id="prompt-label">LET’S START SOMEWHERE</div>
+        <p class="current-word" id="current-word">One word.<br>Any word.</p>
+        <p class="prompt-hint" id="prompt-hint">The first thing that comes to mind is enough.</p>
+        <form id="word-form" autocomplete="off">
+          <label class="sr-only" for="word">Your word or phrase</label>
+          <div class="input-line"><input id="word" name="word" type="text" placeholder="Start with a word…" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="input-help" disabled><button id="add-word" class="submit-word" type="submit" aria-label="Add to chain" disabled>↗</button></div>
+          <p id="input-help" class="input-help">Press <kbd>enter ↵</kbd> to follow the next association</p>
+        </form>
+      </div>
+      <section class="finished" id="finished" aria-labelledby="finished-title" hidden>
+        <span class="mono">A LITTLE SPACE, MADE BY YOU</span>
+        <h2 id="finished-title" tabindex="-1">Leave it here.<br>Or take it somewhere.</h2>
+        <p>Your chain is below. There’s no right way to read it.</p>
+        <label for="reflection">Anything you’d like to follow? <span>Optional</span></label>
+        <textarea id="reflection" rows="3" placeholder="A few words, a sentence, the beginning of something…" spellcheck="false"></textarea>
+        <div class="finish-actions"><button type="button" id="download" class="primary-button">Download writing ↓</button><button type="button" id="resume" class="text-button">Keep associating ↗</button></div>
+        <p class="saved-draft" id="saved-draft" hidden>Your unfinished word is still in the input when you return.</p>
+      </section>
+      <div class="chain-area">
+        <div class="chain-heading"><h2 class="mono">YOUR CHAIN</h2><span class="mono" id="chain-count">00 LINKS</span></div>
+        <p class="empty-chain" id="empty-chain">An open beginning. No destination required.</p>
+        <ol id="chain" aria-label="Your association chain"></ol>
+        <div class="chain-bottom"><span id="chain-caption">No timer. No right answers.</span><button type="button" id="finish" class="text-button" disabled>Finish for now <span aria-hidden="true">↗</span></button></div>
+      </div>
+      <p id="announcement" class="sr-only" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+  <footer><span>WORDS BEFORE MEANING.</span><span class="footer-center">A creative exercise. Entirely yours.</span><span>DEBLOCK / VOL. 001</span></footer>
+  <noscript><p class="no-script">This prototype needs JavaScript to build your chain. Your writing stays in this browser tab.</p></noscript>
+</body>
+</html>
