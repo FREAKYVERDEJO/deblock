@@ -1,5 +1,5 @@
-// Playback only. Image warping, RGB separation, CRT lines and scanner are baked
-// by scripts/distort_images.py from the supplied artwork, not generated here.
+// Playback of abstract pixel fields baked by scripts/generate_glitch.py.
+// Texture positions stay fixed; only sparse pixels gently change brightness.
 (() => {
   const canvas = document.getElementById('field');
   const context = canvas.getContext('2d');
@@ -8,9 +8,9 @@
   const imageButton = document.getElementById('image-toggle');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const cache = new Map();
-  const names = ['neon', 'blue'];
-  const frameWidth = 768, frameHeight = 536, frames = 48, columns = 8;
-  let selected = 0, source = null, sheet = null, width = 0, height = 0;
+  const names = ['signal-11', 'signal-29', 'signal-47', 'signal-83'];
+  const frameWidth = 320, frameHeight = 224, frames = 32, columns = 8;
+  let selected = Math.floor(Math.random() * names.length), source = null, sheet = null, width = 0, height = 0;
   let motion = !reduced.matches, paused = false, request = null, time = 0, last = 0;
   let lastFrame = -1, loadVersion = 0;
 
@@ -32,15 +32,20 @@
     const w = frameWidth * scale, h = frameHeight * scale;
     const x = (width - w) / 2, y = (height - h) / 2;
     context.globalAlpha = 1;
-    context.drawImage(source, x, y, w, h);
+    context.fillStyle = '#030308';
+    context.fillRect(0, 0, width, height);
+    context.globalAlpha = Number(slider.value) / 100;
+    context.imageSmoothingEnabled = false;
     if (sheet) {
-      const frame = Math.floor(time / (1000 / 12)) % frames;
-      context.globalAlpha = Number(slider.value) / 100;
+      const frame = Math.floor(time / (1000 / 4)) % frames;
       context.drawImage(sheet, (frame % columns) * frameWidth, Math.floor(frame / columns) * frameHeight,
         frameWidth, frameHeight, x, y, w, h);
       context.globalAlpha = 1;
       lastFrame = frame;
+    } else {
+      context.drawImage(source, x, y, w, h);
     }
+    context.globalAlpha = 1;
   }
 
   function tick(now) {
@@ -48,7 +53,7 @@
     if (!motion || paused || document.hidden) return;
     time += Math.min(now - last, 100);
     last = now;
-    if (Math.floor(time / (1000 / 12)) % frames !== lastFrame) draw();
+    if (Math.floor(time / (1000 / 4)) % frames !== lastFrame) draw();
     request = requestAnimationFrame(tick);
   }
 
@@ -68,8 +73,7 @@
   async function selectImage() {
     const version = ++loadVersion;
     const name = names[selected];
-    imageButton.textContent = `${String(selected + 1).padStart(2, '0')} / 02`;
-    imageButton.setAttribute('aria-label', `Change background image, currently ${selected + 1} of 2`);
+    imageButton.textContent = 'colours';
     try {
       const still = await loadImage(`/assets/${name}-still.webp`);
       if (version !== loadVersion) return;
@@ -82,7 +86,7 @@
       canvas.dataset.source = name;
       sync();
     } catch {
-      document.getElementById('announcement').textContent = 'The moving image could not load. You can still write.';
+      document.getElementById('announcement').textContent = 'The texture could not load. You can still write.';
     }
   }
 
@@ -97,7 +101,7 @@
   }
   slider.addEventListener('input', draw);
   motionButton.addEventListener('click', () => { motion = !motion; sync(); });
-  imageButton.addEventListener('click', () => { selected = (selected + 1) % names.length; selectImage(); });
+  imageButton.addEventListener('click', () => { selected = (selected + 1 + Math.floor(Math.random() * (names.length - 1))) % names.length; selectImage(); });
   reduced.addEventListener('change', () => { motion = !reduced.matches; sync(); });
   window.addEventListener('writingpause', (event) => { paused = event.detail; sync(); });
   document.addEventListener('visibilitychange', sync);

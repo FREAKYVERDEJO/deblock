@@ -23,8 +23,8 @@ ASSETS = {
     "/assets/ReenieBeanie.ttf": ("assets/ReenieBeanie.ttf", "font/ttf"),
     "/assets/OFL.txt": ("assets/OFL.txt", "text/plain; charset=utf-8"),
 }
-for name in ("neon", "blue"):
-    for variant in ("still", "poster", "frames"):
+for name in ("signal-11", "signal-29", "signal-47", "signal-83"):
+    for variant in ("still", "frames"):
         filename = f"assets/{name}-{variant}.webp"
         ASSETS[f"/{filename}"] = (filename, "image/webp")
 
