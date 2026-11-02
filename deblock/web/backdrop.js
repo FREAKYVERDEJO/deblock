@@ -1,5 +1,5 @@
 // Playback of abstract pixel fields baked by scripts/generate_glitch.py.
-// Texture positions stay fixed; only sparse pixels gently change brightness.
+// Sparse patches visibly shift a few pixels; the overall field stays fixed.
 (() => {
   const canvas = document.getElementById('field');
   const context = canvas.getContext('2d');
@@ -9,9 +9,9 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const cache = new Map();
   const names = ['signal-11', 'signal-29', 'signal-47', 'signal-83'];
-  const frameWidth = 320, frameHeight = 224, frames = 32, columns = 8;
+  const frameWidth = 320, frameHeight = 224, frames = 48, columns = 8;
   let selected = Math.floor(Math.random() * names.length), source = null, sheet = null, width = 0, height = 0;
-  let motion = !reduced.matches, paused = false, request = null, time = 0, last = 0;
+  let motion = !reduced.matches, paused = false, plain = false, request = null, time = 0, last = 0;
   let lastFrame = -1, loadVersion = 0;
 
   function loadImage(url) {
@@ -37,11 +37,12 @@
     context.globalAlpha = Number(slider.value) / 100;
     context.imageSmoothingEnabled = false;
     if (sheet) {
-      const frame = Math.floor(time / (1000 / 4)) % frames;
+      const frame = Math.floor(time / (1000 / 8)) % frames;
       context.drawImage(sheet, (frame % columns) * frameWidth, Math.floor(frame / columns) * frameHeight,
         frameWidth, frameHeight, x, y, w, h);
       context.globalAlpha = 1;
       lastFrame = frame;
+      canvas.dataset.frame = String(frame);
     } else {
       context.drawImage(source, x, y, w, h);
     }
@@ -50,10 +51,10 @@
 
   function tick(now) {
     request = null;
-    if (!motion || paused || document.hidden) return;
+    if (!motion || paused || plain || document.hidden) return;
     time += Math.min(now - last, 100);
     last = now;
-    if (Math.floor(time / (1000 / 4)) % frames !== lastFrame) draw();
+    if (Math.floor(time / (1000 / 8)) % frames !== lastFrame) draw();
     request = requestAnimationFrame(tick);
   }
 
@@ -62,8 +63,8 @@
     request = null;
     motionButton.textContent = motion ? 'motion on' : 'motion off';
     motionButton.setAttribute('aria-pressed', String(motion));
-    canvas.dataset.playing = String(motion && !paused && !document.hidden);
-    if (motion && !paused && !document.hidden && sheet && context) {
+    canvas.dataset.playing = String(motion && !paused && !plain && !document.hidden);
+    if (motion && !paused && !plain && !document.hidden && sheet && context) {
       last = performance.now();
       request = requestAnimationFrame(tick);
     }
@@ -103,6 +104,7 @@
   motionButton.addEventListener('click', () => { motion = !motion; sync(); });
   imageButton.addEventListener('click', () => { selected = (selected + 1 + Math.floor(Math.random() * (names.length - 1))) % names.length; selectImage(); });
   reduced.addEventListener('change', () => { motion = !reduced.matches; sync(); });
+  window.addEventListener('themechange', (event) => { plain = event.detail === 'plain'; sync(); });
   window.addEventListener('writingpause', (event) => { paused = event.detail; sync(); });
   document.addEventListener('visibilitychange', sync);
   window.addEventListener('resize', resize);

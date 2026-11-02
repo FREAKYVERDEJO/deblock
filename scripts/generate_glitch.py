@@ -1,7 +1,7 @@
 """Generate abstract pixel-corruption textures; no reference image is read.
 
 Run with .venv/bin/python scripts/generate_glitch.py. Pillow and NumPy are
-build-time dependencies only. Positions remain fixed throughout each loop.
+build-time dependencies only. Small patches shift; the overall field stays still.
 """
 
 import colorsys
@@ -13,7 +13,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'deblock/web/assets'
 WIDTH, HEIGHT = 320, 224
-FRAMES, COLUMNS = 32, 8
+FRAMES, COLUMNS = 48, 8
 
 
 def noise(rng: np.random.Generator, width: int, height: int) -> np.ndarray:
@@ -55,17 +55,20 @@ def build(seed: int) -> None:
     source = Image.fromarray(base.astype(np.uint8))
     name = f'signal-{seed}'
     source.save(OUTPUT / f'{name}-still.webp', lossless=True)
-    # Local brightness breathes by at most 6%; no translation, zoom, or sweeping
-    # bands. The loop boundary has the same value and slope as its beginning.
+    # Small, independently phased patches shift by at most three native pixels.
+    # Most of the field stays fixed: no full-screen translation or liquid sway.
     phase = noise(rng, 40, 28) * np.pi * 2
-    active = noise(rng, 40, 28) > .77
+    active = noise(rng, 40, 28) > .82
     atlas = Image.new('RGB', (WIDTH * COLUMNS, HEIGHT * (FRAMES // COLUMNS)))
     for frame in range(FRAMES):
-        modulation = 1 + .06 * np.sin(frame / FRAMES * np.pi * 2 + phase) * active
-        pixels = np.clip(base * modulation[:, :, None], 0, 255).astype(np.uint8)
+        angle = frame / FRAMES * np.pi * 2
+        offset = np.rint(3 * np.sin(angle + phase) * active).astype(int)
+        shifted = base[y, np.clip(x + offset, 0, WIDTH - 1)]
+        modulation = 1 + .12 * np.sin(angle + phase) * active
+        pixels = np.clip(shifted * modulation[:, :, None], 0, 255).astype(np.uint8)
         atlas.paste(Image.fromarray(pixels), ((frame % COLUMNS) * WIDTH, (frame // COLUMNS) * HEIGHT))
     atlas.save(OUTPUT / f'{name}-frames.webp', lossless=True, method=5)
-    print(f'{name}: abstract {WIDTH}x{HEIGHT} pixels, 32 stationary frames', flush=True)
+    print(f'{name}: abstract {WIDTH}x{HEIGHT} pixels, 48 frames with localized pixel displacement', flush=True)
 
 
 if __name__ == '__main__':

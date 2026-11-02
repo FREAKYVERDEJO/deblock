@@ -2,65 +2,77 @@
 const byId = (id) => document.getElementById(id);
 const input = byId('word');
 const words = [];
-const previous = byId('previous-word');
-const ghost = byId('ghost-word');
 const space = byId('word-space');
 let exercise = null;
+let composing = false;
 
 function fitWords() {
-  const length = Math.max(input.value.length, previous.textContent.length, 6);
-  const size = Math.max(25, Math.min(128, space.clientWidth / (length * .42)));
+  const plain = document.body.dataset.theme === 'plain';
+  const length = Math.max(input.value.length, 6);
+  const size = Math.max(25, Math.min(plain ? 88 : 128, space.clientWidth / (length * (plain ? .6 : .42))));
   space.style.setProperty('--word-size', `${size}px`);
-  const range = document.createRange();
-  range.selectNodeContents(previous);
-  const textWidth = Math.min(space.clientWidth, range.getBoundingClientRect().width + 12);
-  byId('scribble').style.width = `${textWidth}px`;
-  byId('scribble').style.left = `${(space.clientWidth - textWidth) / 2}px`;
 }
 
-function replaceWord() {
-  const length = [...input.value.trim()].length;
-  const oldLength = [...previous.textContent].length;
-  const progress = oldLength ? Math.min(1, length / Math.max(4, Math.min(oldLength, 12))) : 0;
-  space.style.setProperty('--progress', progress);
-  byId('scribble').style.opacity = String(Math.sin(progress * Math.PI) * .65);
-  const points = [];
-  for (let i = 0; i < 220; i++) {
-    const t = i / 219;
-    const x = 30 + t * 540 + Math.sin(t * 150) * 11;
-    const y = 48 + Math.cos(t * 150) * 23 + Math.sin(t * 37) * 7;
-    points.push(`${i ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`);
+function remember(completed) {
+  if (!completed.length) return;
+  words.push(...completed);
+  input.placeholder = '';
+  byId('announcement').textContent = 'Next word.';
+}
+
+function consumeWhitespace() {
+  if (!exercise || composing) return;
+  if (/\s/u.test(input.value)) {
+    const parts = input.value.split(/\s+/u);
+    const remainder = parts.pop();
+    remember(parts.filter(Boolean));
+    input.value = remainder;
   }
-  byId('scribble-line').setAttribute('d', points.join(' '));
   fitWords();
 }
 
-input.addEventListener('input', replaceWord);
-window.addEventListener('resize', fitWords);
-byId('word-form').addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' && event.isComposing) event.preventDefault();
+function finishWord() {
+  if (!exercise || composing) return;
+  remember(input.value.split(/\s+/u).filter(Boolean));
+  input.value = '';
+  fitWords();
+}
+
+input.addEventListener('input', (event) => {
+  if (!event.isComposing) consumeWhitespace();
+});
+input.addEventListener('compositionstart', () => { composing = true; });
+input.addEventListener('compositionend', () => { composing = false; consumeWhitespace(); });
+// A text input would otherwise remove pasted newlines before we could split them.
+input.addEventListener('paste', (event) => {
+  if (composing || !exercise || !event.clipboardData) return;
+  event.preventDefault();
+  const text = event.clipboardData.getData('text');
+  const combined = input.value.slice(0, input.selectionStart) + text + input.value.slice(input.selectionEnd);
+  const parts = combined.split(/\s+/u);
+  const remainder = parts.pop();
+  remember(parts.filter(Boolean));
+  input.value = remainder;
+  fitWords();
+});
+input.addEventListener('keydown', (event) => {
+  if (event.isComposing || composing) {
+    if (event.key === 'Enter') event.preventDefault();
+    return;
+  }
+  if (event.key === 'Tab') finishWord(); // Preserve normal keyboard navigation.
 });
 byId('word-form').addEventListener('submit', (event) => {
   event.preventDefault();
-  if (!exercise) return;
-  const word = input.value.trim();
-  if (!word) {
-    byId('announcement').textContent = 'Type a word or phrase first.';
-    input.focus();
-    return;
-  }
-  ghost.textContent = previous.textContent;
-  ghost.classList.remove('erasing');
-  void ghost.offsetWidth;
-  ghost.classList.add('erasing');
-  words.push(word);
-  previous.textContent = word;
-  input.value = '';
-  input.placeholder = '';
-  replaceWord();
-  byId('announcement').textContent = `${word}. What comes to mind next?`;
+  finishWord();
   input.focus();
 });
+byId('theme').addEventListener('change', (event) => {
+  document.body.dataset.theme = event.target.value;
+  window.dispatchEvent(new CustomEvent('themechange', { detail: event.target.value }));
+  fitWords();
+});
+window.addEventListener('resize', fitWords);
 
 function showDialog(dialog) {
   dialog.showModal();
@@ -105,7 +117,7 @@ async function loadExercise() {
     exercise = data;
     byId('exercise-title').textContent = exercise.title;
     byId('instructions').textContent = exercise.instructions;
-    byId('hint').textContent = 'type a word · enter · follow it';
+    byId('hint').textContent = 'space → next word';
     input.disabled = false;
     byId('next').disabled = false;
     if (document.activeElement === document.body) input.focus({ preventScroll: true });
