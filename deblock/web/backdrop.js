@@ -1,100 +1,108 @@
-// An original, procedural analog field. No images, tracking, or external assets.
+// Playback only. Image warping, RGB separation, CRT lines and scanner are baked
+// by scripts/distort_images.py from the supplied artwork, not generated here.
 (() => {
   const canvas = document.getElementById('field');
   const context = canvas.getContext('2d');
-  const button = document.getElementById('effects');
-  const label = document.getElementById('effects-label');
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let motion = !reducedMotion.matches;
-  let frame = null;
-  let lastTime = 0;
-  let phase = 0;
-  let width = 0;
-  let height = 0;
+  const slider = document.getElementById('distortion');
+  const motionButton = document.getElementById('motion');
+  const imageButton = document.getElementById('image-toggle');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const cache = new Map();
+  const names = ['neon', 'blue'];
+  const frameWidth = 768, frameHeight = 536, frames = 48, columns = 8;
+  let selected = 0, source = null, sheet = null, width = 0, height = 0;
+  let motion = !reduced.matches, paused = false, request = null, time = 0, last = 0;
+  let lastFrame = -1, loadVersion = 0;
+
+  function loadImage(url) {
+    if (!cache.has(url)) {
+      const image = new Image();
+      image.src = url;
+      cache.set(url, image.decode().then(() => image).catch((error) => {
+        cache.delete(url);
+        throw error;
+      }));
+    }
+    return cache.get(url);
+  }
 
   function draw() {
-    if (!context) return;
-    context.clearRect(0, 0, width, height);
-    const centerX = width * .78;
-    const centerY = height * .29;
-    const scale = Math.max(width * .42, 400);
-    context.globalCompositeOperation = 'screen';
-    // Uneven contours form a luminous folded ribbon, with RGB displacement.
-    for (let ring = 0; ring < 90; ring++) {
-      const radius = scale * (.24 + ring * .008);
-      const depth = ring / 90;
-      for (let channel = 0; channel < 2; channel++) {
-        context.beginPath();
-        context.strokeStyle = channel === 0
-          ? `rgba(${145 + ring}, 25, 255, ${.12 + .24 * Math.sin(depth * Math.PI)})`
-          : `rgba(35, ${100 + ring}, 255, .15)`;
-        context.lineWidth = ring % 9 === 0 ? 1.7 : .7;
-        for (let step = 0; step <= 180; step++) {
-          const angle = step / 180 * Math.PI * 2;
-          const ripple = Math.sin(angle * 5 + depth * 8 + phase * .5) * .13
-            + Math.cos(angle * 3 - phase * .38) * .16;
-          const bend = Math.sin(angle * 2 + depth * 4 + phase * .6);
-          let x = centerX + Math.cos(angle) * radius * (1 + ripple);
-          let y = centerY + Math.sin(angle) * radius * (.65 + ripple) + bend * 45;
-          // Horizontal tape-like shear, oscillating smoothly instead of flashing.
-          x += Math.sin(y * .036 + phase) * 15 * Math.sin(depth * 5 + phase * .4);
-          x += channel * 5 + Math.sin(phase * .4) * 75;
-          y += Math.cos(phase * .3) * 20;
-          if (step === 0) context.moveTo(x, y); else context.lineTo(x, y);
-        }
-        context.closePath();
-        context.stroke();
-      }
+    if (!context || !source) return;
+    const scale = Math.max(width / frameWidth, height / frameHeight);
+    const w = frameWidth * scale, h = frameHeight * scale;
+    const x = (width - w) / 2, y = (height - h) / 2;
+    context.globalAlpha = 1;
+    context.drawImage(source, x, y, w, h);
+    if (sheet) {
+      const frame = Math.floor(time / (1000 / 12)) % frames;
+      context.globalAlpha = Number(slider.value) / 100;
+      context.drawImage(sheet, (frame % columns) * frameWidth, Math.floor(frame / columns) * frameHeight,
+        frameWidth, frameHeight, x, y, w, h);
+      context.globalAlpha = 1;
+      lastFrame = frame;
     }
-    // Thin signal fragments add a softly broken, analog texture.
-    for (let i = 0; i < 48; i++) {
-      const y = (i * 73.9) % height;
-      const x = width * .45 + Math.sin(i * 8.1 + phase * .2) * width * .4;
-      context.fillStyle = i % 3 ? '#c739ff15' : '#58dcff20';
-      context.fillRect(x, y, 12 + (i * 13) % 100, 1);
-    }
-    context.globalCompositeOperation = 'source-over';
   }
 
   function tick(now) {
-    frame = null;
-    if (!motion || document.hidden) return;
-    // Cap drawing at 24 fps; elapsed time is bounded after a suspended frame.
-    if (now - lastTime >= 1000 / 24) {
-      phase += Math.min(now - lastTime, 80) / 1000;
-      lastTime = now;
-      draw();
-    }
-    frame = requestAnimationFrame(tick);
+    request = null;
+    if (!motion || paused || document.hidden) return;
+    time += Math.min(now - last, 100);
+    last = now;
+    if (Math.floor(time / (1000 / 12)) % frames !== lastFrame) draw();
+    request = requestAnimationFrame(tick);
   }
 
   function sync() {
-    if (frame !== null) cancelAnimationFrame(frame);
-    frame = null;
-    document.body.classList.toggle('motion-on', motion);
-    document.body.classList.toggle('page-hidden', document.hidden);
-    button.setAttribute('aria-pressed', String(motion));
-    label.textContent = motion ? 'Motion on' : 'Motion off';
-    if (motion && !document.hidden && context) {
-      lastTime = performance.now();
-      frame = requestAnimationFrame(tick);
-    } else draw();
-  }
-
-  function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
-    canvas.width = Math.round(width * pixelRatio);
-    canvas.height = Math.round(height * pixelRatio);
-    context?.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    if (request !== null) cancelAnimationFrame(request);
+    request = null;
+    motionButton.textContent = motion ? 'motion on' : 'motion off';
+    motionButton.setAttribute('aria-pressed', String(motion));
+    canvas.dataset.playing = String(motion && !paused && !document.hidden);
+    if (motion && !paused && !document.hidden && sheet && context) {
+      last = performance.now();
+      request = requestAnimationFrame(tick);
+    }
     draw();
   }
 
-  button.addEventListener('click', () => { motion = !motion; sync(); });
-  reducedMotion.addEventListener('change', () => { motion = !reducedMotion.matches; sync(); });
+  async function selectImage() {
+    const version = ++loadVersion;
+    const name = names[selected];
+    imageButton.textContent = `${String(selected + 1).padStart(2, '0')} / 02`;
+    imageButton.setAttribute('aria-label', `Change background image, currently ${selected + 1} of 2`);
+    try {
+      const still = await loadImage(`/assets/${name}-still.webp`);
+      if (version !== loadVersion) return;
+      source = still;
+      sheet = null;
+      draw();
+      const atlas = await loadImage(`/assets/${name}-frames.webp`);
+      if (version !== loadVersion) return;
+      sheet = atlas;
+      canvas.dataset.source = name;
+      sync();
+    } catch {
+      document.getElementById('announcement').textContent = 'The moving image could not load. You can still write.';
+    }
+  }
+
+  function resize() {
+    width = innerWidth;
+    height = innerHeight;
+    const ratio = Math.min(devicePixelRatio || 1, 1.5);
+    canvas.width = Math.round(width * ratio);
+    canvas.height = Math.round(height * ratio);
+    context?.setTransform(ratio, 0, 0, ratio, 0, 0);
+    draw();
+  }
+  slider.addEventListener('input', draw);
+  motionButton.addEventListener('click', () => { motion = !motion; sync(); });
+  imageButton.addEventListener('click', () => { selected = (selected + 1) % names.length; selectImage(); });
+  reduced.addEventListener('change', () => { motion = !reduced.matches; sync(); });
+  window.addEventListener('writingpause', (event) => { paused = event.detail; sync(); });
   document.addEventListener('visibilitychange', sync);
   window.addEventListener('resize', resize);
   resize();
   sync();
+  selectImage();
 })();

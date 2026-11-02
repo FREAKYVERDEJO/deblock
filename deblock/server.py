@@ -20,7 +20,13 @@ ASSETS = {
     "/app.js": ("app.js", "text/javascript; charset=utf-8"),
     "/backdrop.js": ("backdrop.js", "text/javascript; charset=utf-8"),
     "/favicon.svg": ("favicon.svg", "image/svg+xml"),
+    "/assets/ReenieBeanie.ttf": ("assets/ReenieBeanie.ttf", "font/ttf"),
+    "/assets/OFL.txt": ("assets/OFL.txt", "text/plain; charset=utf-8"),
 }
+for name in ("neon", "blue"):
+    for variant in ("still", "poster", "frames"):
+        filename = f"assets/{name}-{variant}.webp"
+        ASSETS[f"/{filename}"] = (filename, "image/webp")
 
 
 class PrototypeHandler(BaseHTTPRequestHandler):
