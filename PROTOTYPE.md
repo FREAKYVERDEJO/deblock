@@ -58,22 +58,23 @@ records are in `deblock/web/assets/art/catalog.json` and its adjacent README.
 
 The top-left menu follows the supplied sketch. Profile shows the local creation
 (date joined) date and saved-entry count, and offers a name, optional email, and
-two avatar choices. Click the avatar to choose a picture, then save the profile.
+three avatar choices. Click the avatar to choose a picture, then save the profile.
 Email is only a local field, not an account credential. Password reset is visibly
 unavailable because this prototype has no authentication or email service.
 Library opens saved entries without replacing the current draft. Gallery holds
 PNG exports and supports downloading them again. Failed storage writes display
 an error; PNG downloads remain available if Gallery cannot save the image.
 
-The avatar PNGs are extracted from the owner's blue-ink sketches using Pillow and
-numpy, with paper/background removal and antialiased circular outlines. Rebuild
-from the same source photograph using:
+The avatar PNGs are traced from the owner's sketches using Python and Pillow.
+Continuous contours remove photographed paper and stray marks; matching circular
+borders meet each portrait's shoulders. Portrait 1 retains its existing profile ID.
+Regenerate all three transparent PNGs with:
 
 ```sh
-.venv/bin/python scripts/prepare_avatars.py /path/to/sketch.png
+.venv/bin/python scripts/prepare_avatars.py
 ```
 
-The crop masks are specific to that photograph. Runtime needs no art dependencies.
+The tracing coordinates are included in the script. Runtime needs no art dependencies.
 
 ## Earlier visual experiments
 

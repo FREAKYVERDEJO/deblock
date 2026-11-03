@@ -7,6 +7,8 @@
   let viewedEntry;
   let galleryUrls = [];
   let savingEntry = false;
+  const avatarIds = ['1', '2', '3'];
+  const avatarId = value => avatarIds.includes(value) ? value : '1';
   const date = value => new Date(value).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
   const errorText = error => `Couldn’t access browser storage. ${error.message || 'Try again or download your writing.'}`;
   const ordered = items => items.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
@@ -70,10 +72,10 @@
     profile = await localProfile();
     get('profile-name').value = profile.name;
     get('profile-email').value = profile.email;
-    get(`avatar-${profile.avatar === '2' ? '2' : '1'}`).checked = true;
+    for (const id of avatarIds) get(`avatar-${id}`).checked = id === avatarId(profile.avatar);
     get('profile-joined').textContent = date(profile.joinedAt);
     get('profile-count').textContent = String((await store.all('entries')).length);
-    get('profile-image').src = `/assets/avatars/portrait-${profile.avatar === '2' ? '2' : '1'}.png`;
+    get('profile-image').src = `/assets/avatars/portrait-${avatarId(profile.avatar)}.png`;
   }
   for (const section of ['profile', 'library', 'gallery']) {
     get(`open-${section}`).addEventListener('click', async () => {
@@ -95,7 +97,7 @@
     const status = get('profile-status');
     try {
       profile = profile || await localProfile();
-      const updated = { ...profile, name: get('profile-name').value.trim(), email: get('profile-email').value.trim(), avatar: get('avatar-2').checked ? '2' : '1' };
+      const updated = { ...profile, name: get('profile-name').value.trim(), email: get('profile-email').value.trim(), avatar: get('avatar-3').checked ? '3' : get('avatar-2').checked ? '2' : '1' };
       await store.put('profile', updated); profile = updated;
       get('profile-image').src = `/assets/avatars/portrait-${updated.avatar}.png`;
       get('avatar-picker').hidden = true;

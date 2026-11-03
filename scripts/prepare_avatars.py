@@ -1,55 +1,114 @@
-"""Extract the owner's blue-ink portraits and replace their drawn circle borders.
+"""Render cleaned, hand-traced versions of the owner's three profile sketches.
 
-Usage: python scripts/prepare_avatars.py path/to/sketch.png
-Requires the existing Pillow/numpy art dependencies; not needed at app runtime.
+Run: .venv/bin/python scripts/prepare_avatars.py
+Requires Pillow only at asset-generation time, never at app runtime.
+
+Coordinates trace the supplied drawings, rather than thresholding photographed
+paper. This joins broken ink, omits the stray line beside the new right portrait,
+and preserves the faces and hairstyles. Portrait 1 keeps its existing identity.
 """
 from argparse import ArgumentParser
+from math import sqrt
 from pathlib import Path
 
-import numpy as np
-from PIL import Image, ImageDraw, ImageFilter, ImageOps
+from PIL import Image, ImageDraw
 
-# Portrait-only masks exclude the photographed paper and the uneven pen circles.
+SIZE = 512
+SCALE = 4
+INK = '#34312c'
+RADIUS = 248
+
+# Each path is one continuous ink contour in a 512 × 512 drawing space.
+# Separate eyes, brows and facial features intentionally stay separate.
 PORTRAITS = [
-    ((510, 410, 1040, 965), [(604,565),(710,501),(716,479),(757,496),(775,524),(830,476),(828,502),(941,549),(919,572),(977,711),(957,730),(977,760),(936,786),(948,831),(960,867),(908,846),(905,878),(955,892),(934,916),(840,949),(711,946),(649,929),(644,898),(689,894),(651,873),(644,859),(617,852),(624,818),(606,741),(605,661)]),
-    ((490, 1025, 1055, 1630), [(546,1199),(610,1155),(655,1134),(692,1153),(725,1110),(779,1104),(817,1113),(842,1105),(859,1145),(928,1146),(953,1178),(938,1222),(969,1260),(948,1301),(966,1330),(946,1396),(950,1483),(951,1517),(944,1554),(887,1596),(794,1611),(730,1605),(655,1586),(581,1520),(546,1473),(563,1424),(546,1383),(561,1339),(554,1310),(565,1273)]),
+    [
+        # Ernesta: retain the original short, pointed hair silhouette.
+        [(114,398),(120,345),(111,291),(100,246),(103,207),(117,164),(103,155),(123,153),(181,122),(229,96),(209,82),(238,93),(254,113),(283,90),(305,72),(299,95),(352,111),(404,137),(386,148),(401,181),(411,224),(421,260),(441,278),(418,285),(432,312),(431,329),(402,343),(400,366),(416,395),(381,382),(380,415),(348,410),(334,435)],
+        [(114,398),(138,383),(149,416),(170,412),(166,434),(197,420),(197,442),(217,435)],
+        [(257,153),(246,190),(224,227),(188,239),(169,256),(169,242),(159,267),(158,287),(143,278),(132,247),(135,215)],
+        [(272,147),(295,173),(307,206),(315,232),(333,225),(347,238),(363,225),(377,230),(383,254),(380,277),(366,292),(354,282)],
+        [(160,278),(172,321),(199,356),(237,380),(273,396),(300,379),(331,349),(346,323),(354,282)],
+        [(184,252),(202,245),(220,242)],
+        [(275,226),(291,216),(308,216)],
+        [(244,269),(252,294),(256,309)],
+        [(237,347),(260,349),(282,342),(302,329)],
+        [(232,379),(240,410),(231,438),(218,448)],
+        [(310,375),(311,411),(325,437),(337,442)],
+        [(100,449),(158,453),(193,439),(218,448),(251,463),(287,461),(315,452),(337,442),(363,421),(412,449)],
+    ],
+    [
+        # New left sketch: long straight hair and open smile.
+        [(60,407),(83,343),(91,267),(96,205),(112,154),(146,111),(185,75),(230,58),(265,61),(302,55),(351,75),(384,103),(402,155),(415,243),(426,321),(442,406)],
+        [(147,232),(132,233),(121,222),(115,200),(119,184),(132,185)],
+        [(337,177),(351,155),(364,163),(365,182),(354,202),(350,219)],
+        [(132,185),(148,162),(170,134),(199,99),(226,92),(252,105),(279,136),(307,161),(337,177)],
+        [(132,185),(142,233),(156,269),(180,295),(211,310),(239,318),(261,328),(286,310),(310,291),(332,269),(339,236),(337,177)],
+        [(157,184),(178,172),(202,169)],
+        [(260,163),(281,159),(302,159)],
+        [(235,188),(238,211),(242,233)],
+        [(218,272),(250,259),(286,245),(285,276),(272,290),(248,290),(226,282),(218,272)],
+        [(211,310),(213,335),(207,358),(184,375)],
+        [(310,291),(302,329),(303,365),(318,379)],
+        [(100,449),(132,415),(162,393),(184,375),(211,393),(258,409),(286,397),(318,379),(353,397),(389,420),(412,449)],
+    ],
+    [
+        # New right sketch: continuous wavy hair; the detached stray line is omitted.
+        [(103,414),(111,386),(105,355),(111,325),(117,292),(107,264),(97,242),(102,212),(117,181),(119,151),(128,124),(146,94),(169,67),(197,50),(222,48),(246,52),(273,46),(300,49),(329,62),(356,80),(373,100),(377,129),(388,161),(389,195),(395,225),(405,250),(402,280),(408,312),(422,338),(425,382)],
+        [(163,129),(183,108),(211,82),(228,84),(242,81),(251,94),(268,100),(289,115),(295,139),(305,164),(312,190),(311,223),(324,246)],
+        [(157,143),(149,165),(153,196),(164,238),(177,269),(200,290),(230,308),(251,319),(273,315),(303,292),(324,266),(324,246)],
+        [(153,196),(146,176),(143,157)],
+        [(168,166),(184,159),(205,160)],
+        [(257,162),(277,159),(296,164)],
+        [(233,189),(236,210),(239,226)],
+        [(213,273),(223,277),(242,273),(258,275),(267,272)],
+        [(338,218),(337,184),(347,181),(349,196)],
+        [(230,308),(232,341),(224,366),(199,388)],
+        [(324,246),(330,271),(324,302),(317,331),(320,365),(328,390),(326,426),(331,467)],
+        [(100,449),(129,424),(165,407),(199,388),(216,408),(252,427),(283,416),(319,402)],
+        [(412,449),(391,417),(377,397),(381,382),(402,392),(425,397)],
+        [(377,397),(371,424)],
+    ],
+]
+EYES = [
+    [(201,276,11,12),(303,256,11,10)],
+    [(194,202,8,10),(283,191,7,8)],
+    [(187,196,10,11),(280,196,11,11)],
 ]
 
 
-def prepare(source: Path, destination: Path) -> None:
-    """Preserve the sketched facial lines as dark ink on transparent circles."""
-    photo = ImageOps.exif_transpose(Image.open(source)).convert('RGB')
+def curve(points: list[tuple[int, int]]) -> list[tuple[float, float]]:
+    """Interpolate continuous contours with a restrained Catmull–Rom spline."""
+    padded = [points[0], *points, points[-1]]
+    result = []
+    for i in range(1, len(padded) - 2):
+        a, b, c, d = padded[i-1:i+3]
+        for step in range(12):
+            t = step / 12
+            result.append(tuple(0.5 * (2*b[k] + (-a[k]+c[k])*t +
+                (2*a[k]-5*b[k]+4*c[k]-d[k])*t*t +
+                (-a[k]+3*b[k]-3*c[k]+d[k])*t*t*t) * SCALE for k in (0, 1)))
+    result.append(tuple(v * SCALE for v in points[-1]))
+    return result
+
+
+def prepare(destination: Path) -> None:
+    """Export three antialiased transparent PNGs with equal circular borders."""
     destination.mkdir(parents=True, exist_ok=True)
-    for index, (box, polygon) in enumerate(PORTRAITS, 1):
-        crop = photo.crop(box)
-        rgb = np.asarray(crop, dtype=float)
-        gray = np.asarray(ImageOps.grayscale(crop), dtype=float)
-        background = np.asarray(ImageOps.grayscale(crop).filter(ImageFilter.GaussianBlur(8)), dtype=float)
-        # Blue pen has both a local luminance edge and more blue than red.
-        blue = rgb[:, :, 2] - rgb[:, :, 0]
-        strength = np.clip((background - gray - 1) / 20, 0, 1) * np.clip((blue + 2) / 12, 0, 1)
-        mask = Image.new('L', crop.size)
-        ImageDraw.Draw(mask).polygon([(x-box[0], y-box[1]) for x,y in polygon], fill=255)
-        mask = mask.filter(ImageFilter.MaxFilter(17))
-        alpha = Image.fromarray((strength * np.asarray(mask)).astype('uint8'))
-        alpha = alpha.filter(ImageFilter.MaxFilter(3)).resize((480,480), Image.Resampling.LANCZOS)
-        yy, xx = np.ogrid[:480, :480]
-        inside = (xx - 240)**2 + (yy - 240)**2 <= 220**2
-        alpha = Image.fromarray(np.where(inside, np.asarray(alpha), 0).astype('uint8'))
-        art = Image.new('RGBA', (512,512), (0,0,0,0))
-        ink = Image.new('RGBA', (480,480), '#34312c')
-        ink.putalpha(alpha)
-        art.alpha_composite(ink, (16,16))
-        # Supersampling gives a mathematically circular, antialiased outline.
-        ring = Image.new('RGBA', (2048,2048))
-        ImageDraw.Draw(ring).ellipse((28,28,2020,2020), outline='#34312c', width=12)
-        art = Image.alpha_composite(art, ring.resize(art.size, Image.Resampling.LANCZOS))
-        art.save(destination / f'portrait-{index}.png')
+    for index, paths in enumerate(PORTRAITS, 1):
+        art = Image.new('RGBA', (SIZE*SCALE, SIZE*SCALE))
+        draw = ImageDraw.Draw(art)
+        for points in paths:
+            # Shoulder endpoints meet the circle precisely, without a floating bust.
+            points = [(x, round(256 + sqrt(RADIUS**2 - (x-256)**2)))
+                      if (x, y) in ((100,449), (412,449)) else (x,y) for x,y in points]
+            draw.line(curve(points), fill=INK, width=2*SCALE, joint='curve')
+        for x, y, rx, ry in EYES[index-1]:
+            draw.ellipse(tuple(v*SCALE for v in (x-rx,y-ry,x+rx,y+ry)), outline=INK, width=2*SCALE)
+        draw.ellipse((8*SCALE,8*SCALE,504*SCALE,504*SCALE), outline=INK, width=2*SCALE)
+        art.resize((SIZE,SIZE), Image.Resampling.LANCZOS).save(destination / f'portrait-{index}.png')
 
 
 if __name__ == '__main__':
     parser = ArgumentParser(description=__doc__)
-    parser.add_argument('source', type=Path)
     parser.add_argument('--output', type=Path, default=Path('deblock/web/assets/avatars'))
-    args = parser.parse_args()
-    prepare(args.source, args.output)
+    prepare(parser.parse_args().output)

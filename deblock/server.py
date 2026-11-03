@@ -24,6 +24,7 @@ ASSETS = {
     "/shelf.js": ("shelf.js", "text/javascript; charset=utf-8"),
     "/assets/avatars/portrait-1.png": ("assets/avatars/portrait-1.png", "image/png"),
     "/assets/avatars/portrait-2.png": ("assets/avatars/portrait-2.png", "image/png"),
+    "/assets/avatars/portrait-3.png": ("assets/avatars/portrait-3.png", "image/png"),
     "/export.js": ("export.js", "text/javascript; charset=utf-8"),
     "/vendor/html2canvas-1.4.1.min.js": ("vendor/html2canvas-1.4.1.min.js", "text/javascript; charset=utf-8"),
     "/vendor/html2canvas-LICENSE.txt": ("vendor/html2canvas-LICENSE.txt", "text/plain; charset=utf-8"),
