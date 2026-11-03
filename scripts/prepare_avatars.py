@@ -65,8 +65,7 @@ PORTRAITS = [
         [(230,308),(232,341),(224,366),(199,388)],
         [(324,246),(330,271),(324,302),(317,331),(320,365),(328,390),(326,426),(331,467)],
         [(100,449),(129,424),(165,407),(199,388),(216,408),(252,427),(283,416),(319,402)],
-        [(412,449),(391,417),(377,397),(381,382),(402,392),(425,397)],
-        [(377,397),(371,424)],
+        [(425,382),(425,397),(402,392),(381,382),(377,397),(371,424)],
     ],
 ]
 EYES = [
@@ -105,7 +104,10 @@ def prepare(destination: Path) -> None:
         for x, y, rx, ry in EYES[index-1]:
             draw.ellipse(tuple(v*SCALE for v in (x-rx,y-ry,x+rx,y+ry)), outline=INK, width=2*SCALE)
         draw.ellipse((8*SCALE,8*SCALE,504*SCALE,504*SCALE), outline=INK, width=2*SCALE)
-        art.resize((SIZE,SIZE), Image.Resampling.LANCZOS).save(destination / f'portrait-{index}.png')
+        art = art.resize((SIZE,SIZE), Image.Resampling.LANCZOS)
+        if index == 2:
+            art = art.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        art.save(destination / f'portrait-{index}.png')
 
 
 if __name__ == '__main__':
