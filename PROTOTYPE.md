@@ -36,6 +36,24 @@ the current draft, not saved collections. Repeated library saves update the same
 entry until reset starts a new one. The server exposes only explicitly listed
 assets and the read-only exercise API. The original acceptance tests are unchanged.
 
+## Optional image prompts
+
+The bottom `image off/on` control adds an image above the word. `another` cycles
+through a shuffled deck of 12 reviewed CC0 artworks, with no repeat until the pool
+is exhausted and no immediate repeat across deck boundaries. Switching off keeps
+the selection available for switching back on, without changing the words.
+Hover over the image or focus/tap its info button for title, maker, date, cultural
+context, museum, CC0 status, and the original object link.
+
+Library saves preserve the selected image and its metadata with the text. Older
+text-only entries remain supported. PNG/PDF exports include the full image above
+the writing; info overlays are excluded. Export waits for image decoding and
+reports missing images rather than silently omitting them. Gallery retains the
+combined PNG and image credit metadata.
+
+The bundled pool needs no external network access at runtime. Rights and source
+records are in `deblock/web/assets/art/catalog.json` and its adjacent README.
+
 ## Profile, Library, and Gallery
 
 The top-left menu follows the supplied sketch. Profile shows the local creation
@@ -82,4 +100,5 @@ node tests/reset_checks.cjs
 node tests/export_checks.cjs
 node tests/document_checks.cjs
 node tests/collection_checks.cjs
+node tests/art_checks.cjs
 ```

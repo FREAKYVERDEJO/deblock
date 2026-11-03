@@ -18,6 +18,8 @@ ASSETS = {
     "/": ("index.html", "text/html; charset=utf-8"),
     "/style.css": ("style.css", "text/css; charset=utf-8"),
     "/app.js": ("app.js", "text/javascript; charset=utf-8"),
+    "/art.js": ("art.js", "text/javascript; charset=utf-8"),
+    "/assets/art/catalog.json": ("assets/art/catalog.json", "application/json; charset=utf-8"),
     "/storage.js": ("storage.js", "text/javascript; charset=utf-8"),
     "/shelf.js": ("shelf.js", "text/javascript; charset=utf-8"),
     "/assets/avatars/portrait-1.png": ("assets/avatars/portrait-1.png", "image/png"),
@@ -30,6 +32,9 @@ ASSETS = {
     "/assets/ReenieBeanie.ttf": ("assets/ReenieBeanie.ttf", "font/ttf"),
     "/assets/OFL.txt": ("assets/OFL.txt", "text/plain; charset=utf-8"),
 }
+for artwork in json.loads((WEB_ROOT / "assets/art/catalog.json").read_text()):
+    ASSETS[artwork["src"]] = (artwork["src"].removeprefix("/"), "image/jpeg")
+
 for name in ("signal-11", "signal-29", "signal-47", "signal-83"):
     for variant in ("still", "frames"):
         filename = f"assets/{name}-{variant}.webp"

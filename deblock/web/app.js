@@ -14,7 +14,7 @@ window.DeblockDocument = {
     entryId ||= crypto.randomUUID();
     entryCreatedAt ||= new Date().toISOString();
     return { id: entryId, createdAt: entryCreatedAt, updatedAt: new Date().toISOString(),
-      title: byId('document-title').textContent.trim(), words: [...words], draft: input.value, arrows: showArrows };
+      title: byId('document-title').textContent.trim(), words: [...words], draft: input.value, arrows: showArrows, artwork: window.DeblockArt?.snapshot() || null };
   },
 };
 
@@ -27,6 +27,7 @@ function documentBody() {
 }
 
 function renderSummary() {
+  window.DeblockArt?.renderDocument(byId('finish-art'));
   byId('chain-summary').textContent = documentBody() || 'Nothing to finish. You can just be here.';
 }
 

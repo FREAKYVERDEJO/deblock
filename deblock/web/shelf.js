@@ -29,11 +29,12 @@
     if (entry.draft.trim()) links.push(entry.arrows ? `(${entry.draft} — unfinished)` : entry.draft.trim());
     return links.join(entry.arrows ? ' → ' : ' ');
   }
-  function viewEntry(entry) {
+  async function viewEntry(entry) {
     viewedEntry = entry;
     get('entry-title').textContent = entry.title || 'Untitled';
     get('entry-body').textContent = entryText(entry);
     get('entry-status').textContent = '';
+    await window.DeblockArt?.renderSaved(get('entry-art'), entry.artwork);
     showDialog(get('entry-dialog'));
   }
   async function renderLibrary() {
@@ -59,6 +60,7 @@
       const url = URL.createObjectURL(item.blob); galleryUrls.push(url);
       const link = document.createElement('a'); link.href = url; link.download = 'deblock-document.png';
       link.className = 'gallery-card';
+      if (item.artwork) link.title = `${item.artwork.title} — ${item.artwork.artist} · ${item.artwork.museum} · CC0`;
       const image = document.createElement('img'); image.src = url; image.alt = item.title || 'Saved writing'; image.loading = 'lazy';
       link.append(image, textElement('span', item.title || 'Untitled'), textElement('small', 'download PNG'));
       list.append(link);
@@ -118,7 +120,7 @@
   window.DeblockShelf = {
     snapshotFor: dialog => dialog.id === 'entry-dialog' ? viewedEntry : window.DeblockDocument.snapshot(),
     async saveImage(blob, entry) {
-      await store.put('images', { id: crypto.randomUUID(), title: entry.title, blob, updatedAt: new Date().toISOString() });
+      await store.put('images', { id: crypto.randomUUID(), title: entry.title, artwork: entry.artwork || null, blob, updatedAt: new Date().toISOString() });
     },
   };
 })();

@@ -7,6 +7,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
   <script src="/app.js" defer></script>
+  <script src="/art.js" defer></script>
   <script src="/storage.js" defer></script>
   <script src="/shelf.js" defer></script>
   <script src="/vendor/html2canvas-1.4.1.min.js" defer></script>
@@ -22,6 +23,7 @@
     </nav>
   </details>
   <main>
+    <figure id="writing-art" class="artwork writing-art" hidden></figure>
     <form id="word-form" autocomplete="off">
       <label for="word" class="sr-only">Next word</label>
       <div class="word-space" id="word-space">
@@ -34,6 +36,8 @@
     <span class="signature">deblock</span>
     <span class="privacy">private · save to keep</span>
     <nav aria-label="Writing controls">
+      <button id="art-toggle" type="button" aria-label="Show image" aria-pressed="false">image off</button>
+      <button id="art-next" type="button" aria-label="Another image" hidden>another</button>
       <button id="about" type="button" aria-label="Exercise instructions and privacy">?</button>
       <button id="reset" type="button">reset</button>
       <button id="finish" type="button">done</button>
@@ -50,6 +54,7 @@
   <dialog id="finish-dialog">
     <button class="close" type="button" aria-label="Return to writing">×</button>
     <h1 id="document-title" contenteditable="plaintext-only" role="textbox" aria-label="Document title" aria-multiline="true" title="Click to edit the title" spellcheck="false">leave it here.</h1>
+    <figure id="finish-art" class="artwork document-art" hidden></figure>
     <p id="chain-summary"></p>
     <div class="end-actions">
       <button id="resume" type="button">keep writing</button>
@@ -107,10 +112,13 @@
   </dialog>
   <dialog id="entry-dialog" aria-labelledby="entry-title">
     <button class="close" type="button" aria-label="Close entry">×</button>
-    <h1 id="entry-title"></h1><p id="entry-body"></p>
+    <h1 id="entry-title"></h1>
+    <figure id="entry-art" class="artwork document-art" hidden></figure>
+    <p id="entry-body"></p>
     <div class="end-actions"><details class="save-menu"><summary>save</summary><div class="save-options"><button type="button" data-export="png">as PNG</button><button type="button" data-export="pdf">as PDF</button></div></details></div>
     <p id="entry-status" role="status" data-export-status data-html2canvas-ignore="true"></p>
   </dialog>
+  <p id="art-status" class="art-status" role="status"></p>
   <p id="announcement" class="sr-only" role="status" aria-live="polite"></p>
   <noscript>This writing space needs JavaScript. Your writing stays in your browser.</noscript>
 </body>

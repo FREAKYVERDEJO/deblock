@@ -41,6 +41,11 @@
 
   async function capture(dialog) {
     await document.fonts.ready;
+    if (dialog.querySelector('[data-art-error]')) throw new Error('The artwork is unavailable. It cannot be omitted from this export.');
+    await Promise.all([...dialog.querySelectorAll('img')].map(async image => {
+      try { await image.decode(); }
+      catch { throw new Error('The image could not load. Try again before exporting.'); }
+    }));
     if (!dialog.open) throw new Error('Open your finished document first.');
     const bounds = dialog.getBoundingClientRect();
     const css = getComputedStyle(dialog);
