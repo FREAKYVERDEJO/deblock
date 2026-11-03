@@ -95,16 +95,25 @@
       if (busy) return;
       busy = true;
       button.closest('.save-menu')?.removeAttribute('open');
-      const status = document.getElementById('export-status');
+      const dialog = button.closest('dialog');
+      const status = dialog.querySelector('[data-export-status]');
       status.textContent = '';
       const format = button.dataset.export;
       try {
-        const blob = await createExport(format, document.getElementById('finish-dialog'));
+        const entry = root.DeblockShelf?.snapshotFor(dialog);
+        const blob = await createExport(format, dialog);
+        let galleryError = null;
+        if (format === 'png' && root.DeblockShelf) {
+          try { await root.DeblockShelf.saveImage(blob, entry); }
+          catch (error) { galleryError = error; }
+        }
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
         link.download = `deblock-document.${format}`;
         link.click();
+        if (galleryError) status.textContent = 'PNG downloaded, but Gallery could not save it. Browser storage may be full or unavailable.';
+        else if (format === 'png' && root.DeblockShelf) status.textContent = 'Saved to Gallery and downloaded.';
         setTimeout(() => URL.revokeObjectURL(url), 60000);
       } catch (error) {
         status.textContent = `Couldn’t save ${format.toUpperCase()}. ${error.message}`;

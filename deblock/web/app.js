@@ -7,6 +7,16 @@ let exercise = null;
 let composing = false;
 let showArrows = true;
 const defaultTitle = 'leave it here.';
+let entryId = null;
+let entryCreatedAt = null;
+window.DeblockDocument = {
+  snapshot() {
+    entryId ||= crypto.randomUUID();
+    entryCreatedAt ||= new Date().toISOString();
+    return { id: entryId, createdAt: entryCreatedAt, updatedAt: new Date().toISOString(),
+      title: byId('document-title').textContent.trim(), words: [...words], draft: input.value, arrows: showArrows };
+  },
+};
 
 function documentBody() {
   const summary = [...words];
@@ -96,7 +106,7 @@ for (const dialog of document.querySelectorAll('dialog')) {
   dialog.querySelector('.close').addEventListener('click', () => dialog.close());
   dialog.addEventListener('close', () => {
     window.dispatchEvent(new CustomEvent('writingpause', { detail: false }));
-    input.focus({ preventScroll: true });
+    if (!document.querySelector('dialog[open]')) input.focus({ preventScroll: true });
   });
 }
 byId('about').addEventListener('click', () => showDialog(byId('info-dialog')));
@@ -114,6 +124,8 @@ byId('reset').addEventListener('click', () => showDialog(byId('reset-dialog')));
 byId('cancel-reset').addEventListener('click', () => byId('reset-dialog').close());
 byId('confirm-reset').addEventListener('click', () => {
   words.length = 0;
+  entryId = null;
+  entryCreatedAt = null;
   input.value = '';
   input.placeholder = 'a word…';
   composing = false;

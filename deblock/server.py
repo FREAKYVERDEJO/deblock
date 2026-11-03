@@ -18,6 +18,10 @@ ASSETS = {
     "/": ("index.html", "text/html; charset=utf-8"),
     "/style.css": ("style.css", "text/css; charset=utf-8"),
     "/app.js": ("app.js", "text/javascript; charset=utf-8"),
+    "/storage.js": ("storage.js", "text/javascript; charset=utf-8"),
+    "/shelf.js": ("shelf.js", "text/javascript; charset=utf-8"),
+    "/assets/avatars/portrait-1.png": ("assets/avatars/portrait-1.png", "image/png"),
+    "/assets/avatars/portrait-2.png": ("assets/avatars/portrait-2.png", "image/png"),
     "/export.js": ("export.js", "text/javascript; charset=utf-8"),
     "/vendor/html2canvas-1.4.1.min.js": ("vendor/html2canvas-1.4.1.min.js", "text/javascript; charset=utf-8"),
     "/vendor/html2canvas-LICENSE.txt": ("vendor/html2canvas-LICENSE.txt", "text/plain; charset=utf-8"),
@@ -61,7 +65,7 @@ class PrototypeHandler(BaseHTTPRequestHandler):
         self.send_header("Referrer-Policy", "no-referrer")
         self.send_header("Content-Security-Policy", (
             "default-src 'self'; script-src 'self'; style-src 'self'; "
-            "img-src 'self'; connect-src 'self'; object-src 'none'; "
+            "img-src 'self' blob:; connect-src 'self'; object-src 'none'; "
             "base-uri 'none'; frame-ancestors 'none'; form-action 'none'"
         ))
         self.end_headers()

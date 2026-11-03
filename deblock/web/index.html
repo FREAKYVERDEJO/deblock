@@ -7,10 +7,20 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
   <script src="/app.js" defer></script>
+  <script src="/storage.js" defer></script>
+  <script src="/shelf.js" defer></script>
   <script src="/vendor/html2canvas-1.4.1.min.js" defer></script>
   <script src="/export.js" defer></script>
 </head>
 <body>
+  <details id="site-menu" class="site-menu">
+    <summary aria-label="Open menu"><span></span><span></span><span></span></summary>
+    <nav aria-label="Your collection">
+      <button id="open-profile" type="button">Profile</button>
+      <button id="open-library" type="button">Library</button>
+      <button id="open-gallery" type="button">Gallery</button>
+    </nav>
+  </details>
   <main>
     <form id="word-form" autocomplete="off">
       <label for="word" class="sr-only">Next word</label>
@@ -22,10 +32,10 @@
   </main>
   <footer>
     <span class="signature">deblock</span>
-    <span class="privacy">only in this tab</span>
+    <span class="privacy">private · save to keep</span>
     <nav aria-label="Writing controls">
-      <button id="reset" type="button">reset</button>
       <button id="about" type="button" aria-label="Exercise instructions and privacy">?</button>
+      <button id="reset" type="button">reset</button>
       <button id="finish" type="button">done</button>
     </nav>
   </footer>
@@ -34,7 +44,7 @@
     <h1 id="exercise-title">The Signifier Chain</h1>
     <p>Each space moves you to the next word. Enter works too. Completed words are kept under done.</p>
     <p id="instructions">Loading instructions…</p>
-    <p class="fine-print">Your words stay in this tab. They aren’t sent or saved. Download them before closing or refreshing.</p>
+    <p class="fine-print">Your draft stays in this tab until you save. Choose save → to library to keep an entry in this browser. PNG exports are also kept in Gallery. Nothing is sent to a server. Browser data can be cleared, so download anything you want to keep.</p>
     <button id="retry" type="button" hidden>try again</button>
   </dialog>
   <dialog id="finish-dialog">
@@ -47,19 +57,59 @@
       <details class="save-menu">
         <summary>save</summary>
         <div class="save-options">
+          <button id="save-entry" type="button">to library</button>
           <button type="button" data-export="png">as PNG</button>
           <button type="button" data-export="pdf">as PDF</button>
         </div>
       </details>
     </div>
-    <p class="fine-print">Only in this tab. Download before closing.</p>
-    <p id="export-status" role="status" data-html2canvas-ignore="true"></p>
+    <p class="fine-print">Unsaved drafts stay in this tab. Saved items stay in this browser.</p>
+    <p id="export-status" role="status" data-export-status data-html2canvas-ignore="true"></p>
   </dialog>
   <dialog id="reset-dialog" aria-labelledby="reset-title">
     <button class="close" type="button" aria-label="Cancel reset">×</button>
     <h1 id="reset-title">start again?</h1>
-    <p>This clears your words in this tab. Save them under done first if you want to keep them.</p>
+    <p>This clears your words in this tab. Save them under done first if you want to keep them. Your Library and Gallery stay saved.</p>
     <div class="end-actions"><button id="cancel-reset" type="button" autofocus>keep writing</button><button id="confirm-reset" type="button">reset</button></div>
+  </dialog>
+  <dialog id="profile-dialog" aria-labelledby="profile-title" class="collection-dialog">
+    <button class="close" type="button" aria-label="Close profile">×</button>
+    <h1 id="profile-title">Profile</h1>
+    <p class="fine-print">Local profile · only in this browser</p>
+    <button id="profile-picture" class="profile-picture" type="button" aria-label="Change profile picture" aria-expanded="false" aria-controls="avatar-picker"><img id="profile-image" src="/assets/avatars/portrait-1.png" alt="Your profile drawing"></button>
+    <form id="profile-form">
+      <fieldset id="avatar-picker" hidden>
+        <legend>Choose your picture</legend>
+        <label class="avatar-choice"><input id="avatar-1" type="radio" name="avatar" value="1" checked aria-label="Short-haired portrait"><img src="/assets/avatars/portrait-1.png" alt=""></label>
+        <label class="avatar-choice"><input id="avatar-2" type="radio" name="avatar" value="2" aria-label="Curly-haired portrait"><img src="/assets/avatars/portrait-2.png" alt=""></label>
+      </fieldset>
+      <label for="profile-name">Name</label><input id="profile-name" type="text" maxlength="100" autocomplete="nickname">
+      <label for="profile-email">Email</label><input id="profile-email" type="email" maxlength="254" autocomplete="email" aria-describedby="email-note">
+      <p id="email-note" class="fine-print">Stored locally. No sign-in or emails are sent.</p>
+      <dl class="profile-facts"><div><dt>Date joined</dt><dd id="profile-joined">—</dd></div><div><dt>Number of entries</dt><dd id="profile-count">0</dd></div></dl>
+      <button type="button" disabled aria-describedby="password-note">password reset</button>
+      <p id="password-note" class="fine-print">This local prototype has no password. Password reset will be available with accounts.</p>
+      <div class="end-actions"><button type="submit">save profile</button></div>
+    </form>
+    <p id="profile-status" class="section-status" role="status"></p>
+  </dialog>
+  <dialog id="library-dialog" aria-labelledby="library-title" class="collection-dialog">
+    <button class="close" type="button" aria-label="Close library">×</button>
+    <h1 id="library-title">Library</h1>
+    <p class="fine-print">Your entries, saved in this browser.</p>
+    <div id="library-list"></div><p id="library-status" class="section-status" role="status"></p>
+  </dialog>
+  <dialog id="gallery-dialog" aria-labelledby="gallery-title" class="collection-dialog">
+    <button class="close" type="button" aria-label="Close gallery">×</button>
+    <h1 id="gallery-title">Gallery</h1>
+    <p class="fine-print">Your saved PNGs. Click a picture to download it again.</p>
+    <div id="gallery-list" class="gallery-grid"></div><p id="gallery-status" class="section-status" role="status"></p>
+  </dialog>
+  <dialog id="entry-dialog" aria-labelledby="entry-title">
+    <button class="close" type="button" aria-label="Close entry">×</button>
+    <h1 id="entry-title"></h1><p id="entry-body"></p>
+    <div class="end-actions"><details class="save-menu"><summary>save</summary><div class="save-options"><button type="button" data-export="png">as PNG</button><button type="button" data-export="pdf">as PDF</button></div></details></div>
+    <p id="entry-status" role="status" data-export-status data-html2canvas-ignore="true"></p>
   </dialog>
   <p id="announcement" class="sr-only" role="status" aria-live="polite"></p>
   <noscript>This writing space needs JavaScript. Your writing stays in your browser.</noscript>
