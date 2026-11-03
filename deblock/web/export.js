@@ -48,7 +48,7 @@
       parseFloat(css.borderLeftWidth) - parseFloat(css.borderRightWidth));
     const height = dialog.scrollHeight + parseFloat(css.borderTopWidth) + parseFloat(css.borderBottomWidth);
     const scale = Math.min(2, 16000 / Math.max(bounds.width, height), Math.sqrt(24000000 / (bounds.width * height)));
-    if (scale < 1) throw new Error('This document is too long for a visual export. Use the text download to keep the full chain.');
+    if (scale < 1) throw new Error('This document is too long for a visual export. Copy your writing to keep the full text.');
     return root.html2canvas(dialog, {
       backgroundColor: css.backgroundColor,
       scale, logging: false, removeContainer: true,
@@ -94,6 +94,7 @@
     button.addEventListener('click', async () => {
       if (busy) return;
       busy = true;
+      button.closest('.save-menu')?.removeAttribute('open');
       const status = document.getElementById('export-status');
       status.textContent = '';
       const format = button.dataset.export;

@@ -23,11 +23,18 @@ nav button { font-size: 14px; }
 dialog { border: 1px solid #bcb5aa; background: #eeebe4; color: var(--ink); width: min(520px, 85vw); padding: 35px; max-height: 80svh; overflow: auto; }
 dialog::backdrop { background: #0007; backdrop-filter: blur(9px); }
 dialog h1 { font-size: 30px; font-weight: 400; margin: 0 25px 18px 0; }
+#document-title { min-height: 1.2em; overflow-wrap: anywhere; white-space: pre-wrap; cursor: text; }
 dialog p { color: #4c463e; font-size: 17px; line-height: 1.6; overflow-wrap: anywhere; }
 dialog .fine-print { font-size: 13px; margin-top: 25px; }
 .close { position: absolute; right: 15px; top: 12px; font-size: 22px; }
 .end-actions { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-left: -10px; font-size: 16px; }
 .end-actions button { text-decoration: underline; text-underline-offset: 5px; }
+.save-menu { position: relative; }
+.save-menu summary { list-style: none; cursor: pointer; padding: 10px; text-decoration: underline; text-underline-offset: 5px; }
+.save-menu summary::-webkit-details-marker { display: none; }
+.save-menu summary:is(:hover, :focus-visible) { color: #005bd3; }
+.save-options { position: absolute; bottom: 100%; right: 0; display: flex; gap: 6px; padding: 6px; background: #eeebe4; border: 1px solid #bcb5aa; z-index: 1; }
+.save-options button { border: 1px solid #bcb5aa; white-space: nowrap; text-decoration: none; }
 #export-status:empty { display: none; }
 #export-status { font-size: 12px; }
 @media (max-width: 600px) {

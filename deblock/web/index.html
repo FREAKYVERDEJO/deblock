@@ -39,9 +39,19 @@
   </dialog>
   <dialog id="finish-dialog">
     <button class="close" type="button" aria-label="Return to writing">×</button>
-    <h1>leave it here.</h1>
+    <h1 id="document-title" contenteditable="plaintext-only" role="textbox" aria-label="Document title" aria-multiline="true" title="Click to edit the title" spellcheck="false">leave it here.</h1>
     <p id="chain-summary"></p>
-    <div class="end-actions"><button id="resume" type="button">keep writing</button><button type="button" data-export="png">save PNG</button><button type="button" data-export="pdf">save PDF</button><button id="download" type="button">text ↓</button></div>
+    <div class="end-actions">
+      <button id="resume" type="button">keep writing</button>
+      <button id="arrows-toggle" type="button" aria-label="Show arrows" aria-pressed="true">arrows on</button>
+      <details class="save-menu">
+        <summary>save</summary>
+        <div class="save-options">
+          <button type="button" data-export="png">as PNG</button>
+          <button type="button" data-export="pdf">as PDF</button>
+        </div>
+      </details>
+    </div>
     <p class="fine-print">Only in this tab. Download before closing.</p>
     <p id="export-status" role="status" data-html2canvas-ignore="true"></p>
   </dialog>

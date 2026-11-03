@@ -12,15 +12,21 @@ and clears the current word immediately; Enter also commits. Repeated whitespace
 is ignored and pasted text is split into words. There is no theme switcher,
 background animation, next-word hint, or submit button below the input.
 `reset` asks before clearing the chain and unfinished word. `done` shows the whole
-chain with resume, PNG, PDF, and text downloads. `?` opens instructions and privacy
-details. Controls turn blue on hover and keyboard focus.
+chain with resume and a `save` menu offering `as PNG` and `as PDF`. `?` opens
+instructions and privacy details. Controls turn blue on hover and keyboard focus.
+
+In the finished document, click the title to edit it. `arrows on/off` switches
+between the association chain and continuous text without changing your words.
+The title and formatting persist when you resume writing and apply to PNG and PDF
+downloads. Reset restores the default title while keeping your arrow
+preference for the next chain.
 
 PNG and PDF preserve the finished panel's fonts, colours, width, and line wrapping,
 including content below its scroll area. The PDF embeds the same lossless pixels
 as the PNG on one page, rather than reflowing text onto standard paper. Exports
 run entirely in the browser using a vendored copy of html2canvas 1.4.1 (MIT;
 license in `deblock/web/vendor/`). Very large documents show an explicit error
-instead of silently clipping the chain; the text download remains available.
+instead of silently clipping the chain; you can select and copy the writing.
 
 Writing stays in tab memory. Nothing is sent, logged, or stored automatically.
 Download before refreshing or closing. The server exposes only explicitly listed
@@ -49,4 +55,5 @@ Word-entry regression checks use only Node built-ins:
 node tests/word_input_checks.cjs
 node tests/reset_checks.cjs
 node tests/export_checks.cjs
+node tests/document_checks.cjs
 ```

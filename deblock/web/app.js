@@ -5,6 +5,20 @@ const words = [];
 const space = byId('word-space');
 let exercise = null;
 let composing = false;
+let showArrows = true;
+const defaultTitle = 'leave it here.';
+
+function documentBody() {
+  const summary = [...words];
+  if (input.value.trim()) {
+    summary.push(showArrows ? `(${input.value} — unfinished)` : input.value.trim());
+  }
+  return summary.join(showArrows ? ' → ' : ' ');
+}
+
+function renderSummary() {
+  byId('chain-summary').textContent = documentBody() || 'Nothing to finish. You can just be here.';
+}
 
 function fitWords() {
   const length = Math.max(input.value.length, 6);
@@ -87,10 +101,14 @@ for (const dialog of document.querySelectorAll('dialog')) {
 }
 byId('about').addEventListener('click', () => showDialog(byId('info-dialog')));
 byId('finish').addEventListener('click', () => {
-  const summary = [...words];
-  if (input.value.trim()) summary.push(`(${input.value} — unfinished)`);
-  byId('chain-summary').textContent = summary.length ? summary.join(' → ') : 'Nothing to finish. You can just be here.';
+  renderSummary();
   showDialog(byId('finish-dialog'));
+});
+byId('arrows-toggle').addEventListener('click', () => {
+  showArrows = !showArrows;
+  byId('arrows-toggle').ariaPressed = String(showArrows);
+  byId('arrows-toggle').textContent = showArrows ? 'arrows on' : 'arrows off';
+  renderSummary();
 });
 byId('reset').addEventListener('click', () => showDialog(byId('reset-dialog')));
 byId('cancel-reset').addEventListener('click', () => byId('reset-dialog').close());
@@ -100,6 +118,7 @@ byId('confirm-reset').addEventListener('click', () => {
   input.placeholder = 'a word…';
   composing = false;
   byId('chain-summary').textContent = '';
+  byId('document-title').textContent = defaultTitle;
   byId('export-status').textContent = '';
   byId('announcement').textContent = 'Cleared. Start with a new word.';
   fitWords();
@@ -107,18 +126,10 @@ byId('confirm-reset').addEventListener('click', () => {
   input.focus({ preventScroll: true });
 });
 byId('resume').addEventListener('click', () => byId('finish-dialog').close());
-byId('download').addEventListener('click', () => {
-  const sections = [exercise?.title || 'The Signifier Chain', words.join(' → ')];
-  if (input.value.trim()) sections.push(`Unfinished link: ${input.value}`);
-  const url = URL.createObjectURL(new Blob([sections.join('\n\n') + '\n'], { type: 'text/plain;charset=utf-8' }));
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'deblock-signifier-chain.txt';
-  link.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-});
 window.addEventListener('beforeunload', (event) => {
-  if (words.length || input.value) { event.preventDefault(); event.returnValue = ''; }
+  if (words.length || input.value || byId('document-title').textContent !== defaultTitle) {
+    event.preventDefault(); event.returnValue = '';
+  }
 });
 
 async function loadExercise() {
