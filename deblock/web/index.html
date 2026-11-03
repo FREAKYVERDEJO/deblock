@@ -6,32 +6,25 @@
   <title>deblock</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
-  <script src="/backdrop.js" defer></script>
   <script src="/app.js" defer></script>
+  <script src="/vendor/html2canvas-1.4.1.min.js" defer></script>
+  <script src="/export.js" defer></script>
 </head>
-<body data-theme="pixel">
-  <div class="image-field" aria-hidden="true"><canvas id="field"></canvas></div>
-  <aside class="distortion-control">
-    <label for="distortion">distortion</label>
-    <input id="distortion" type="range" min="0" max="100" value="65" aria-label="Distortion intensity">
-  </aside>
+<body>
   <main>
     <form id="word-form" autocomplete="off">
       <label for="word" class="sr-only">Next word</label>
       <div class="word-space" id="word-space">
-        <input id="word" type="text" placeholder="a word…" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="hint" disabled>
+        <input id="word" type="text" placeholder="a word…" spellcheck="false" autocomplete="off" autocapitalize="off" disabled>
       </div>
-      <p id="hint">space → next word</p>
-      <button id="next" type="submit" aria-label="Next association" disabled>↵</button>
+      <p id="hint" role="status" hidden></p>
     </form>
   </main>
   <footer>
     <span class="signature">deblock</span>
     <span class="privacy">only in this tab</span>
     <nav aria-label="Writing controls">
-      <select id="theme" aria-label="Theme"><option value="pixel">pixel</option><option value="plain">plain</option></select>
-      <button id="image-toggle" type="button" aria-label="Shuffle background colours">colours</button>
-      <button id="motion" type="button" aria-pressed="true">motion on</button>
+      <button id="reset" type="button">reset</button>
       <button id="about" type="button" aria-label="Exercise instructions and privacy">?</button>
       <button id="finish" type="button">done</button>
     </nav>
@@ -48,8 +41,15 @@
     <button class="close" type="button" aria-label="Return to writing">×</button>
     <h1>leave it here.</h1>
     <p id="chain-summary"></p>
-    <div class="end-actions"><button id="resume" type="button">keep writing</button><button id="download" type="button">download ↓</button></div>
+    <div class="end-actions"><button id="resume" type="button">keep writing</button><button type="button" data-export="png">save PNG</button><button type="button" data-export="pdf">save PDF</button><button id="download" type="button">text ↓</button></div>
     <p class="fine-print">Only in this tab. Download before closing.</p>
+    <p id="export-status" role="status" data-html2canvas-ignore="true"></p>
+  </dialog>
+  <dialog id="reset-dialog" aria-labelledby="reset-title">
+    <button class="close" type="button" aria-label="Cancel reset">×</button>
+    <h1 id="reset-title">start again?</h1>
+    <p>This clears your words in this tab. Save them under done first if you want to keep them.</p>
+    <div class="end-actions"><button id="cancel-reset" type="button" autofocus>keep writing</button><button id="confirm-reset" type="button">reset</button></div>
   </dialog>
   <p id="announcement" class="sr-only" role="status" aria-live="polite"></p>
   <noscript>This writing space needs JavaScript. Your writing stays in your browser.</noscript>

@@ -7,9 +7,8 @@ let exercise = null;
 let composing = false;
 
 function fitWords() {
-  const plain = document.body.dataset.theme === 'plain';
   const length = Math.max(input.value.length, 6);
-  const size = Math.max(25, Math.min(plain ? 88 : 128, space.clientWidth / (length * (plain ? .6 : .42))));
+  const size = Math.max(25, Math.min(88, space.clientWidth / (length * .6)));
   space.style.setProperty('--word-size', `${size}px`);
 }
 
@@ -67,7 +66,8 @@ byId('word-form').addEventListener('submit', (event) => {
   finishWord();
   input.focus();
 });
-byId('theme').addEventListener('change', (event) => {
+// Compatibility for older embedded markup; the current page has one plain style.
+byId('theme')?.addEventListener('change', (event) => {
   document.body.dataset.theme = event.target.value;
   window.dispatchEvent(new CustomEvent('themechange', { detail: event.target.value }));
   fitWords();
@@ -91,6 +91,20 @@ byId('finish').addEventListener('click', () => {
   if (input.value.trim()) summary.push(`(${input.value} — unfinished)`);
   byId('chain-summary').textContent = summary.length ? summary.join(' → ') : 'Nothing to finish. You can just be here.';
   showDialog(byId('finish-dialog'));
+});
+byId('reset').addEventListener('click', () => showDialog(byId('reset-dialog')));
+byId('cancel-reset').addEventListener('click', () => byId('reset-dialog').close());
+byId('confirm-reset').addEventListener('click', () => {
+  words.length = 0;
+  input.value = '';
+  input.placeholder = 'a word…';
+  composing = false;
+  byId('chain-summary').textContent = '';
+  byId('export-status').textContent = '';
+  byId('announcement').textContent = 'Cleared. Start with a new word.';
+  fitWords();
+  byId('reset-dialog').close();
+  input.focus({ preventScroll: true });
 });
 byId('resume').addEventListener('click', () => byId('finish-dialog').close());
 byId('download').addEventListener('click', () => {
@@ -117,11 +131,11 @@ async function loadExercise() {
     exercise = data;
     byId('exercise-title').textContent = exercise.title;
     byId('instructions').textContent = exercise.instructions;
-    byId('hint').textContent = 'space → next word';
+    byId('hint').hidden = true;
     input.disabled = false;
-    byId('next').disabled = false;
     if (document.activeElement === document.body) input.focus({ preventScroll: true });
   } catch {
+    byId('hint').hidden = false;
     byId('hint').textContent = 'exercise unavailable · open ? to retry';
     byId('instructions').textContent = 'Check that the local server is running, then try again.';
     byId('retry').hidden = false;
