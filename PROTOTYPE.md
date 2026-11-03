@@ -39,7 +39,7 @@ assets and the read-only exercise API. The original acceptance tests are unchang
 ## Optional image prompts
 
 The bottom `image off/on` control adds an image above the word. `another` cycles
-through a shuffled deck of 12 reviewed CC0 artworks, with no repeat until the pool
+through a shuffled deck of 22 reviewed CC0 artworks, with no repeat until the pool
 is exhausted and no immediate repeat across deck boundaries. Switching off keeps
 the selection available for switching back on, without changing the words.
 Hover over the image or focus/tap its info button for title, maker, date, cultural

@@ -1,8 +1,16 @@
 # Reviewed CC0 image pool
 
-Reviewed on 2026-11-03. Twelve hand-selected works from The Metropolitan Museum
+Reviewed on 2026-11-03. Twenty-two hand-selected works from The Metropolitan Museum
 of Art and the Smithsonian American Art Museum. This is a small starting pool,
 not an exhaustive representation of any culture.
+
+The expansion adds ten works: six gardens, flowers, seascapes, and ceramics,
+and four religious works spanning Hindu, Buddhist, Christian, and Islamic
+traditions. The latter are Shiva as Lord of Dance (39328), Meditating Buddha
+(39489), Icon with the Virgin and Child (463984), and Calligraphic Galleon
+(454611). Their official object pages document the subjects; all receive the
+same shuffle treatment as the rest of the pool, with no extra weighting.
+Existing works and IDs are retained unchanged.
 
 Every Met selection had `isPublicDomain: true` and a nonempty image URL in its
 individual official API record. Several candidates with false flags were excluded.
