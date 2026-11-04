@@ -16,6 +16,7 @@ from PIL import Image, ImageDraw
 SIZE = 512
 SCALE = 4
 INK = '#34312c'
+STROKE_WIDTH = 3 * SCALE
 RADIUS = 248
 
 # Each path is one continuous ink contour in a 512 × 512 drawing space.
@@ -100,10 +101,10 @@ def prepare(destination: Path) -> None:
             # Shoulder endpoints meet the circle precisely, without a floating bust.
             points = [(x, round(256 + sqrt(RADIUS**2 - (x-256)**2)))
                       if (x, y) in ((100,449), (412,449)) else (x,y) for x,y in points]
-            draw.line(curve(points), fill=INK, width=2*SCALE, joint='curve')
+            draw.line(curve(points), fill=INK, width=STROKE_WIDTH, joint='curve')
         for x, y, rx, ry in EYES[index-1]:
-            draw.ellipse(tuple(v*SCALE for v in (x-rx,y-ry,x+rx,y+ry)), outline=INK, width=2*SCALE)
-        draw.ellipse((8*SCALE,8*SCALE,504*SCALE,504*SCALE), outline=INK, width=2*SCALE)
+            draw.ellipse(tuple(v*SCALE for v in (x-rx,y-ry,x+rx,y+ry)), outline=INK, width=STROKE_WIDTH)
+        draw.ellipse((8*SCALE,8*SCALE,504*SCALE,504*SCALE), outline=INK, width=STROKE_WIDTH)
         art = art.resize((SIZE,SIZE), Image.Resampling.LANCZOS)
         if index == 2:
             art = art.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
