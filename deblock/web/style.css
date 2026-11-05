@@ -17,7 +17,7 @@ main { position: relative; height: 100%; display: grid; place-items: center; pad
 #hint { color: #777065; font-size: 15px; }
 footer { position: fixed; bottom: 16px; left: 25px; right: 25px; display: flex; align-items: center; gap: 24px; color: #777065; }
 .signature { font-size: 22px; }
-.privacy { font-size: 12px; }
+.save-reminder { font-size: 12px; }
 nav { margin-left: auto; display: flex; gap: 14px; align-items: center; }
 nav button { font-size: 14px; }
 dialog { border: 1px solid #bcb5aa; background: #eeebe4; color: var(--ink); width: min(520px, 85vw); padding: 35px; max-height: 80svh; overflow: auto; }
@@ -43,7 +43,7 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
   .word-space { height: 130px; }
   #word-form { transform: translateY(-7vh); }
   footer { left: 16px; right: 12px; bottom: 12px; gap: 12px; flex-wrap: wrap; }
-  .privacy { position: absolute; bottom: 45px; left: 0; }
+  .save-reminder { position: absolute; bottom: 45px; left: 0; }
   nav { gap: 3px; }
   nav button { padding: 10px 7px; }
   dialog { padding: 26px; }

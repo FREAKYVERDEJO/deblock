@@ -13,7 +13,7 @@ is ignored and pasted text is split into words. There is no theme switcher,
 background animation, next-word hint, or submit button below the input.
 `reset` asks before clearing the chain and unfinished word. `done` shows the whole
 chain with resume and a `save` menu offering `to library`, `as PNG`, and `as PDF`. `?` opens
-instructions and privacy details. Controls turn blue on hover and keyboard focus.
+instructions and a brief explanation of saving. Controls turn blue on hover and keyboard focus.
 
 In the finished document, click the title to edit it. `arrows on/off` switches
 between the association chain and continuous text without changing your words.
