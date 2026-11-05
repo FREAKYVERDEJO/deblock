@@ -8,6 +8,23 @@
   const modeOf = entry => entry.story ? 'story' : 'free';
   const hasContent = entry => Boolean(entry.story || entry.words.length || entry.draft || entry.blackout);
   const blank = story => ({ title: 'Untitled', words: [], draft: '', arrows: !story, story, artwork: null, blackout: null });
+  const outlineInput = get('story-outline');
+  const outlineMirror = get('outline-mirror');
+  function syncOutlineMarkers() {
+    outlineMirror.replaceChildren();
+    for (const text of (outlineInput.value || outlineInput.placeholder || '').split('\n')) {
+      const line = document.createElement('div');
+      line.textContent = text || '\u200b';
+      outlineMirror.append(line);
+    }
+    outlineMirror.style.width = `${outlineInput.clientWidth}px`;
+    outlineMirror.style.transform = `translateY(${-outlineInput.scrollTop || 0}px)`;
+  }
+  outlineInput.addEventListener('input', syncOutlineMarkers);
+  outlineInput.addEventListener('scroll', () => {
+    outlineMirror.style.transform = `translateY(${-outlineInput.scrollTop}px)`;
+  });
+  if (root.ResizeObserver) new root.ResizeObserver(syncOutlineMarkers).observe(outlineInput);
   function closeMenu() { get('site-menu').open = false; }
   async function switchMode(mode) {
     closeMenu();
@@ -29,6 +46,7 @@
     get('new-story').hidden = !edit;
     get('story-outline-status').textContent = '';
     showDialog(get('story-dialog'));
+    syncOutlineMarkers();
   }
   function refresh() {
     const entry = root.DeblockDocument.snapshot();

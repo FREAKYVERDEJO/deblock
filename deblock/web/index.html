@@ -58,7 +58,10 @@
     <h1 id="story-dialog-title">Story Beats</h1>
     <form id="story-outline-form">
       <label for="story-outline" class="sr-only">Your story skeleton</label>
-      <textarea id="story-outline" rows="4" maxlength="100100" placeholder="&gt; Lily decides to see Matt&#10;&gt; Matt waits for her by the pier&#10;&gt; Lily arrives at the pier …" aria-describedby="story-outline-note" required></textarea>
+      <div class="outline-editor">
+        <div class="outline-markers" aria-hidden="true"><div id="outline-mirror"></div></div>
+        <textarea id="story-outline" rows="4" maxlength="100100" placeholder="Lily decides to see Matt&#10;Matt waits for her by the pier&#10;Lily arrives at the pier …" aria-describedby="story-outline-note" required></textarea>
+      </div>
       <p id="story-outline-note" class="fine-print sr-only"></p>
       <button id="story-start" type="submit">start writing</button>
       <button id="new-story" type="button" hidden>new story</button>
@@ -94,7 +97,7 @@
     <div class="end-actions">
       <button id="resume" type="button">keep writing</button>
       <button id="arrows-toggle" type="button" aria-label="Show arrows" aria-pressed="true">arrows on</button>
-      <button id="open-poetry" type="button">highlight / blackout</button>
+      <button id="open-poetry" type="button">blackout</button>
       <details class="save-menu">
         <summary>save</summary>
         <div class="save-options">
@@ -109,15 +112,20 @@
   </dialog>
   <dialog id="poetry-dialog" aria-labelledby="poetry-title">
     <button class="close" type="button" aria-label="Cancel poetry changes">×</button>
-    <h1 id="poetry-title">blackout poetry</h1>
-    <p>Choose words to keep.</p>
-    <div id="poetry-words" class="poetry-words" role="group" aria-label="Words to keep"></div>
-    <label for="poetry-style">View</label>
-    <select id="poetry-style"><option value="highlight">Highlight kept words</option><option value="blackout">Black out the rest</option></select>
+    <h1 id="poetry-title">blackout</h1>
+    <div id="poetry-words" class="poetry-words" role="group" aria-label="Drag across words to black them out" aria-describedby="poetry-instructions"></div>
     <p id="poetry-count" class="sr-only" role="status"></p>
-    <p id="poetry-preview" aria-label="Poetry preview"></p>
-    <p id="poetry-line" class="fine-print" aria-label="Kept words in order"></p>
-    <div class="end-actions"><button id="poetry-apply" type="button">use this view</button><button id="poetry-clear" type="button">clear selection</button><button id="poetry-original" type="button">restore original</button></div>
+    <div class="poetry-actions">
+      <details id="poetry-help">
+        <summary aria-label="How to make blackout poetry">?</summary>
+        <div>
+          <p id="poetry-instructions">Drag across words to black them out. Click a word to cover or uncover it. With a keyboard, use Tab to reach a word and Space or Enter to toggle it.</p>
+          <p>Save keeps your poem in your library. Your original words stay intact.</p>
+          <button id="poetry-original" type="button">restore all words</button>
+        </div>
+      </details>
+      <button id="poetry-apply" type="button">save</button>
+    </div>
   </dialog>
   <dialog id="reset-dialog" aria-labelledby="reset-title">
     <button class="close" type="button" aria-label="Cancel reset">×</button>

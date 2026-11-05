@@ -114,3 +114,20 @@ node tests/document_checks.cjs
 node tests/collection_checks.cjs
 node tests/art_checks.cjs
 ```
+
+## Blackout and story outline
+
+Blackout opens as normal text. Drag across words to cover a range with black bars;
+click or use Tab and Space/Enter to toggle a word. The question-mark help includes
+restore all words. Save applies the blackout and uses the usual library save;
+closing without saving discards only the pending blackout changes. Original words
+remain intact, and PNG/PDF exports keep the saved blackout presentation. Existing
+highlight entries still render, but reopening them in blackout uses black bars.
+
+Story Beats uses upright text and a black caret. Each explicit outline line has a
+decorative `>` in the gutter, including blank lines; wrapped continuations do not
+get another marker. Markers never become part of typed, copied, or saved text.
+
+`tests/blackout_outline_browser.cjs` checks this revised UI. The earlier
+`writing_modes_browser.cjs` and `guest_browser.cjs` retain their historical
+highlight-picker flows and do not describe the simplified blackout controls.
