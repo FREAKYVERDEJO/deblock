@@ -45,6 +45,7 @@
     get('story-start').textContent = edit ? 'keep these beats' : 'start writing';
     get('new-story').hidden = !edit;
     get('story-outline-status').textContent = '';
+    get('story-help').open = false;
     showDialog(get('story-dialog'));
     syncOutlineMarkers();
   }

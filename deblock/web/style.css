@@ -157,27 +157,31 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 .story-mode.has-art main { gap: 18px; }
 .story-mode.has-art #word-form { grid-template-rows: auto minmax(100px, 18svh) auto; }
 .story-mode.has-art .word-space { min-height: 100px; }
-#story-dialog { width: min(860px, 92vw); padding: clamp(28px, 5vw, 58px); border: 0; background: #fffefa; }
-#story-dialog h1 { font: 400 clamp(30px, 4vw, 44px)/1.2 'Times New Roman', Times, serif; margin-bottom: clamp(36px, 6vh, 64px); }
+#story-dialog { width: min(720px, 90vw); padding: clamp(24px, 4vw, 44px); border: 0; background: #fffefa; }
+#story-dialog h1 { font: 400 clamp(28px, 3.5vw, 38px)/1.2 'Times New Roman', Times, serif; margin-bottom: 32px; }
 #story-outline-form { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 /* The transparent mirror measures wrapped lines; its markers never enter the value. */
 .outline-editor { position: relative; flex-basis: 100%; min-width: 0; }
-#story-outline, #outline-mirror { width: 100%; padding: 4px 4px 4px 1.3em; font: 400 clamp(23px, 3.2vw, 36px)/1.45 'Times New Roman', Times, serif; letter-spacing: normal; white-space: pre-wrap; overflow-wrap: break-word; tab-size: 8; }
-#story-outline { display: block; min-height: 220px; resize: vertical; border: 0; border-radius: 0; box-shadow: none; background: transparent; color: #4b7fae; caret-color: #000; }
+#story-outline, #outline-mirror { width: 100%; padding: 4px 4px 4px 1.3em; font: 400 clamp(21px, 2.8vw, 30px)/1.45 'Times New Roman', Times, serif; letter-spacing: normal; white-space: pre-wrap; overflow-wrap: break-word; tab-size: 8; }
+#story-outline { display: block; min-height: 180px; resize: vertical; border: 0; border-radius: 0; box-shadow: none; background: transparent; color: #4b7fae; caret-color: #000; }
 .outline-markers { position: absolute; inset: 0; overflow: hidden; pointer-events: none; user-select: none; }
 #outline-mirror { color: transparent; }
 #outline-mirror > div { position: relative; min-height: 1.45em; }
-#outline-mirror > div::before { content: '>'; position: absolute; left: -1.1em; color: #4b7fae; }
-#story-outline::placeholder { color: #4b7fae; opacity: 1; }
-#story-outline:focus-visible { outline: 1px solid #b7d0e5; outline-offset: 8px; }
+#outline-mirror > div::before { content: '>'; position: absolute; left: -1.1em; color: #4b7fae; font-style: normal; }
+#story-outline::placeholder { color: #4b7fae; opacity: 1; font-style: italic; }
+.outline-editor:has(#story-outline:placeholder-shown) #outline-mirror { font-style: italic; }
+#story-outline:focus-visible { outline: none; }
 #story-outline-form button { font-style: normal; text-decoration: none; }
-#story-start { margin: 24px 0 0 auto; font-size: clamp(25px, 3.2vw, 36px); }
-#new-story { margin-top: 24px; font-size: 18px; }
+.story-outline-actions { position: relative; flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; margin-top: 16px; }
+#story-start { margin-left: auto; font-size: clamp(23px, 2.8vw, 30px); white-space: nowrap; }
+#new-story { font-size: 18px; }
+#story-help > summary { list-style: none; cursor: pointer; padding: 10px; font-size: 25px; }
+#story-help > summary::-webkit-details-marker { display: none; }
+#story-help > p { position: absolute; z-index: 1; bottom: 100%; left: 0; width: min(380px, 100%); margin: 0 0 8px; padding: 16px; background: #fffefa; box-shadow: 0 2px 16px #0002; font-size: 16px; }
 #story-outline-note:not(.sr-only) { flex-basis: 100%; margin: 10px 0; }
 #story-outline-status:empty { display: none; }
 @media (max-width: 600px) {
-  #story-dialog { padding: 30px 25px; }
-  #story-outline { min-height: 240px; }
+  #story-dialog { padding: 26px 22px; }
 }
 #chain-summary { white-space: pre-wrap; }
 #review-outline { margin: 18px 0; }

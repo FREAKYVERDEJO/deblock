@@ -29,7 +29,7 @@
     <button id="open-library" type="button">library</button>
     <button id="open-gallery" type="button">gallery</button>
     <a id="guest-sign-in" href="/accounts/login/">sign in</a>
-    <a id="guest-sign-up" href="/accounts/signup/">sign up</a>
+    <a id="guest-sign-up" href="/accounts/signup/" hidden>sign up</a>
     <button id="open-profile" class="profile-control" type="button" aria-label="Profile" data-account-only hidden>
       <svg viewBox="0 0 40 40" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
         <circle cx="20" cy="20" r="18"></circle>
@@ -63,8 +63,14 @@
         <textarea id="story-outline" rows="4" maxlength="100100" placeholder="Lily decides to see Matt&#10;Matt waits for her by the pier&#10;Lily arrives at the pier …" aria-describedby="story-outline-note" required></textarea>
       </div>
       <p id="story-outline-note" class="fine-print sr-only"></p>
-      <button id="story-start" type="submit">start writing</button>
-      <button id="new-story" type="button" hidden>new story</button>
+      <div class="story-outline-actions">
+        <details id="story-help">
+          <summary aria-label="About Story Beats">?</summary>
+          <p>A beat is something that happens in your story. Add at least two, one per line, in the order you want them to happen. Then write your way from one beat to the next. You can edit your outline or stop whenever you like.</p>
+        </details>
+        <button id="new-story" type="button" hidden>new story</button>
+        <button id="story-start" type="submit">start writing</button>
+      </div>
     </form>
     <p id="story-outline-status" role="status"></p>
   </dialog>

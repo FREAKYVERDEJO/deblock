@@ -124,9 +124,11 @@ closing without saving discards only the pending blackout changes. Original word
 remain intact, and PNG/PDF exports keep the saved blackout presentation. Existing
 highlight entries still render, but reopening them in blackout uses black bars.
 
-Story Beats uses upright text and a black caret. Each explicit outline line has a
-decorative `>` in the gutter, including blank lines; wrapped continuations do not
-get another marker. Markers never become part of typed, copied, or saved text.
+The guest writing header offers sign in. Story Beats uses a compact dialog with
+question-mark help at the bottom left and no outline around the textbox. Only the
+example placeholder is italic; entered text stays upright, with a black caret.
+Each explicit outline line has a decorative `>` in the gutter, including blank
+lines; wrapped continuations do not get another marker. Markers never become part of typed, copied, or saved text.
 
 `tests/blackout_outline_browser.cjs` checks this revised UI. The earlier
 `writing_modes_browser.cjs` and `guest_browser.cjs` retain their historical
