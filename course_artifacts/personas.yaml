@@ -1,0 +1,48 @@
+# Research personas for UX critique only.
+# These are assumptions derived from the selected segment, not real people or
+# evidence of demand. Replace or revise them after interviews.
+version: 1
+decision_date: "2026-11-04"
+source: "niche_brief.md; deblock/spec.md"
+personas:
+  - id: blocked-poet-private
+    segment: "Adult creative writer who self-identifies as blocked"
+    goal: "Put down a first line or image without judging it immediately."
+    context: "Alone, on a phone late in the day, with a few minutes available."
+    device: "mobile"
+    knowledge: "Uses a notes app and has seen generic writing prompts."
+    likely_concerns:
+      - "Will the app save or share personal writing?"
+      - "Will I be judged or told what my words mean?"
+    likely_mistakes:
+      - "May miss a secondary privacy explanation if it appears only after typing."
+      - "May assume a timer or streak is required from familiar writing apps."
+    success_signal: "Understands privacy before input and can enter one word without pressure."
+
+  - id: fiction-writer-empty-scene
+    segment: "Adult fiction writer stalled before a scene"
+    goal: "Break the empty-page moment and find material to develop."
+    context: "At a laptop during a planned writing session."
+    device: "desktop"
+    knowledge: "Has tried outlines, prompts, and freewriting."
+    likely_concerns:
+      - "How does a loose word chain connect to my story?"
+      - "Can I leave when it is not helping?"
+    likely_mistakes:
+      - "May search for a correct or clever association instead of continuing."
+      - "May expect the product to generate story ideas."
+    success_signal: "Can start, stop, or resume without a verdict or forced reflection."
+
+  - id: writing-student-no-grade
+    segment: "Adult writing student who dislikes evaluated prompts"
+    goal: "Experiment privately before deciding whether anything is worth sharing."
+    context: "Between classes, on a shared laptop or tablet."
+    device: "tablet"
+    knowledge: "Comfortable with prompts but wary of surveillance or grading."
+    likely_concerns:
+      - "Is this visible to a teacher or anyone else?"
+      - "Does saving create an account or send my writing away?"
+    likely_mistakes:
+      - "May confuse a local save with publication."
+      - "May leave if controls are not keyboard-accessible."
+    success_signal: "Can distinguish unsaved, locally saved, and downloaded writing."
