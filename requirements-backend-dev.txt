@@ -1,0 +1,4 @@
+-r requirements.txt
+-r requirements-dev.txt
+pytest-django==4.14.0
+pip-audit==2.10.1

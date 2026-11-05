@@ -1,0 +1,7 @@
+Django==5.2.19
+django-allauth==65.21.1
+argon2-cffi==25.1.0
+Pillow==13.0.0
+psycopg[binary]==3.3.8
+redis==8.1.0
+gunicorn==26.2.0
