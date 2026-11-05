@@ -244,7 +244,8 @@
     "credit": "Gift of R. H. Ellsworth Ltd., in honor of Susan Dillon, 1987",
     "verifiedAt": "2026-11-03",
     "src": "/assets/art/met-39328.jpg",
-    "sha256": "f80fff80cc71999645eae304932b3ec45180662a7e39c2398e9f5c12d886136a"
+    "sha256": "f80fff80cc71999645eae304932b3ec45180662a7e39c2398e9f5c12d886136a",
+    "inRotation": false
   },
   {
     "id": "met-39489",
@@ -263,7 +264,8 @@
     "credit": "Purchase, Friends of Asian Art Gifts, 1997",
     "verifiedAt": "2026-11-03",
     "src": "/assets/art/met-39489.jpg",
-    "sha256": "3e6cd0fd490e899e73a18f87aa0d641cbd3fce38bd43c16c4849e1728e44f728"
+    "sha256": "3e6cd0fd490e899e73a18f87aa0d641cbd3fce38bd43c16c4849e1728e44f728",
+    "inRotation": false
   },
   {
     "id": "met-463984",
@@ -282,7 +284,8 @@
     "credit": "Gift of J. Pierpont Morgan, 1917",
     "verifiedAt": "2026-11-03",
     "src": "/assets/art/met-463984.jpg",
-    "sha256": "821832cee5d35ba1d80a1fba16cfe64fa6c1ce0929e751ff784f17f0cfd6c4a5"
+    "sha256": "821832cee5d35ba1d80a1fba16cfe64fa6c1ce0929e751ff784f17f0cfd6c4a5",
+    "inRotation": false
   },
   {
     "id": "met-454611",
@@ -416,5 +419,81 @@
     "verifiedAt": "2026-11-03",
     "src": "/assets/art/met-75553.jpg",
     "sha256": "b10c5ad273babdf584e1426bbb054a2b2b06afadf96ae792da439aa4c084b8d0"
+  },
+  {
+    "id": "met-858237",
+    "title": "Krishna Rajagopalaswamy, king of the cowherds",
+    "artist": "Tirupati School, South India",
+    "date": "late 18th century",
+    "culture": "South India, Andhra Pradesh, Tirupati",
+    "medium": "Opaque watercolor and hand-colored silver on paper",
+    "museum": "The Metropolitan Museum of Art",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/858237",
+    "imageUrl": "https://images.metmuseum.org/CRDImages/as/web-large/DP-24984-001.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "rightsEvidence": "https://collectionapi.metmuseum.org/public/collection/v1/objects/858237",
+    "rightsStatement": "isPublicDomain: true; image released under The Met Open Access CC0 policy",
+    "credit": "Purchase, Friends of Asian Art Gifts, 2022",
+    "verifiedAt": "2026-11-05",
+    "src": "/assets/art/met-858237.jpg",
+    "sha256": "db76a14aa596286aa441208f90f5c2375106fcb7f8e1243f1a85db3b158eb26d"
+  },
+  {
+    "id": "met-45213",
+    "title": "Scene from the Life of the Buddha",
+    "artist": "Maker not recorded",
+    "date": "early 15th century",
+    "culture": "Japan",
+    "medium": "Section from a cycle of eight scenes from the life of the Buddha; ink, color, and gold on silk",
+    "museum": "The Metropolitan Museum of Art",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/45213",
+    "imageUrl": "https://images.metmuseum.org/CRDImages/as/web-large/DP245467.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "rightsEvidence": "https://collectionapi.metmuseum.org/public/collection/v1/objects/45213",
+    "rightsStatement": "isPublicDomain: true; image released under The Met Open Access CC0 policy",
+    "credit": "Gift of Alvin E. Friedman-Kien, 1993",
+    "verifiedAt": "2026-11-05",
+    "src": "/assets/art/met-45213.jpg",
+    "sha256": "85b4decd097fd16e90ab1a5aea66aa11430b2af9cf86343d3616c5664cb61e53"
+  },
+  {
+    "id": "met-40448",
+    "title": "Buddha Amitabha Descending from His Pure Land",
+    "artist": "Maker not recorded",
+    "date": "late 13th century",
+    "culture": "China",
+    "medium": "Hanging scroll; ink, color, and gold on silk",
+    "museum": "The Metropolitan Museum of Art",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/40448",
+    "imageUrl": "https://images.metmuseum.org/CRDImages/as/web-large/DP-15580-029.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "rightsEvidence": "https://collectionapi.metmuseum.org/public/collection/v1/objects/40448",
+    "rightsStatement": "isPublicDomain: true; image released under The Met Open Access CC0 policy",
+    "credit": "Rogers Fund, 1987",
+    "verifiedAt": "2026-11-05",
+    "src": "/assets/art/met-40448.jpg",
+    "sha256": "8d7f3d44a5fcc5267b1ae7b578fbb1334aba85cf04c78aa8283b25307d6674a4"
+  },
+  {
+    "id": "met-831188",
+    "title": "Icon of the Virgin and Child, Hodegetria variant",
+    "artist": "Byzantine or Crusader",
+    "date": "13th century",
+    "culture": "Byzantine or Crusader",
+    "medium": "Tempera on wood",
+    "museum": "The Metropolitan Museum of Art",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/831188",
+    "imageUrl": "https://images.metmuseum.org/CRDImages/md/web-large/DP-22753-001.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "rightsEvidence": "https://collectionapi.metmuseum.org/public/collection/v1/objects/831188",
+    "rightsStatement": "isPublicDomain: true; image released under The Met Open Access CC0 policy",
+    "credit": "Purchase, Mary and Kathryn Jaharis Gift, in honor of Helen C. Evans, 2020",
+    "verifiedAt": "2026-11-05",
+    "src": "/assets/art/met-831188.jpg",
+    "sha256": "a0a0984d9bea70051c44cfe4630fe79efb31d688dc3ad3f7ae4c58f5dc655591"
   }
 ]

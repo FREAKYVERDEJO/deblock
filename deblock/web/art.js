@@ -28,7 +28,8 @@
       return response.json();
     }).then(items => {
       if (!Array.isArray(items) || !items.length || items.some(item => item.license !== 'CC0' || !/^\/assets\/art\/[a-z0-9-]+\.jpg$/.test(item.src))) throw new Error('The image pool is invalid.');
-      next = createDeck(items); return items;
+      // Retired prompts stay resolvable for previously saved documents.
+      next = createDeck(items.filter(item => item.inRotation !== false)); return items;
     }).catch(error => { catalogPromise = null; throw error; });
     return catalogPromise;
   }

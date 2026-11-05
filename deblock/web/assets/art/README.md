@@ -1,16 +1,22 @@
 # Reviewed CC0 image pool
 
-Reviewed on 2026-11-03. Twenty-two hand-selected works from The Metropolitan Museum
-of Art and the Smithsonian American Art Museum. This is a small starting pool,
-not an exhaustive representation of any culture.
+Reviewed on 2026-11-03; painted iconography update reviewed on 2026-11-05.
+The catalog contains 26 works from The Metropolitan Museum of Art and the
+Smithsonian American Art Museum: 23 in rotation and three retained for saved
+entries. This is a small curated pool, not an exhaustive representation of any culture.
 
-The expansion adds ten works: six gardens, flowers, seascapes, and ceramics,
-and four religious works spanning Hindu, Buddhist, Christian, and Islamic
-traditions. The latter are Shiva as Lord of Dance (39328), Meditating Buddha
-(39489), Icon with the Virgin and Child (463984), and Calligraphic Galleon
-(454611). Their official object pages document the subjects; all receive the
-same shuffle treatment as the rest of the pool, with no extra weighting.
-Existing works and IDs are retained unchanged.
+The religious selection in rotation uses paintings and calligraphy:
+- Krishna Rajagopalaswamy, king of the cowherds (858237), Hindu devotional painting.
+- Scene from the Life of the Buddha (45213), Japanese Buddhist painting.
+- Buddha Amitabha Descending from His Pure Land (40448), Chinese Buddhist painting.
+- Icon of the Virgin and Child, Hodegetria variant (831188), Christian painted icon.
+- Calligraphic Galleon (454611), Ottoman Islamic devotional calligraphy.
+
+The official object pages document these subjects. All receive the same shuffle
+weight as other prompts. The three earlier religious sculptures (39328, 39489,
+463984) have `inRotation: false`: they are excluded from new prompts, while their
+IDs, metadata, and image files remain available for Library entries and exports.
+Do not remove archived images when updating the selection.
 
 Every Met selection had `isPublicDomain: true` and a nonempty image URL in its
 individual official API record. Several candidates with false flags were excluded.
