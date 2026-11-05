@@ -1,11 +1,12 @@
-"""Serve the local writing prototype with no third-party runtime dependencies.
+"""Start the local writing app, including sign-in and guest writing.
 
 Run from the repository root with ``python -m deblock.server``.
-Only the exercise API and explicitly listed frontend assets are served.
+Use ``--browser-only`` for the legacy standard-library prototype without accounts.
 """
 
 import argparse
 import json
+import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -65,7 +66,11 @@ class PrototypeHandler(BaseHTTPRequestHandler):
                               "application/json; charset=utf-8")
         elif path in ASSETS:
             filename, content_type = ASSETS[path]
-            self._respond(200, (WEB_ROOT / filename).read_bytes(), content_type)
+            content = (WEB_ROOT / filename).read_bytes()
+            if path == '/':
+                # This explicitly account-free preview cannot serve sign-in routes.
+                content = content.replace(b'id="guest-sign-in"', b'id="guest-sign-in" hidden')
+            self._respond(200, content, content_type)
         else:
             self._respond(404, b"Not found", "text/plain; charset=utf-8")
 
@@ -91,7 +96,14 @@ class PrototypeHandler(BaseHTTPRequestHandler):
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--browser-only", action="store_true", help="Run the legacy preview without accounts or sign-in")
     args = parser.parse_args()
+    if not args.browser_only:
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'deblock.backend.settings')
+        os.environ.setdefault('DEBLOCK_ORIGIN', f'http://127.0.0.1:{args.port}')
+        from django.core.management import execute_from_command_line
+        execute_from_command_line(['deblock', 'runserver', f'127.0.0.1:{args.port}', '--noreload'])
+        return
     with ThreadingHTTPServer(("127.0.0.1", args.port), PrototypeHandler) as server:
         print(f"deblock is ready at http://127.0.0.1:{server.server_port}", flush=True)
         try:

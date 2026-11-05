@@ -27,14 +27,18 @@ It does not generate, diagnose, or interpret a writer's text.
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements-backend-dev.txt
 .venv/bin/python manage.py migrate
-.venv/bin/python manage.py runserver 127.0.0.1:8003 --noreload
+.venv/bin/python -m deblock.server --port 8016
 ```
 
-Open <http://127.0.0.1:8003/> to sign in/create an account, or choose **Continue
-without signing in** for browser-only guest writing. Read local verification/reset
-emails with `.venv/bin/python manage.py mailbox`. Saved entries and images now
-belong to your account and persist in the local database.
+Open <http://127.0.0.1:8016/> to start as a guest, then choose **sign in** to use
+an account. Account pages also offer **Continue without signing in**.
+The launcher serves both writing and account routes and sets local email links
+to the chosen port (unless `DEBLOCK_ORIGIN` is explicitly configured).
+Read local verification/reset emails with `.venv/bin/python manage.py mailbox`.
+Guest saves stay in this browser. When signed in, saved entries and images belong
+to your account and persist in the local database.
 
 See [BACKEND.md](BACKEND.md) for account features, importing older browser saves,
 security controls, tests, and PostgreSQL/SMTP deployment configuration.
-[PROTOTYPE.md](PROTOTYPE.md) documents the earlier browser-only version.
+[PROTOTYPE.md](PROTOTYPE.md) documents writing controls and the optional
+`--browser-only` preview, which deliberately hides sign-in.

@@ -9,11 +9,15 @@ erasing the original. Selection and display style are saved with the entry and
 shown in PNG/PDF exports. See [FEATURES.md](FEATURES.md).
 
 ```sh
-python3 -m deblock.server
+.venv/bin/python manage.py migrate
+.venv/bin/python -m deblock.server --port 8016
 ```
 
-Open http://127.0.0.1:8000. Use `--port 8001` for a separate preview. The local
-server uses only Python's standard library; it is not a production server.
+Open http://127.0.0.1:8016. Install the dependencies listed in README first. The
+default launcher includes guest writing and working sign-in routes; it is not a
+production server. For the older browser-only preview described below, run
+`python3 -m deblock.server --browser-only --port 8000`. That explicit mode uses
+only Python's standard library and hides sign-in because it has no accounts.
 
 The interface is a single warm white page in Times New Roman. Whitespace commits
 and clears the current word immediately; Enter also commits. Repeated whitespace

@@ -77,8 +77,11 @@ IDs; a large import may hit rate limits and need a retry after a minute.
 
 Browser profile information does not become account credentials. Choose the name
 and avatar again in Profile. Account email and join date come from the server.
-The standalone `python -m deblock.server` remains available as the legacy local
-prototype; it has no login or server persistence and is not a deployment server.
+The normal `.venv/bin/python -m deblock.server --port 8016` launcher serves this
+account backend and configures local email links for that port. Run migrations
+as above before starting it. Add `--browser-only` for the legacy standard-library
+prototype; that mode hides sign-in and has no accounts or server persistence.
+Neither preview command is a production deployment server.
 
 ## Security boundaries
 
