@@ -21,6 +21,7 @@
   if (typeof document === 'undefined') return;
   const get = id => document.getElementById(id);
   let catalogPromise, next, selected = null, enabled = false, busy = false;
+  let available = true;
   let selectedImage = null, upcoming = null, requestId = 0;
   let failedRestore = null;
   let infoId = 0;
@@ -91,14 +92,16 @@
     container.append(image); addInfo(container, item);
   }
   function refresh() {
+    get('art-toggle').hidden = !available;
     get('art-toggle').ariaPressed = String(enabled);
     get('art-toggle').textContent = enabled ? 'image on' : 'image off';
-    get('art-next').hidden = !enabled;
-    document.body.classList.toggle('has-art', enabled);
-    render(get('writing-art'), enabled ? selected : null, selectedImage);
+    get('art-next').hidden = !available || !enabled;
+    document.body.classList.toggle('has-art', available && enabled);
+    render(get('writing-art'), available && enabled ? selected : null, selectedImage);
     render(get('finish-art'), selected);
   }
   async function change(shuffle) {
+    if (!available) return;
     if (!shuffle && (enabled || busy)) {
       requestId++; busy = false; enabled = false;
       get('art-next').setAttribute('aria-disabled', 'false');
@@ -136,6 +139,15 @@
   get('art-toggle').addEventListener('click', () => change(false));
   get('art-next').addEventListener('click', () => change(true));
   root.DeblockArt = {
+    setAvailable(value) {
+      if (available === Boolean(value)) return;
+      available = Boolean(value);
+      if (!available) {
+        requestId++; busy = false;
+        get('art-status').textContent = '';
+      }
+      refresh();
+    },
     async restore(item) {
       const request = ++requestId;
       busy = true;

@@ -130,6 +130,13 @@ example placeholder is italic; entered text stays upright, with a black caret.
 Each explicit outline line has a decorative `>` in the gutter, including blank
 lines; wrapped continuations do not get another marker. Markers never become part of typed, copied, or saved text.
 
+Story Beats has no image controls or writing image. Artwork already attached to a
+saved story remains part of that saved piece. Free association keeps its image
+controls. Confirming reset in Story Beats clears its outline and passages and
+opens an empty outline; cancelling leaves the story intact. Reset does not touch
+saved entries or the separate free-association draft. The regression browser check
+is `tests/story_reset_browser.cjs`.
+
 `tests/blackout_outline_browser.cjs` checks this revised UI. The earlier
 `writing_modes_browser.cjs` and `guest_browser.cjs` retain their historical
 highlight-picker flows and do not describe the simplified blackout controls.

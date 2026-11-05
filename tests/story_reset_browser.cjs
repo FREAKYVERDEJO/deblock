@@ -1,0 +1,95 @@
+// Regression: reset starts a fresh story without reviving old drafts or touching saves.
+const assert = require('node:assert/strict');
+const { chromium } = require('playwright');
+const base = process.env.DEBLOCK_TEST_URL || 'http://127.0.0.1:8016';
+(async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    for (const width of [1280, 390]) {
+      const page = await browser.newPage({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
+      const errors = [];
+      page.on('pageerror', error => errors.push(error.message));
+      page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+      page.on('dialog', dialog => dialog.accept());
+      const menu = async id => { await page.locator('#site-menu > summary').click(); await page.locator(id).click(); };
+      const snapshot = () => page.evaluate(() => window.DeblockDocument.snapshot());
+      await page.goto(base);
+      await page.locator('#word:not([disabled])').waitFor();
+      await page.locator('#word').fill('sea glass');
+      const free = await snapshot();
+      await menu('#open-story');
+      await page.locator('#story-outline').fill('leave home\nmeet a friend\nreturn');
+      await page.locator('#story-start').click();
+      await page.locator('#word').fill('Morning light');
+      await page.locator('#next-beat').click();
+      await page.locator('#word').fill('We talk');
+      const before = await snapshot();
+      await page.locator('#reset').click();
+      await page.locator('#cancel-reset').click();
+      const cancelled = await snapshot();
+      assert.deepEqual(cancelled.story, before.story);
+      assert.equal(cancelled.id, before.id);
+      await page.locator('#finish').click();
+      await page.locator('#document-title').fill('Saved before reset');
+      await page.locator('#finish-dialog .save-menu > summary').click();
+      await page.locator('#save-entry').click();
+      await page.waitForFunction(() => document.getElementById('export-status').textContent.startsWith('Saved to library'));
+      await page.locator('#finish-dialog .close').click();
+      await page.locator('#reset').click();
+      await page.locator('#confirm-reset').click();
+      assert.equal(await page.locator('#story-dialog').evaluate(el => el.open), true, 'story reset must open a fresh outline');
+      assert.equal(await page.locator('#story-outline').inputValue(), '', 'old beats must be cleared');
+      await page.locator('#story-dialog .close').click();
+      const restoredFree = await snapshot();
+      assert.equal(restoredFree.id, free.id);
+      assert.deepEqual(restoredFree.words, free.words);
+      assert.equal(restoredFree.draft, free.draft);
+      await menu('#open-story');
+      assert.equal(await page.locator('#story-outline').inputValue(), '', 'switching back must not resurrect the reset story');
+      await page.locator('#story-outline').fill('a new beginning\na new ending');
+      await page.locator('#story-start').click();
+      const fresh = await snapshot();
+      assert.notEqual(fresh.id, before.id);
+      assert.equal(fresh.title, 'Untitled');
+      assert.deepEqual(fresh.story.passages[0].words, []);
+      assert.equal(fresh.story.passages[0].draft, '');
+      assert.equal(await page.locator('#art-toggle').isVisible(), false);
+      assert.equal(await page.locator('#art-next').isVisible(), false);
+      assert.equal(await page.locator('#writing-art').isVisible(), false);
+      // Previously saved artwork is retained, but cannot turn the story writer's image controls back on.
+      const artwork = await page.evaluate(async () => (await (await fetch('/assets/art/catalog.json')).json())[0]);
+      await page.evaluate(async artwork => {
+        const entry = window.DeblockDocument.snapshot();
+        await window.DeblockDocument.load({ ...entry, artwork });
+      }, artwork);
+      assert.equal(await page.locator('#art-toggle').isVisible(), false);
+      assert.equal(await page.locator('#art-next').isVisible(), false);
+      assert.equal(await page.locator('#writing-art').isVisible(), false);
+      assert.equal(await page.locator('body').evaluate(el => el.classList.contains('has-art')), false);
+      await menu('#open-free');
+      assert.equal(await page.locator('#art-toggle').isVisible(), true);
+      await page.locator('#art-toggle').click();
+      await page.locator('#writing-art:not([hidden])').waitFor();
+      await menu('#open-story');
+      assert.equal(await page.locator('#art-toggle').isVisible(), false);
+      assert.equal(await page.locator('#writing-art').isVisible(), false);
+      await page.locator('#open-library').click();
+      await page.getByRole('button', { name: /Saved before reset/ }).click();
+      assert.equal(await page.locator('#entry-body').innerText(), 'Morning light\n\nWe talk');
+      await page.locator('#entry-dialog .close').click();
+      await page.locator('#library-dialog .close').click();
+      await menu('#open-free');
+      await page.locator('#reset').click();
+      await page.locator('#confirm-reset').click();
+      const cleared = await snapshot();
+      assert.deepEqual(cleared.words, []);
+      assert.equal(cleared.draft, '');
+      assert.equal(cleared.story, null);
+      assert.equal(await page.locator('#story-dialog').evaluate(el => el.open), false);
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+      assert.deepEqual(errors, []);
+      console.log(`PASS ${width}px: reset/cancel, fresh outline and identity, no stale story, free draft and saved entry preserved, story images hidden, free images and reset work`);
+      await page.close();
+    }
+  } finally { await browser.close(); }
+})().catch(error => { console.error(error); process.exitCode = 1; });

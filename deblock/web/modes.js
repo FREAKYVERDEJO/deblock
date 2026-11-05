@@ -59,6 +59,7 @@
     get('open-story').setAttribute('aria-current', story ? 'page' : 'false');
     get('open-free').setAttribute('aria-current', story ? 'false' : 'page');
     document.body.classList.toggle('story-mode', Boolean(story));
+    root.DeblockArt?.setAvailable?.(!story);
     if (!story) return;
     get('word').placeholder = '';
     get('story-progress').textContent = `passage ${story.active + 1} of ${story.passages.length}`;
@@ -111,6 +112,14 @@
   });
   root.DeblockModes = {
     refresh, reviewState,
+    async reset(mode) {
+      drafts.delete(mode);
+      if (mode === 'story') {
+        outlineInput.value = '';
+        await root.DeblockDocument.load(drafts.get('free') || blank(null));
+        outline(false);
+      } else refresh();
+    },
     hasDrafts: () => get('story-outline').value.trim() || [...drafts.values()].some(hasContent),
     async openEntry(entry) {
       const current = root.DeblockDocument.snapshot();

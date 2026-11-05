@@ -179,14 +179,16 @@ byId('arrows-toggle').addEventListener('click', () => {
   byId('arrows-toggle').textContent = showArrows ? 'arrows on' : 'arrows off';
   renderSummary();
 });
-byId('reset').addEventListener('click', () => showDialog(byId('reset-dialog')));
+byId('reset').addEventListener('click', () => {
+  byId('reset-description').textContent = story
+    ? 'This clears this story’s beats and passages and opens a new outline. Save under done first if you want to keep it. Your saved entries and free-association draft stay intact.'
+    : 'This clears your words in this tab. Save them under done first if you want to keep them. Your Library and Gallery stay saved.';
+  showDialog(byId('reset-dialog'));
+});
 byId('cancel-reset').addEventListener('click', () => byId('reset-dialog').close());
-byId('confirm-reset').addEventListener('click', () => {
-  if (story) {
-    story = window.DeblockWritingTools.copy(story);
-    story.active = 0;
-    for (const passage of story.passages) { passage.words = []; passage.draft = ''; }
-  }
+byId('confirm-reset').addEventListener('click', async () => {
+  const resetMode = story ? 'story' : 'free';
+  story = null;
   blackout = null;
   entryRevision = null;
   words.length = 0;
@@ -201,8 +203,8 @@ byId('confirm-reset').addEventListener('click', () => {
   byId('announcement').textContent = 'Cleared. Start with a new word.';
   fitWords();
   byId('reset-dialog').close();
-  input.focus({ preventScroll: true });
-  window.DeblockModes?.refresh();
+  await window.DeblockModes?.reset?.(resetMode);
+  if (resetMode === 'free') input.focus({ preventScroll: true });
 });
 byId('resume').addEventListener('click', () => byId('finish-dialog').close());
 window.addEventListener('beforeunload', (event) => {
