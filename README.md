@@ -21,8 +21,16 @@ It does not generate, diagnose, or interpret a writer's text.
 ## Run locally
 
 ```sh
-python3 -m deblock.server
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-backend-dev.txt
+.venv/bin/python manage.py migrate
+.venv/bin/python manage.py runserver 127.0.0.1:8003 --noreload
 ```
 
-Open http://127.0.0.1:8000. For the expanded prototype notes and test commands,
-see [PROTOTYPE.md](PROTOTYPE.md).
+Open <http://127.0.0.1:8003/> to create an account. Read local verification/reset
+emails with `.venv/bin/python manage.py mailbox`. Saved entries and images now
+belong to your account and persist in the local database.
+
+See [BACKEND.md](BACKEND.md) for account features, importing older browser saves,
+security controls, tests, and PostgreSQL/SMTP deployment configuration.
+[PROTOTYPE.md](PROTOTYPE.md) documents the earlier browser-only version.
