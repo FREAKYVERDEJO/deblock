@@ -96,7 +96,8 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 
 .artwork { position: relative; margin: 0; }
 .artwork > img { display: block; max-width: 100%; height: auto; margin: 0 auto; object-fit: contain; }
-.writing-art { max-width: min(520px, 80vw); }
+/* Reserve the same space for every aspect ratio so the word never jumps. */
+.writing-art { width: min(520px, 80vw); height: 35svh; flex-shrink: 0; display: grid; place-items: center; }
 .writing-art > img { max-height: 35svh; }
 .has-art main { display: flex; flex-direction: column; justify-content: center; gap: 26px; padding: 70px 10% 95px; }
 .has-art .word-space { height: 110px; }
@@ -114,6 +115,7 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
   footer { gap: 8px; }
   .has-art main { gap: 16px; padding: 70px 8% 100px; }
   .has-art .word-space { height: 90px; }
+  .writing-art { height: 30svh; }
   .writing-art > img { max-height: 30svh; }
   footer nav { gap: 0; flex-wrap: wrap; justify-content: flex-end; }
   footer nav button { padding: 10px 5px; font-size: 13px; }
