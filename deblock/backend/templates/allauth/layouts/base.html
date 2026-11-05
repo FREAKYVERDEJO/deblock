@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block head_title %}deblock{% endblock %} · deblock</title>
+  <link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/account.css">
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="auth-page">
+  <a class="auth-brand" href="/">deblock</a>
+  <main class="auth-card">
+    {% if messages %}<ul class="messages" role="status">{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>{% endif %}
+    {% block body %}{% block content %}{% endblock %}{% endblock %}
+    {% if local_email_delivery %}<p class="helptext">Local development: account emails are saved on this computer. Read the latest with <code>python manage.py mailbox</code>.</p>{% endif %}
+    <nav class="auth-links" aria-label="Account">
+    {% if user.is_authenticated %}
+      <a href="/">write</a><a href="{% url 'account_email' %}">email</a><a href="{% url 'account_change_password' %}">password</a><a href="{% url 'account_logout' %}">sign out</a>
+    {% else %}
+      <a href="{% url 'account_login' %}">sign in</a><a href="{% url 'account_signup' %}">create account</a>
+    {% endif %}
+    </nav>
+  </main>
+  {% block extra_body %}{% endblock %}
+</body>
+</html>

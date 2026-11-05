@@ -21,6 +21,7 @@ ASSETS = {
     "/art.js": ("art.js", "text/javascript; charset=utf-8"),
     "/assets/art/catalog.json": ("assets/art/catalog.json", "application/json; charset=utf-8"),
     "/storage.js": ("storage.js", "text/javascript; charset=utf-8"),
+    "/account.js": ("account.js", "text/javascript; charset=utf-8"),
     "/shelf.js": ("shelf.js", "text/javascript; charset=utf-8"),
     "/assets/avatars/portrait-1.png": ("assets/avatars/portrait-1.png", "image/png"),
     "/assets/avatars/portrait-2.png": ("assets/avatars/portrait-2.png", "image/png"),

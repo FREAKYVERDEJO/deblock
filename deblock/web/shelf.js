@@ -1,4 +1,4 @@
-// The sketch's three sections share the same browser-local collection.
+// Profile, library, and gallery use the active storage adapter.
 (function () {
   'use strict';
   const get = id => document.getElementById(id);
@@ -7,10 +7,11 @@
   let viewedEntry;
   let galleryUrls = [];
   let savingEntry = false;
+  let savedDraft;
   const avatarIds = ['1', '2', '3'];
   const avatarId = value => avatarIds.includes(value) ? value : '1';
   const date = value => new Date(value).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-  const errorText = error => `Couldn’t access browser storage. ${error.message || 'Try again or download your writing.'}`;
+  const errorText = error => `${store.accountMode ? 'Couldn’t access your saved work.' : 'Couldn’t access browser storage.'} ${error.message || 'Try again or download your writing.'}`;
   const ordered = items => items.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 
   async function localProfile() {
@@ -48,7 +49,10 @@
       const button = document.createElement('button');
       button.type = 'button'; button.className = 'entry-card';
       button.append(textElement('strong', entry.title || 'Untitled'), textElement('time', date(entry.updatedAt)), textElement('span', entryText(entry).slice(0, 150)));
-      button.addEventListener('click', () => viewEntry(entry));
+      button.addEventListener('click', async () => {
+        try { await viewEntry(store.accountMode ? await store.get('entries', entry.id) : entry); }
+        catch (error) { get('library-status').textContent = errorText(error); }
+      });
       list.append(button);
     }
   }
@@ -59,13 +63,24 @@
     const list = get('gallery-list'); list.replaceChildren();
     if (!images.length) list.append(textElement('p', 'No pictures yet. Save a document as PNG to add it here.', 'empty-state'));
     for (const item of images) {
-      const url = URL.createObjectURL(item.blob); galleryUrls.push(url);
+      const url = store.accountMode ? item.url : URL.createObjectURL(item.blob);
+      if (!store.accountMode) galleryUrls.push(url);
       const link = document.createElement('a'); link.href = url; link.download = 'deblock-document.png';
       link.className = 'gallery-card';
       if (item.artwork) link.title = `${item.artwork.title} — ${item.artwork.artist} · ${item.artwork.museum} · CC0`;
       const image = document.createElement('img'); image.src = url; image.alt = item.title || 'Saved writing'; image.loading = 'lazy';
       link.append(image, textElement('span', item.title || 'Untitled'), textElement('small', 'download PNG'));
-      list.append(link);
+      if (store.accountMode) {
+        const container = document.createElement('div'); container.className = 'gallery-item';
+        const remove = textElement('button', 'delete'); remove.type = 'button';
+        remove.setAttribute('aria-label', `Delete ${item.title || 'image'}`);
+        remove.addEventListener('click', async () => {
+          if (!window.confirm('Delete this saved picture from Gallery?')) return;
+          try { await store.remove('images', item.id); await renderGallery(); }
+          catch (error) { get('gallery-status').textContent = errorText(error); }
+        });
+        container.append(link, remove); list.append(container);
+      } else list.append(link);
     }
   }
   async function renderProfile() {
@@ -102,7 +117,7 @@
       get('profile-image').src = `/assets/avatars/portrait-${updated.avatar}.png`;
       get('avatar-picker').hidden = true;
       get('profile-picture').setAttribute('aria-expanded', 'false');
-      status.textContent = 'Profile saved in this browser.';
+      status.textContent = store.accountMode ? 'Profile saved.' : 'Profile saved in this browser.';
     } catch (error) { status.textContent = errorText(error); }
   });
   get('save-entry').addEventListener('click', async () => {
@@ -114,11 +129,43 @@
       const entry = window.DeblockDocument.snapshot();
       if (!entry.words.length && !entry.draft.trim()) { status.textContent = 'Write something first.'; return; }
       await localProfile();
-      await store.put('entries', entry);
-      status.textContent = 'Saved to library in this browser.';
+      // Bind this draft to its own last save, even if Library refreshes another revision.
+      if (store.accountMode && savedDraft?.id === entry.id) entry.revision = savedDraft.revision;
+      const saved = await store.put('entries', entry);
+      if (store.accountMode) savedDraft = saved;
+      status.textContent = store.accountMode ? 'Saved to library.' : 'Saved to library in this browser.';
     } catch (error) { status.textContent = errorText(error); }
     finally { savingEntry = false; }
   });
+  if (store.accountMode) {
+    get('edit-entry').addEventListener('click', () => {
+      get('edit-entry-title').value = viewedEntry.title;
+      get('edit-entry-text').value = [...viewedEntry.words, viewedEntry.draft].filter(Boolean).join(' ');
+      get('edit-entry-status').textContent = '';
+      showDialog(get('edit-entry-dialog'));
+    });
+    get('edit-entry-form').addEventListener('submit', async event => {
+      event.preventDefault();
+      const button = get('edit-entry-form').querySelector('[type="submit"]');
+      button.disabled = true;
+      try {
+        const updated = await store.put('entries', { ...viewedEntry,
+          title: get('edit-entry-title').value, words: [get('edit-entry-text').value], draft: '', arrows: false });
+        await viewEntry(updated);
+        get('edit-entry-dialog').close();
+        await renderLibrary();
+      } catch (error) { get('edit-entry-status').textContent = errorText(error); }
+      finally { button.disabled = false; }
+    });
+    get('delete-entry').addEventListener('click', async () => {
+      if (!window.confirm('Delete this entry from your Library?')) return;
+      try {
+        await store.remove('entries', viewedEntry.id);
+        if (savedDraft?.id === viewedEntry.id) savedDraft = null;
+        get('entry-dialog').close(); await renderLibrary();
+      } catch (error) { get('entry-status').textContent = errorText(error); }
+    });
+  }
   window.DeblockShelf = {
     snapshotFor: dialog => dialog.id === 'entry-dialog' ? viewedEntry : window.DeblockDocument.snapshot(),
     async saveImage(blob, entry) {

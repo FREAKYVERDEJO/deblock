@@ -28,9 +28,10 @@
       transaction.onabort = () => reject(transaction.error || new Error('Save cancelled.'));
     });
   }
-  root.DeblockStorage = {
+  root.DeblockLocalStorage = {
     all: store => operation(store, 'getAll'),
     get: (store, id) => operation(store, 'get', id),
     put: (store, value) => operation(store, 'put', value),
   };
+  root.DeblockStorage ||= root.DeblockLocalStorage;
 })(window);

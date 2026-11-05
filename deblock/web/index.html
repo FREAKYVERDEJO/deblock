@@ -10,6 +10,7 @@
   <script src="/art.js" defer></script>
   <script src="/storage.js" defer></script>
   <script src="/shelf.js" defer></script>
+  <script src="/account.js" defer></script>
   <script src="/vendor/html2canvas-1.4.1.min.js" defer></script>
   <script src="/export.js" defer></script>
 </head>
@@ -20,6 +21,7 @@
       <button id="open-profile" type="button">Profile</button>
       <button id="open-library" type="button">Library</button>
       <button id="open-gallery" type="button">Gallery</button>
+      <a href="/accounts/logout/" data-account-only hidden>sign out</a>
     </nav>
   </details>
   <main>
@@ -95,6 +97,7 @@
       <p id="password-note" class="fine-print">Password reset isn’t available in this prototype.</p>
       <div class="end-actions"><button type="submit">save profile</button></div>
     </form>
+    <div class="account-actions" data-account-only hidden><button id="import-browser" type="button">import browser entries</button><button id="delete-account" type="button">delete account</button></div>
     <p id="profile-status" class="section-status" role="status"></p>
   </dialog>
   <dialog id="library-dialog" aria-labelledby="library-title" class="collection-dialog">
@@ -114,8 +117,30 @@
     <figure id="entry-art" class="artwork document-art" hidden></figure>
     <p id="entry-body"></p>
     <div class="end-actions"><details class="save-menu"><summary>save</summary><div class="save-options"><button type="button" data-export="png">as PNG</button><button type="button" data-export="pdf">as PDF</button></div></details></div>
+    <div class="end-actions" data-account-only hidden><button id="edit-entry" type="button">edit</button><button id="delete-entry" type="button">delete</button></div>
     <p id="entry-status" role="status" data-export-status data-html2canvas-ignore="true"></p>
   </dialog>
+  <dialog id="edit-entry-dialog">
+    <button class="close" type="button" aria-label="Close editor">×</button>
+    <h1>Edit entry</h1>
+    <form id="edit-entry-form">
+      <label for="edit-entry-title">Title</label><input id="edit-entry-title" maxlength="300" required>
+      <label for="edit-entry-text">Text</label><textarea id="edit-entry-text" rows="10" maxlength="250000"></textarea>
+      <button type="submit">save changes</button>
+    </form>
+    <p id="edit-entry-status" role="status"></p>
+  </dialog>
+  <dialog id="delete-account-dialog">
+    <button class="close" type="button" aria-label="Cancel account deletion">×</button>
+    <h1>Delete account?</h1>
+    <p>This permanently removes your account, entries, and gallery images. Download anything you want to keep first.</p>
+    <form id="delete-account-form">
+      <label for="delete-account-password">Confirm your password</label><input id="delete-account-password" type="password" autocomplete="current-password" required>
+      <button type="submit">delete account permanently</button>
+    </form>
+    <p id="delete-account-status" role="status"></p>
+  </dialog>
+  <p id="account-session-warning" class="account-session-warning" role="status" hidden>Your session changed. <a href="/accounts/login/" target="_blank" rel="noopener">Sign in</a>, then download your draft before reloading.</p>
   <p id="art-status" class="art-status" role="status"></p>
   <p id="announcement" class="sr-only" role="status" aria-live="polite"></p>
   <noscript>This writing space needs JavaScript.</noscript>

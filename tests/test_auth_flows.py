@@ -100,3 +100,38 @@ def test_weak_password_is_rejected():
     response = Client().post('/accounts/signup/', {'email': 'writer@example.test', 'password1': 'password', 'password2': 'password'})
     assert response.status_code == 200
     assert not User.objects.exists()
+
+
+def test_reset_links_expire_and_tampered_links_fail(monkeypatch):
+    from datetime import timedelta
+    from allauth.account.forms import default_token_generator
+    user = verified_user(); client = Client()
+    client.post('/accounts/password/reset/', {'email': user.email})
+    path = mail_path('/password/reset/key/')
+    tampered = Client().get(path[:-2] + ('x' if path[-2] != 'x' else 'y') + '/', follow=True)
+    assert b'invalid' in tampered.content.lower()
+    later = default_token_generator._now() + timedelta(hours=2)
+    monkeypatch.setattr(default_token_generator, '_now', lambda: later)
+    expired = Client().get(path, follow=True)
+    assert b'invalid' in expired.content.lower()
+    user.refresh_from_db()
+    assert user.check_password(PASSWORD)
+
+
+def test_email_change_requires_confirmation_and_preserves_old_identity():
+    user = verified_user(); client = Client()
+    client.force_login(user, backend='allauth.account.auth_backends.AuthenticationBackend')
+    response = client.post('/accounts/email/', {'email': 'new@example.test', 'action_add': ''})
+    # A fresh force_login can require reauthentication before changing email.
+    if response.status_code == 302 and '/reauthenticate/' in response.url:
+        # allauth resumes the pending email-change action after reauthentication.
+        response = client.post(response.url, {'password': PASSWORD})
+    assert response.status_code == 302, response.content.decode()
+    user.refresh_from_db()
+    assert user.email == 'writer@example.test'
+    pending = EmailAddress.objects.get(user=user, email='new@example.test')
+    assert not pending.verified
+    verify = mail_path('/confirm-email/')
+    assert client.post(verify).status_code == 302
+    user.refresh_from_db()
+    assert user.email == 'new@example.test'

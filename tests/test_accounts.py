@@ -131,3 +131,44 @@ def test_limits_bad_json_and_security_headers(users, settings):
 def test_private_files_are_never_static():
     for path in ['/var/deblock.sqlite3', '/.env', '/AGENTS.md', '/.git/config']:
         assert Client().get(path).status_code == 404
+
+
+def test_account_deletion_requires_password_and_cascades_only_owned_records(users):
+    alice, bob = users
+    client = signed_in(alice)
+    mine = Entry.objects.create(owner=alice, title='Mine')
+    theirs = Entry.objects.create(owner=bob, title='Theirs')
+    GalleryImage.objects.create(owner=alice, png=b'png', size=3)
+    assert client.delete('/api/account/', {'password': 'incorrect'}, content_type='application/json').status_code == 403
+    assert User.objects.filter(pk=alice.pk).exists()
+    assert client.delete('/api/account/', {'password': 'A long unique password 937!'}, content_type='application/json').status_code == 204
+    assert not Entry.objects.filter(pk=mine.pk).exists()
+    assert not GalleryImage.objects.filter(owner_id=alice.pk).exists()
+    assert Entry.objects.filter(pk=theirs.pk).exists()
+    assert client.get('/api/entries/').status_code == 401
+
+
+def test_malformed_profile_upload_quota_and_delete_rate_limit(users, settings):
+    client = signed_in(users[0])
+    assert client.put('/api/profile/', {'avatar': {}}, content_type='application/json').status_code == 400
+    settings.MAX_GALLERY_IMAGES = 0
+    assert client.post('/api/images/', {'id': uuid.uuid4(), 'image': png()}).status_code == 409
+    assert GalleryImage.objects.count() == 0
+    for _ in range(5):
+        assert client.delete('/api/account/', {'password': 'wrong'}, content_type='application/json').status_code == 403
+    assert client.delete('/api/account/', {'password': 'wrong'}, content_type='application/json').status_code == 429
+
+
+def test_paginated_entries_and_account_ui(users):
+    client = signed_in(users[0])
+    Entry.objects.bulk_create([Entry(owner=users[0], title=str(index)) for index in range(52)])
+    first = client.get('/api/entries/').json()
+    second = client.get('/api/entries/?page=2').json()
+    assert len(first['items']) == 50 and first['nextPage'] == 2
+    assert len(second['items']) == 2 and second['nextPage'] is None
+    assert set(item['id'] for item in first['items']).isdisjoint(item['id'] for item in second['items'])
+    assert client.get('/api/entries/?page=bad').status_code == 400
+    assert b'accountMode: true' in client.get('/storage.js').content
+    assert b'account.js' in client.get('/').content
+    assert client.get('/')['Referrer-Policy'] == 'same-origin'
+    assert Client().get('/').status_code == 302

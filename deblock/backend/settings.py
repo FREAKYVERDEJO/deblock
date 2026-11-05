@@ -64,7 +64,7 @@ TEMPLATES = [{'BACKEND': 'django.template.backends.django.DjangoTemplates',
     'DIRS': [BASE_DIR / 'deblock/backend/templates'], 'APP_DIRS': True,
     'OPTIONS': {'context_processors': [
         'django.template.context_processors.request', 'django.contrib.auth.context_processors.auth',
-        'django.contrib.messages.context_processors.messages',
+        'django.contrib.messages.context_processors.messages', 'deblock.backend.context.email_delivery',
     ]}}]
 AUTH_USER_MODEL = 'backend.User'
 AUTHENTICATION_BACKENDS = ['allauth.account.auth_backends.AuthenticationBackend']
@@ -109,7 +109,7 @@ SECURE_HSTS_SECONDS = 31536000 if PRODUCTION else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = PRODUCTION
 SECURE_HSTS_PRELOAD = PRODUCTION
 SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_REFERRER_POLICY = 'no-referrer'
+SECURE_REFERRER_POLICY = 'same-origin'
 X_FRAME_OPTIONS = 'DENY'
 if os.environ.get('DEBLOCK_TRUST_PROXY_HTTPS') == '1':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -136,7 +136,7 @@ EMAIL_HOST_USER = required('EMAIL_HOST_USER') if PRODUCTION else os.environ.get(
 EMAIL_HOST_PASSWORD = required('EMAIL_HOST_PASSWORD') if PRODUCTION else os.environ.get('EMAIL_HOST_PASSWORD', '')
 EMAIL_USE_TLS = True
 EMAIL_TIMEOUT = 15
-DEFAULT_FROM_EMAIL = required('DEFAULT_FROM_EMAIL') if PRODUCTION else 'deblock <noreply@localhost>'
+DEFAULT_FROM_EMAIL = required('DEFAULT_FROM_EMAIL') if PRODUCTION else os.environ.get('DEFAULT_FROM_EMAIL', 'deblock <noreply@localhost>')
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 ADMINS = []  # Never email request bodies, passwords, or private writing on errors.
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024

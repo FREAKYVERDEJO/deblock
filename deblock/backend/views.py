@@ -57,7 +57,7 @@ def account_api(methods):
             if account_id is not None and account_id != str(request.user.pk):
                 return error('The signed-in account changed. Reload before saving to another account.', 409)
             if request.method not in {'GET', 'HEAD'}:
-                limit = 20 if request.path == '/api/images/' else 120
+                limit = 5 if request.path == '/api/account/' else 20 if request.path == '/api/images/' else 120
                 key = f'api-write:{request.user.pk}:{limit}:{int(time.time()) // 60}'
                 try:
                     if cache.add(key, 1, 65):
@@ -168,7 +168,7 @@ def profile(request):
         value = body(request)
         name = text(value.get('name', ''), 'Name', 100)
         avatar = value.get('avatar')
-        if avatar not in {'1', '2', '3'}:
+        if not isinstance(avatar, str) or avatar not in {'1', '2', '3'}:
             raise InvalidInput('Choose one of the three profile drawings.')
         request.user.name, request.user.avatar = name, avatar
         request.user.save(update_fields=['name', 'avatar'])

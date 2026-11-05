@@ -10,8 +10,9 @@ class ResponseSecurityMiddleware:
         request.get_host()  # Validate hosts even for views which never build a URL.
         length = request.META.get('CONTENT_LENGTH', '')
         if length and (not length.isdigit() or int(length) > 10 * 1024 * 1024):
-            return JsonResponse({'error': 'Request too large.'}, status=413)
-        response = self.get_response(request)
+            response = JsonResponse({'error': 'Request too large.'}, status=413)
+        else:
+            response = self.get_response(request)
         response['Content-Security-Policy'] = (
             "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob:; "
             "connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"

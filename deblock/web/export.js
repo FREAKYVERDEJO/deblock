@@ -117,7 +117,7 @@
         link.href = url;
         link.download = `deblock-document.${format}`;
         link.click();
-        if (galleryError) status.textContent = 'PNG downloaded, but Gallery could not save it. Browser storage may be full or unavailable.';
+        if (galleryError) status.textContent = `PNG downloaded, but Gallery could not save it. ${galleryError.message || 'Try again.'}`;
         else if (format === 'png' && root.DeblockShelf) status.textContent = 'Saved to Gallery and downloaded.';
         setTimeout(() => URL.revokeObjectURL(url), 60000);
       } catch (error) {
