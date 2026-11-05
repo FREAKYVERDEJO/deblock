@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from deblock.server import EXPORT_STYLE_SOURCE
 
 
 class ResponseSecurityMiddleware:
@@ -14,7 +15,7 @@ class ResponseSecurityMiddleware:
         else:
             response = self.get_response(request)
         response['Content-Security-Policy'] = (
-            "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob:; "
+            f"default-src 'self'; script-src 'self'; style-src 'self' {EXPORT_STYLE_SOURCE}; img-src 'self' blob: data:; "
             "connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
         )
         response['Cache-Control'] = 'no-store'

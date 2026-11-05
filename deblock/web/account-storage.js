@@ -59,6 +59,7 @@
       if (store === 'images') {
         const form = new FormData();
         form.set('id', value.id); form.set('title', value.title || '');
+        form.set('caption', value.caption || '');
         form.set('artworkId', value.artwork?.id || ''); form.set('image', value.blob, 'deblock-document.png');
         return request('/api/images/', 'POST', form);
       }

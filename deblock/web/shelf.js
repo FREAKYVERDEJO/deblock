@@ -28,14 +28,17 @@
     return element;
   }
   function entryText(entry) {
+    if (entry.story) return window.DeblockWritingTools.storyText(entry.story, entry.arrows);
     const links = [...entry.words];
-    if (entry.draft.trim()) links.push(entry.arrows ? `(${entry.draft} — unfinished)` : entry.draft.trim());
+    if (entry.draft.trim()) links.push(entry.draft.trim());
     return links.join(entry.arrows ? ' → ' : ' ');
   }
   async function viewEntry(entry) {
     viewedEntry = entry;
     get('entry-title').textContent = entry.title || 'Untitled';
     get('entry-body').textContent = entryText(entry);
+    window.DeblockPoetry?.render(get('entry-body'), entry);
+    get('edit-entry').hidden = Boolean(entry.story || entry.blackout);
     get('entry-status').textContent = '';
     await window.DeblockArt?.renderSaved(get('entry-art'), entry.artwork);
     showDialog(get('entry-dialog'));
@@ -61,7 +64,7 @@
     for (const url of galleryUrls) URL.revokeObjectURL(url);
     galleryUrls = [];
     const list = get('gallery-list'); list.replaceChildren();
-    if (!images.length) list.append(textElement('p', 'No pictures yet. Save a document as PNG to add it here.', 'empty-state'));
+    if (!images.length) list.append(textElement('p', 'No pictures yet. Choose save → to gallery to keep an image with your writing.', 'empty-state'));
     for (const item of images) {
       const url = store.accountMode ? item.url : URL.createObjectURL(item.blob);
       if (!store.accountMode) galleryUrls.push(url);
@@ -69,7 +72,9 @@
       link.className = 'gallery-card';
       if (item.artwork) link.title = `${item.artwork.title} — ${item.artwork.artist} · ${item.artwork.museum} · CC0`;
       const image = document.createElement('img'); image.src = url; image.alt = item.title || 'Saved writing'; image.loading = 'lazy';
-      link.append(image, textElement('span', item.title || 'Untitled'), textElement('small', 'download PNG'));
+      link.append(image, textElement('span', item.title || 'Untitled'));
+      if (item.caption) link.append(textElement('p', item.caption, 'gallery-caption'));
+      link.append(textElement('small', 'download PNG'));
       if (store.accountMode) {
         const container = document.createElement('div'); container.className = 'gallery-item';
         const remove = textElement('button', 'delete'); remove.type = 'button';
@@ -127,15 +132,20 @@
     const status = get('export-status');
     try {
       const entry = window.DeblockDocument.snapshot();
-      if (!entry.words.length && !entry.draft.trim()) { status.textContent = 'Write something first.'; return; }
+      if (!entry.story && !entry.words.length && !entry.draft.trim()) { status.textContent = 'Write something first.'; return; }
       await localProfile();
       // Bind this draft to its own last save, even if Library refreshes another revision.
-      if (store.accountMode && savedDraft?.id === entry.id) entry.revision = savedDraft.revision;
+      if (store.accountMode && !entry.revision && savedDraft?.id === entry.id) entry.revision = savedDraft.revision;
       const saved = await store.put('entries', entry);
       if (store.accountMode) savedDraft = saved;
+      window.DeblockDocument.saved?.(saved || entry);
       status.textContent = store.accountMode ? 'Saved to library.' : 'Saved to library in this browser.';
     } catch (error) { status.textContent = errorText(error); }
     finally { savingEntry = false; }
+  });
+  get('continue-entry').addEventListener('click', async () => {
+    try { await window.DeblockModes.openEntry(viewedEntry); }
+    catch (error) { get('entry-status').textContent = errorText(error); }
   });
   if (store.accountMode) {
     get('edit-entry').addEventListener('click', () => {
@@ -169,7 +179,10 @@
   window.DeblockShelf = {
     snapshotFor: dialog => dialog.id === 'entry-dialog' ? viewedEntry : window.DeblockDocument.snapshot(),
     async saveImage(blob, entry) {
-      await store.put('images', { id: crypto.randomUUID(), title: entry.title, artwork: entry.artwork || null, blob, updatedAt: new Date().toISOString() });
+      const caption = entry.blackout
+        ? window.DeblockWritingTools.poemText(entry, entry.blackout)
+        : entryText({ ...entry, arrows: false });
+      await store.put('images', { id: crypto.randomUUID(), title: entry.title || 'Untitled', caption, artwork: entry.artwork || null, blob, updatedAt: new Date().toISOString() });
     },
   };
 })();

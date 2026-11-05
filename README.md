@@ -6,6 +6,9 @@ It does not generate, diagnose, or interpret a writer's text.
 
 ## Start here
 
+- [Feature list](FEATURES.md): Story Beats, highlight/blackout poetry, and existing writing tools.
+- [Architecture](ARCHITECTURE.md): component contracts and implementation boundaries.
+
 - [Product specification](deblock/spec.md): user problem, MVP requirements,
   acceptance criteria, and evidence limits.
 - [Course artifacts](course_artifacts/README.md): product direction, niche
@@ -27,7 +30,8 @@ python3 -m venv .venv
 .venv/bin/python manage.py runserver 127.0.0.1:8003 --noreload
 ```
 
-Open <http://127.0.0.1:8003/> to create an account. Read local verification/reset
+Open <http://127.0.0.1:8003/> to sign in/create an account, or choose **Continue
+without signing in** for browser-only guest writing. Read local verification/reset
 emails with `.venv/bin/python manage.py mailbox`. Saved entries and images now
 belong to your account and persist in the local database.
 

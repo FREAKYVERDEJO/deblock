@@ -57,7 +57,7 @@
     return root.html2canvas(dialog, {
       backgroundColor: css.backgroundColor,
       scale, logging: false, removeContainer: true,
-      ignoreElements: (element) => element.matches('script, canvas, .image-field, main, footer, #info-dialog'),
+      ignoreElements: (element) => element.matches('script, canvas, .image-field, main, footer, #info-dialog, .close, .end-actions, [data-html2canvas-ignore]'),
       onclone: (doc) => {
         const copy = doc.getElementById(dialog.id);
         Object.assign(copy.style, {
@@ -90,12 +90,27 @@
     return imagePdf(rgb, canvas.width, canvas.height, width * .75, width * .75 * canvas.height / canvas.width);
   }
 
-  root.DeblockExport = { capture, createExport, imagePdf };
+  async function artworkPng(dialog) {
+    const image = dialog.querySelector('.document-art img');
+    if (!image || dialog.querySelector('[data-art-error]')) throw new Error('Choose an image before saving to Gallery.');
+    try { await image.decode(); }
+    catch { throw new Error('The artwork could not load. Try again before saving.'); }
+    const canvas = document.createElement('canvas');
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    if (!canvas.width || !canvas.height || canvas.width * canvas.height > 24000000) throw new Error('This image cannot be saved at its original size.');
+    canvas.getContext('2d').drawImage(image, 0, 0);
+    return new Promise((resolve, reject) => canvas.toBlob(
+      blob => blob ? resolve(blob) : reject(new Error('The image could not be created.')), 'image/png'
+    ));
+  }
+
+  root.DeblockExport = { capture, createExport, imagePdf, artworkPng };
   if (typeof module !== 'undefined') module.exports = { imagePdf };
   if (typeof document === 'undefined') return;
 
   let busy = false;
-  for (const button of document.querySelectorAll('[data-export]')) {
+  for (const button of document.querySelectorAll('[data-export], [data-save-gallery]')) {
     button.addEventListener('click', async () => {
       if (busy) return;
       busy = true;
@@ -103,13 +118,22 @@
       const dialog = button.closest('dialog');
       const status = dialog.querySelector('[data-export-status]');
       status.textContent = '';
-      const format = button.dataset.export;
+      const galleryOnly = button.hasAttribute('data-save-gallery');
+      const format = galleryOnly ? 'gallery' : button.dataset.export;
       try {
         const entry = root.DeblockShelf?.snapshotFor(dialog);
+        // Resolve the piece's attached artwork even if its writing prompt was hidden.
+        if (entry) await root.DeblockArt?.renderSaved(dialog.querySelector('.document-art'), entry.artwork);
+        if (galleryOnly) {
+          const artwork = await artworkPng(dialog);
+          await root.DeblockShelf.saveImage(artwork, entry);
+          status.textContent = 'Saved to Gallery.';
+          return;
+        }
         const blob = await createExport(format, dialog);
         let galleryError = null;
         if (format === 'png' && root.DeblockShelf) {
-          try { await root.DeblockShelf.saveImage(blob, entry); }
+          try { await root.DeblockShelf.saveImage(entry.artwork ? await artworkPng(dialog) : blob, entry); }
           catch (error) { galleryError = error; }
         }
         const url = URL.createObjectURL(blob);

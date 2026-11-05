@@ -28,7 +28,7 @@ async function run() {
   assert.equal(get('reset-dialog').open, true);
   get('cancel-reset').handlers.click();
   get('finish').handlers.click();
-  assert.equal(get('chain-summary').textContent, 'moon → (tide — unfinished)');
+  assert.equal(get('chain-summary').textContent, 'moon → tide');
   get('reset').handlers.click();
   get('confirm-reset').handlers.click();
   assert.equal(get('word').value, '');

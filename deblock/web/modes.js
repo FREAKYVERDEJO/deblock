@@ -1,0 +1,112 @@
+// Menu navigation owns tab-only drafts; writing state remains behind Document.
+(function (root) {
+  'use strict';
+  const get = id => document.getElementById(id);
+  const tools = root.DeblockWritingTools;
+  const drafts = new Map();
+  let editingOutline = false;
+  const modeOf = entry => entry.story ? 'story' : 'free';
+  const hasContent = entry => Boolean(entry.story || entry.words.length || entry.draft || entry.blackout);
+  const blank = story => ({ title: 'Untitled', words: [], draft: '', arrows: !story, story, artwork: null, blackout: null });
+  function closeMenu() { get('site-menu').open = false; }
+  async function switchMode(mode) {
+    closeMenu();
+    const current = root.DeblockDocument.snapshot();
+    drafts.set(modeOf(current), current);
+    if (mode === 'story' && !drafts.has('story')) { outline(false); return; }
+    if (modeOf(current) !== mode) await root.DeblockDocument.load(drafts.get(mode) || blank(null));
+    get('word').focus({ preventScroll: true });
+  }
+  function outline(edit) {
+    editingOutline = edit;
+    const entry = root.DeblockDocument.snapshot();
+    if (edit) get('story-outline').value = entry.story.beats.map(beat => beat.text).join('\n');
+    get('story-outline-note').textContent = edit
+      ? 'Edit the wording of each beat. Keep the same order and number of lines so each passage stays in place.'
+      : 'One beat per line. Arrange them in story order before starting. You decide when each passage is ready.';
+    get('story-outline-note').classList.toggle('sr-only', !edit);
+    get('story-start').textContent = edit ? 'keep these beats' : 'start writing';
+    get('new-story').hidden = !edit;
+    get('story-outline-status').textContent = '';
+    showDialog(get('story-dialog'));
+  }
+  function refresh() {
+    const entry = root.DeblockDocument.snapshot();
+    const story = entry.story;
+    for (const id of ['story-context', 'story-advance', 'previous-beat', 'edit-outline']) get(id).hidden = !story;
+    get('keyboard-help').textContent = story
+      ? 'Space moves to the next word. Enter moves to the next beat. Open outline to see your beats, or done to read your story.'
+      : 'Space or Enter moves to the next word. Find your chain under done.';
+    get('open-story').setAttribute('aria-current', story ? 'page' : 'false');
+    get('open-free').setAttribute('aria-current', story ? 'false' : 'page');
+    document.body.classList.toggle('story-mode', Boolean(story));
+    if (!story) return;
+    get('word').placeholder = '';
+    get('story-progress').textContent = `passage ${story.active + 1} of ${story.passages.length}`;
+    get('beat-from').textContent = story.beats[story.active].text;
+    get('beat-to').textContent = story.beats[story.active + 1].text;
+    get('previous-beat').disabled = story.active === 0;
+    get('next-beat').textContent = 'press ↵ for next beat';
+    get('next-beat').disabled = story.active === story.passages.length - 1;
+  }
+  function reviewState() {
+    const entry = root.DeblockDocument.snapshot();
+    get('open-poetry').hidden = Boolean(entry.story);
+    get('review-outline').hidden = !entry.story;
+    get('review-outline-list').replaceChildren();
+    if (entry.story) for (const beat of entry.story.beats) {
+      const item = document.createElement('li'); item.textContent = beat.text;
+      get('review-outline-list').append(item);
+    }
+  }
+  get('open-story').addEventListener('click', () => switchMode('story'));
+  get('open-free').addEventListener('click', () => switchMode('free'));
+  get('edit-outline').addEventListener('click', () => outline(true));
+  get('new-story').addEventListener('click', () => {
+    get('story-dialog').close();
+    get('story-outline').value = '';
+    outline(false);
+  });
+  get('story-outline-form').addEventListener('submit', async event => {
+    event.preventDefault();
+    try {
+      const value = tools.createStory(get('story-outline').value);
+      const current = root.DeblockDocument.snapshot();
+      if (editingOutline) {
+        if (value.beats.length !== current.story.beats.length) throw new Error('Keep the same number of beats; your passages stay attached to these lines.');
+        current.story.beats.forEach((beat, index) => { beat.text = value.beats[index].text; });
+        await root.DeblockDocument.load(current);
+      } else {
+        if (current.story && !root.confirm('Start a new story? Save the current story first if you want to keep it.')) return;
+        drafts.set(modeOf(current), current);
+        await root.DeblockDocument.load(blank(value));
+      }
+      get('story-dialog').close();
+      get('word').focus({ preventScroll: true });
+    } catch (error) { get('story-outline-status').textContent = error.message; }
+  });
+  get('previous-beat').addEventListener('click', () => root.DeblockDocument.movePassage(root.DeblockDocument.snapshot().story.active - 1));
+  get('next-beat').addEventListener('click', () => {
+    const story = root.DeblockDocument.snapshot().story;
+    if (story.active < story.passages.length - 1) root.DeblockDocument.movePassage(story.active + 1);
+  });
+  root.DeblockModes = {
+    refresh, reviewState,
+    hasDrafts: () => get('story-outline').value.trim() || [...drafts.values()].some(hasContent),
+    async openEntry(entry) {
+      const current = root.DeblockDocument.snapshot();
+      const mode = modeOf(entry);
+      const existing = modeOf(current) === mode ? current : drafts.get(mode);
+      const content = value => JSON.stringify([value.words, value.draft, value.story, value.blackout, value.title]);
+      if (existing && hasContent(existing) && content(existing) !== content(entry) &&
+          !root.confirm('Replace the draft in this writing mode with the saved entry? Cancel to save your draft first.')) return false;
+      drafts.set(modeOf(current), current);
+      await root.DeblockDocument.load(entry);
+      drafts.set(mode, entry);
+      for (const dialog of document.querySelectorAll('dialog[open]')) dialog.close();
+      get('word').focus({ preventScroll: true });
+      return true;
+    },
+  };
+  refresh();
+})(window);

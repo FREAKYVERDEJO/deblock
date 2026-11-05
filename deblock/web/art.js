@@ -22,6 +22,7 @@
   const get = id => document.getElementById(id);
   let catalogPromise, next, selected = null, enabled = false, busy = false;
   let selectedImage = null, upcoming = null, requestId = 0;
+  let failedRestore = null;
   let infoId = 0;
   function catalog() {
     if (!catalogPromise) catalogPromise = fetch('/assets/art/catalog.json').then(response => {
@@ -95,7 +96,7 @@
     get('art-next').hidden = !enabled;
     document.body.classList.toggle('has-art', enabled);
     render(get('writing-art'), enabled ? selected : null, selectedImage);
-    render(get('finish-art'), enabled ? selected : null);
+    render(get('finish-art'), selected);
   }
   async function change(shuffle) {
     if (!shuffle && (enabled || busy)) {
@@ -121,6 +122,7 @@
         if (prepared.error) throw new Error(prepared.error);
         selected = prepared.item; selectedImage = prepared.image;
       }
+      failedRestore = null;
       enabled = true; refresh(); get('art-status').textContent = '';
       preloadNext();
     } catch (error) {
@@ -134,8 +136,36 @@
   get('art-toggle').addEventListener('click', () => change(false));
   get('art-next').addEventListener('click', () => change(true));
   root.DeblockArt = {
-    snapshot: () => enabled && selected ? { ...selected } : null,
-    renderDocument: container => render(container, enabled ? selected : null),
+    async restore(item) {
+      const request = ++requestId;
+      busy = true;
+      failedRestore = null;
+      try {
+        if (!item) { selected = null; selectedImage = null; enabled = false; refresh(); return; }
+        const found = (await catalog()).find(work => work.id === item.id);
+        if (!found) throw new Error('This saved image is no longer in the local pool.');
+        const prepared = await prepare(found);
+        if (request !== requestId) return;
+        if (prepared.error) throw new Error(prepared.error);
+        selected = found; selectedImage = prepared.image; enabled = true; refresh();
+      } catch (error) {
+        if (request === requestId) {
+          // Preserve the saved artwork reference; failed decoding must not erase it on save.
+          failedRestore = { id: item.id, error: error.message };
+          selected = null; selectedImage = null; enabled = true; refresh();
+          get('art-status').textContent = error.message;
+        }
+      } finally { if (request === requestId) busy = false; }
+    },
+    // Hiding the prompt does not detach it from the piece being saved.
+    snapshot: (includeHidden = false) => (enabled || includeHidden) && failedRestore ? { id: failedRestore.id } : (enabled || includeHidden) && selected ? { ...selected } : null,
+    renderDocument(container) {
+      render(container, selected);
+      if (failedRestore) {
+        container.hidden = false; container.textContent = failedRestore.error;
+        container.dataset.artError = 'true';
+      }
+    },
     async renderSaved(container, item) {
       // Resolve saved IDs against the reviewed catalog, never arbitrary saved URLs.
       render(container, null);

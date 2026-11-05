@@ -6,7 +6,6 @@ import uuid
 import warnings
 from functools import wraps
 
-from allauth.account.decorators import verified_email_required
 from allauth.account.models import EmailAddress
 from django.conf import settings
 from django.contrib.auth import logout
@@ -15,13 +14,14 @@ from django.db import transaction
 from django.db.models import Sum
 from django.http import HttpResponse, JsonResponse, Http404
 from django.middleware.csrf import get_token
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_GET
 from PIL import Image, UnidentifiedImageError
 
 from deblock.exercises import get_exercise
 from deblock.server import ASSETS, WEB_ROOT
 from .models import Entry, GalleryImage, User
+from .writing import validate_story, validate_blackout
 
 ARTWORK = {item['id']: item for item in json.loads((WEB_ROOT / 'assets/art/catalog.json').read_text())}
 BACKEND_ASSETS = {
@@ -29,6 +29,7 @@ BACKEND_ASSETS = {
     '/local-storage.js': ('storage.js', 'text/javascript; charset=utf-8'),
     '/account.js': ('account.js', 'text/javascript; charset=utf-8'),
     '/account.css': ('account.css', 'text/css; charset=utf-8'),
+    '/guest.js': ('guest.js', 'text/javascript; charset=utf-8'),
 }
 
 
@@ -113,12 +114,13 @@ def profile_json(user) -> dict:
 
 def entry_json(entry) -> dict:
     return {'id': str(entry.pk), 'title': entry.title, 'words': entry.words, 'draft': entry.draft,
+            'story': entry.story, 'blackout': entry.blackout,
             'arrows': entry.arrows, 'artwork': ARTWORK.get(entry.artwork_id), 'revision': entry.revision,
             'createdAt': entry.created_at.isoformat(), 'updatedAt': entry.updated_at.isoformat()}
 
 
 def image_json(image) -> dict:
-    return {'id': str(image.pk), 'title': image.title, 'artwork': ARTWORK.get(image.artwork_id),
+    return {'id': str(image.pk), 'title': image.title, 'caption': image.caption, 'artwork': ARTWORK.get(image.artwork_id),
             'updatedAt': image.created_at.isoformat(), 'url': f'/api/images/{image.pk}/file/'}
 
 
@@ -133,10 +135,21 @@ def page(request, query, serialize) -> JsonResponse:
     return JsonResponse({'items': [serialize(item) for item in items[:50]], 'nextPage': number+1 if len(items)>50 else None})
 
 
-@verified_email_required
 @require_GET
 def index(request):
+    if not request.user.is_authenticated or not EmailAddress.objects.filter(
+            user=request.user, email__iexact=request.user.email, verified=True).exists():
+        return redirect('guest-writing')
     return HttpResponse((WEB_ROOT / 'index.html').read_text(), content_type='text/html; charset=utf-8')
+
+
+@require_GET
+def guest(request):
+    """Open the shared writer with explicit browser-only storage, without changing identity."""
+    html = (WEB_ROOT / 'index.html').read_text()
+    html = html.replace('src="/storage.js"', 'src="/local-storage.js"')
+    html = html.replace('src="/account.js"', 'src="/guest.js"')
+    return HttpResponse(html, content_type='text/html; charset=utf-8')
 
 
 @require_GET
@@ -193,6 +206,17 @@ def entry(request, key):
     if not isinstance(words, list) or len(words) > 20000 or any(not isinstance(word, str) for word in words):
         raise InvalidInput('Words must be a list of at most 20,000 text items.')
     draft = text(value.get('draft', ''), 'Draft', 250000)
+    try:
+        story = validate_story(value.get('story'))
+        if story:
+            words = [word for passage in story['passages'] for word in
+                     [*passage['words'], *([passage['draft']] if passage['draft'] else [])]]
+            draft = ''
+        blackout = validate_blackout(value.get('blackout'), words, draft)
+        if story and blackout:
+            raise ValueError('Blackout poetry is available for free-association chains.')
+    except ValueError as exc:
+        raise InvalidInput(str(exc)) from None
     if sum(len(word) for word in words) + len(draft) > 250000 or any('\x00' in word for word in words):
         raise InvalidInput('An entry can contain at most 250,000 characters.')
     arrows = value.get('arrows')
@@ -211,10 +235,13 @@ def entry(request, key):
                 return error('Your library is full. Delete an entry before saving another.', 409)
             record = Entry(id=key, owner=user)
         else:
+            if record.story and not story:
+                raise InvalidInput('Open this story in Story Beats to preserve its outline and passages.')
             if type(value.get('revision')) is not int or value['revision'] != record.revision:
                 return error('This entry changed in another tab. Reopen it before saving your edits.', 409)
             record.revision += 1
         record.title, record.words, record.draft, record.arrows, record.artwork_id = title, words, draft, arrows, art
+        record.story, record.blackout = story, blackout
         record.save()
     return JsonResponse(entry_json(record), status=201 if created else 200)
 
@@ -253,6 +280,7 @@ def images(request):
     except ValueError:
         raise InvalidInput('Invalid image ID.') from None
     title = text(request.POST.get('title', ''), 'Title', 300)
+    caption = text(request.POST.get('caption', ''), 'Caption', 250000)
     art = artwork_id({'id': request.POST['artworkId']} if request.POST.get('artworkId') else None)
     data = verified_png(request.FILES.get('image'))
     with transaction.atomic():
@@ -265,7 +293,7 @@ def images(request):
         owned = GalleryImage.objects.filter(owner=user)
         if owned.count() >= settings.MAX_GALLERY_IMAGES or (owned.aggregate(total=Sum('size'))['total'] or 0) + len(data) > settings.MAX_GALLERY_BYTES:
             return error('Your gallery is full. Download and remove an image to make room.', 409)
-        image = GalleryImage.objects.create(id=key, owner=user, title=title, artwork_id=art, png=data, size=len(data))
+        image = GalleryImage.objects.create(id=key, owner=user, title=title, caption=caption, artwork_id=art, png=data, size=len(data))
     return JsonResponse(image_json(image), status=201)
 
 

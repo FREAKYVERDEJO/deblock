@@ -52,7 +52,7 @@ async function run() {
       let prevented = false;
       e.input.handlers.paste({ preventDefault() { prevented = true; }, clipboardData: { getData: () => 'river\nstone\tcloud' } });
       assert.ok(prevented); assert.equal(e.input.value, 'cloud');
-      assert.equal(e.summary(), 'river → stone → (cloud — unfinished)');
+      assert.equal(e.summary(), 'river → stone → cloud');
     }],
     ['composition waits for committed text', async () => {
       const e = await editor(); e.input.handlers.compositionstart(); e.type('海 ');
@@ -70,7 +70,7 @@ async function run() {
       const e = await editor(); e.type('moon tide');
       e.get('theme').handlers.change({ target: { value: 'plain' } });
       assert.equal(e.document.body.dataset.theme, 'plain'); assert.equal(e.input.value, 'tide');
-      assert.equal(e.summary(), 'moon → (tide — unfinished)');
+      assert.equal(e.summary(), 'moon → tide');
       assert.ok(e.events.some(event => event.type === 'themechange' && event.detail === 'plain'));
     }],
   ];

@@ -1,5 +1,13 @@
 # Run the deblock prototype
 
+**Writing tools:** the dropdown now includes **Story Beats** directly above
+Profile and **Free association** for switching back. Each mode keeps its own
+draft in tab memory. Story outlines and passages are saved together in Library;
+**continue writing** restores them. In a finished associative chain,
+**highlight / blackout** lets you choose a poem from the existing words without
+erasing the original. Selection and display style are saved with the entry and
+shown in PNG/PDF exports. See [FEATURES.md](FEATURES.md).
+
 ```sh
 python3 -m deblock.server
 ```

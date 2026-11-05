@@ -14,10 +14,16 @@ from deblock.exercises import get_exercise
 
 
 WEB_ROOT = Path(__file__).with_name("web")
+# Exact pseudo-element stylesheet injected by the pinned html2canvas 1.4.1.
+# Keep inline scripts/styles blocked; data images are needed for its font metric probe.
+EXPORT_STYLE_SOURCE = "'sha256-UP0QZg7irvSMvOBz9mH2PIIE28+57UiavRfeVea0l3g='"
 ASSETS = {
     "/": ("index.html", "text/html; charset=utf-8"),
     "/style.css": ("style.css", "text/css; charset=utf-8"),
     "/app.js": ("app.js", "text/javascript; charset=utf-8"),
+    "/writing-tools.js": ("writing-tools.js", "text/javascript; charset=utf-8"),
+    "/modes.js": ("modes.js", "text/javascript; charset=utf-8"),
+    "/poetry.js": ("poetry.js", "text/javascript; charset=utf-8"),
     "/art.js": ("art.js", "text/javascript; charset=utf-8"),
     "/assets/art/catalog.json": ("assets/art/catalog.json", "application/json; charset=utf-8"),
     "/storage.js": ("storage.js", "text/javascript; charset=utf-8"),
@@ -71,8 +77,8 @@ class PrototypeHandler(BaseHTTPRequestHandler):
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "no-referrer")
         self.send_header("Content-Security-Policy", (
-            "default-src 'self'; script-src 'self'; style-src 'self'; "
-            "img-src 'self' blob:; connect-src 'self'; object-src 'none'; "
+            f"default-src 'self'; script-src 'self'; style-src 'self' {EXPORT_STYLE_SOURCE}; "
+            "img-src 'self' blob: data:; connect-src 'self'; object-src 'none'; "
             "base-uri 'none'; frame-ancestors 'none'; form-action 'none'"
         ))
         self.end_headers()

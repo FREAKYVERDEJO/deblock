@@ -1,7 +1,34 @@
 # Accounts and storage
 
+## Story Beats and blackout poetry
+
+Run `.venv/bin/python manage.py migrate` after updating to add the nullable
+`story` and `blackout` fields (migration `0002_entry_writing_modes`). Existing
+entries are preserved. Restart the local server after updating Python code.
+
+Open **Story Beats** above Profile in the menu. Library saves preserve the outline,
+each passage, active passage and unfinished input. Open the saved entry and choose
+**continue writing** to resume. The plain-text editor is hidden for structured
+stories and poems. Existing owner/revision checks also protect these entries.
+
+From a finished free-association chain, **highlight / blackout** selects words
+to keep. Saving stores the original chain and its selection; exports show the
+chosen view. Both fields use version 1 and are validated by `backend/writing.py`.
+The request/response routes are unchanged; see [architecture](ARCHITECTURE.md) for
+the shapes and [features](FEATURES.md) for the user flows.
+
+Visual exports allow only the pinned html2canvas pseudo-element stylesheet via a
+CSP hash, plus `data:` images for its font probe. Inline scripts and other inline
+styles remain blocked. Exported documents omit editing controls.
+
+## Account behavior
+
 The default app uses Django and django-allauth for email/password accounts. Email
-verification is required before writing or saving. Library entries and Gallery
+verification is required for account writing and server saves. **Continue without
+signing in** on account pages opens `/guest/` with the shared UI and browser-only
+IndexedDB storage. It does not create or change a login session, fetch private
+collections, or upload writing. Guest saves can later be explicitly imported
+through Profile after signing in. Library entries and Gallery
 PNGs belong to the signed-in user; every API lookup checks ownership. Text stays
 in the page until the writer chooses **save → to library**. **as PNG** downloads
 and also saves to Gallery; **as PDF** downloads only. Entries can be edited and
@@ -17,7 +44,8 @@ python3 -m venv .venv
 .venv/bin/python manage.py runserver 127.0.0.1:8003 --noreload
 ```
 
-Open <http://127.0.0.1:8003/> and create an account. Verification and password-reset
+Open <http://127.0.0.1:8003/> and sign in/create an account, or choose **Continue
+without signing in**. Verification and password-reset
 emails are written to `var/mail/`, not sent externally. To read the latest email:
 
 ```sh

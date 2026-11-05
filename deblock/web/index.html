@@ -6,8 +6,11 @@
   <title>deblock</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
+  <script src="/writing-tools.js" defer></script>
   <script src="/app.js" defer></script>
   <script src="/art.js" defer></script>
+  <script src="/modes.js" defer></script>
+  <script src="/poetry.js" defer></script>
   <script src="/storage.js" defer></script>
   <script src="/shelf.js" defer></script>
   <script src="/account.js" defer></script>
@@ -17,60 +20,104 @@
 <body>
   <details id="site-menu" class="site-menu">
     <summary aria-label="Open menu"><span></span><span></span><span></span></summary>
-    <nav aria-label="Your collection">
-      <button id="open-profile" type="button">Profile</button>
-      <button id="open-library" type="button">Library</button>
-      <button id="open-gallery" type="button">Gallery</button>
-      <a href="/accounts/logout/" data-account-only hidden>sign out</a>
+    <nav aria-label="Writing modes">
+      <button id="open-free" type="button" aria-current="page">Free association</button>
+      <button id="open-story" type="button">Story Beats</button>
     </nav>
   </details>
+  <nav class="collection-nav" aria-label="Your collection and account">
+    <button id="open-library" type="button">library</button>
+    <button id="open-gallery" type="button">gallery</button>
+    <a id="guest-sign-in" href="/accounts/login/">sign in</a>
+    <a id="guest-sign-up" href="/accounts/signup/">sign up</a>
+    <button id="open-profile" class="profile-control" type="button" aria-label="Profile" data-account-only hidden>
+      <svg viewBox="0 0 40 40" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+        <circle cx="20" cy="20" r="18"></circle>
+        <circle cx="20" cy="16" r="6"></circle>
+        <path d="M8 33v-2a9 9 0 0 1 9-9h6a9 9 0 0 1 9 9v2"></path>
+      </svg>
+    </button>
+  </nav>
   <main>
     <figure id="writing-art" class="artwork writing-art" hidden></figure>
     <form id="word-form" autocomplete="off">
+      <section id="story-context" aria-label="Current story passage" hidden>
+        <p id="story-progress" class="sr-only"></p>
+        <p class="beat-context"><strong id="beat-from"></strong><span class="beat-arrow" aria-label="toward">→</span><strong id="beat-to"></strong></p>
+      </section>
       <label for="word" class="sr-only">Next word</label>
       <div class="word-space" id="word-space">
         <input id="word" type="text" placeholder="a word…" spellcheck="false" autocomplete="off" autocapitalize="off" disabled>
       </div>
+      <div id="story-advance" hidden><button id="next-beat" type="button">press ↵ for next beat</button></div>
       <p id="hint" role="status" hidden></p>
     </form>
   </main>
+  <dialog id="story-dialog" aria-labelledby="story-dialog-title">
+    <button class="close" type="button" aria-label="Close story outline">×</button>
+    <h1 id="story-dialog-title">Story Beats</h1>
+    <form id="story-outline-form">
+      <label for="story-outline" class="sr-only">Your story skeleton</label>
+      <textarea id="story-outline" rows="4" maxlength="100100" placeholder="&gt; Lily decides to see Matt&#10;&gt; Matt waits for her by the pier&#10;&gt; Lily arrives at the pier …" aria-describedby="story-outline-note" required></textarea>
+      <p id="story-outline-note" class="fine-print sr-only"></p>
+      <button id="story-start" type="submit">start writing</button>
+      <button id="new-story" type="button" hidden>new story</button>
+    </form>
+    <p id="story-outline-status" role="status"></p>
+  </dialog>
   <footer>
     <span class="signature">deblock</span>
-    <span class="save-reminder">save to keep</span>
     <nav aria-label="Writing controls">
       <button id="art-toggle" type="button" aria-label="Show image" aria-pressed="false">image off</button>
       <button id="art-next" type="button" aria-label="Another image" hidden>another</button>
-      <button id="about" type="button" aria-label="Exercise help">?</button>
       <button id="reset" type="button">reset</button>
       <button id="finish" type="button">done</button>
+      <button id="previous-beat" type="button" hidden>previous passage</button>
+      <button id="edit-outline" type="button" hidden>outline</button>
+      <button id="about" type="button" aria-label="Exercise help">?</button>
     </nav>
   </footer>
   <dialog id="info-dialog">
     <button class="close" type="button" aria-label="Close instructions">×</button>
     <h1 id="exercise-title">The Signifier Chain</h1>
-    <p>Each space moves you to the next word. Enter works too. Completed words are kept under done.</p>
+    <p id="keyboard-help">Space or Enter moves to the next word. Find your chain under done.</p>
     <p id="instructions">Loading instructions…</p>
-    <p class="fine-print">Save before closing to keep your draft. Library, Gallery, and profile details are saved in this browser; clearing its data removes them. Download a PNG or PDF for a lasting copy.</p>
+    <p id="draft-privacy" class="fine-print">Unsaved writing disappears on reload or close. Library saves stay in this browser.</p>
     <button id="retry" type="button" hidden>try again</button>
   </dialog>
   <dialog id="finish-dialog">
     <button class="close" type="button" aria-label="Return to writing">×</button>
-    <h1 id="document-title" contenteditable="plaintext-only" role="textbox" aria-label="Document title" aria-multiline="true" title="Click to edit the title" spellcheck="false">leave it here.</h1>
+    <h1 id="document-title" contenteditable="plaintext-only" role="textbox" aria-label="Document title" aria-multiline="true" title="Click to edit the title" spellcheck="false">Untitled</h1>
     <figure id="finish-art" class="artwork document-art" hidden></figure>
     <p id="chain-summary"></p>
+    <details id="review-outline" data-html2canvas-ignore="true" hidden><summary>story outline</summary><ol id="review-outline-list"></ol></details>
     <div class="end-actions">
       <button id="resume" type="button">keep writing</button>
       <button id="arrows-toggle" type="button" aria-label="Show arrows" aria-pressed="true">arrows on</button>
+      <button id="open-poetry" type="button">highlight / blackout</button>
       <details class="save-menu">
         <summary>save</summary>
         <div class="save-options">
           <button id="save-entry" type="button">to library</button>
+          <button type="button" data-save-gallery>to gallery</button>
           <button type="button" data-export="png">as PNG</button>
           <button type="button" data-export="pdf">as PDF</button>
         </div>
       </details>
     </div>
     <p id="export-status" role="status" data-export-status data-html2canvas-ignore="true"></p>
+  </dialog>
+  <dialog id="poetry-dialog" aria-labelledby="poetry-title">
+    <button class="close" type="button" aria-label="Cancel poetry changes">×</button>
+    <h1 id="poetry-title">blackout poetry</h1>
+    <p>Choose words to keep.</p>
+    <div id="poetry-words" class="poetry-words" role="group" aria-label="Words to keep"></div>
+    <label for="poetry-style">View</label>
+    <select id="poetry-style"><option value="highlight">Highlight kept words</option><option value="blackout">Black out the rest</option></select>
+    <p id="poetry-count" class="sr-only" role="status"></p>
+    <p id="poetry-preview" aria-label="Poetry preview"></p>
+    <p id="poetry-line" class="fine-print" aria-label="Kept words in order"></p>
+    <div class="end-actions"><button id="poetry-apply" type="button">use this view</button><button id="poetry-clear" type="button">clear selection</button><button id="poetry-original" type="button">restore original</button></div>
   </dialog>
   <dialog id="reset-dialog" aria-labelledby="reset-title">
     <button class="close" type="button" aria-label="Cancel reset">×</button>
@@ -97,7 +144,7 @@
       <p id="password-note" class="fine-print">Password reset isn’t available in this prototype.</p>
       <div class="end-actions"><button type="submit">save profile</button></div>
     </form>
-    <div class="account-actions" data-account-only hidden><button id="import-browser" type="button">import browser entries</button><button id="delete-account" type="button">delete account</button></div>
+    <div class="account-actions" data-account-only hidden><a href="/accounts/logout/">sign out</a><button id="import-browser" type="button">import browser entries</button><button id="delete-account" type="button">delete account</button></div>
     <p id="profile-status" class="section-status" role="status"></p>
   </dialog>
   <dialog id="library-dialog" aria-labelledby="library-title" class="collection-dialog">
@@ -108,7 +155,6 @@
   <dialog id="gallery-dialog" aria-labelledby="gallery-title" class="collection-dialog">
     <button class="close" type="button" aria-label="Close gallery">×</button>
     <h1 id="gallery-title">Gallery</h1>
-    <p class="fine-print">Your saved PNGs. Click a picture to download it again.</p>
     <div id="gallery-list" class="gallery-grid"></div><p id="gallery-status" class="section-status" role="status"></p>
   </dialog>
   <dialog id="entry-dialog" aria-labelledby="entry-title">
@@ -116,7 +162,8 @@
     <h1 id="entry-title"></h1>
     <figure id="entry-art" class="artwork document-art" hidden></figure>
     <p id="entry-body"></p>
-    <div class="end-actions"><details class="save-menu"><summary>save</summary><div class="save-options"><button type="button" data-export="png">as PNG</button><button type="button" data-export="pdf">as PDF</button></div></details></div>
+    <div class="end-actions"><button id="continue-entry" type="button">continue writing</button></div>
+    <div class="end-actions"><details class="save-menu"><summary>save</summary><div class="save-options"><button type="button" data-save-gallery>to gallery</button><button type="button" data-export="png">as PNG</button><button type="button" data-export="pdf">as PDF</button></div></details></div>
     <div class="end-actions" data-account-only hidden><button id="edit-entry" type="button">edit</button><button id="delete-entry" type="button">delete</button></div>
     <p id="entry-status" role="status" data-export-status data-html2canvas-ignore="true"></p>
   </dialog>

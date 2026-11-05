@@ -8,7 +8,7 @@ async function editor() {
   const elements = new Map();
   const get = id => {
     if (!elements.has(id)) elements.set(id, {
-      value: '', textContent: id === 'document-title' ? 'leave it here.' : '',
+      value: '', textContent: id === 'document-title' ? 'Untitled' : '',
       clientWidth: 600, style: { setProperty() {} }, handlers: {},
       addEventListener(name, handler) { this.handlers[name] = handler; },
       focus() {}, showModal() {}, close() {},
@@ -30,12 +30,12 @@ async function run() {
   const e = await editor();
   e.type('moon tide shore');
   e.get('finish').handlers.click();
-  assert.equal(e.get('chain-summary').textContent, 'moon → tide → (shore — unfinished)');
+  assert.equal(e.get('chain-summary').textContent, 'moon → tide → shore');
   e.get('arrows-toggle').handlers.click();
   assert.equal(e.get('chain-summary').textContent, 'moon tide shore');
   assert.equal(e.get('arrows-toggle').ariaPressed, 'false');
   e.get('arrows-toggle').handlers.click();
-  assert.equal(e.get('chain-summary').textContent, 'moon → tide → (shore — unfinished)');
+  assert.equal(e.get('chain-summary').textContent, 'moon → tide → shore');
   e.get('document-title').textContent = 'A quiet shore';
   e.get('resume').handlers.click();
   e.get('finish').handlers.click();
@@ -43,9 +43,9 @@ async function run() {
   e.get('arrows-toggle').handlers.click();
   assert.equal(e.body(), 'moon tide shore');
   e.get('arrows-toggle').handlers.click();
-  assert.equal(e.body(), 'moon → tide → (shore — unfinished)');
+  assert.equal(e.body(), 'moon → tide → shore');
   e.get('confirm-reset').handlers.click();
-  assert.equal(e.get('document-title').textContent, 'leave it here.');
+  assert.equal(e.get('document-title').textContent, 'Untitled');
   e.get('finish').handlers.click();
   assert.equal(e.get('chain-summary').textContent, 'Nothing to finish. You can just be here.');
   console.log('5 document checks passed (toggle, preservation, plain text, arrow text, reset)');

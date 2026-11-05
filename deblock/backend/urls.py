@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='writing'),
+    path('guest/', views.guest, name='guest-writing'),
     path('accounts/', include('allauth.urls')),
     path('api/session/', views.session),
     path('api/profile/', views.profile),

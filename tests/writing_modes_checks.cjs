@@ -1,0 +1,25 @@
+// R.11/R.12, CT.11/CT.12. Pure state contract; no browser/backend required.
+const assert = require('node:assert/strict');
+const tools = require('../deblock/web/writing-tools.js');
+let id = 0;
+const original = tools.createStory('i go to the store\ni meet a mysterious stranger\ni go home', () => `beat-${++id}`);
+assert.equal(original.passages.length, 2);
+assert.throws(() => tools.createStory('one beat'), /two/i);
+let story = tools.captureStory(original, ['The', 'bell'], 'rings');
+story = tools.moveStory(story, 1);
+story = tools.captureStory(story, ['I', 'walk'], 'home');
+story = tools.moveStory(story, 0);
+assert.deepEqual(story.passages[0].words, ['The', 'bell']);
+assert.equal(story.passages[0].draft, 'rings');
+assert.equal(story.passages[1].draft, 'home');
+assert.deepEqual(original.passages[0].words, []);
+assert.equal(tools.storyText(story, false), 'The bell rings\n\nI walk home');
+assert.ok(!tools.storyText(story, false).includes('mysterious stranger'));
+const empty = tools.moveStory(original, 1);
+assert.equal(empty.active, 1);
+assert.throws(() => tools.moveStory(original, 2), /passage/i);
+const entry = { words: ['rain', 'glass sea', '<script>'], draft: 'light' };
+assert.deepEqual(tools.poetryTokens(entry), ['rain', 'glass', 'sea', '<script>', 'light']);
+assert.equal(tools.poemText(entry, { kept: [0, 2, 4] }), 'rain sea light');
+assert.deepEqual(entry.words, ['rain', 'glass sea', '<script>']);
+console.log('12 writing-mode state checks passed (CT.11/CT.12)');

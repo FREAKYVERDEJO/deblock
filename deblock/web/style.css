@@ -12,12 +12,12 @@ main { position: relative; height: 100%; display: grid; place-items: center; pad
 #word-form { width: 100%; max-width: 1100px; transform: translateY(-9vh); text-align: center; }
 .word-space { height: 170px; display: grid; align-items: center; }
 #word { width: 100%; border: 0; background: transparent; color: var(--ink); padding: 8px 0; caret-color: var(--ink); font-size: var(--word-size); font-weight: 400; line-height: 1.3; text-align: center; }
-#word:focus { outline: none; }
+#word { appearance: none; border-radius: 0; box-shadow: none; }
+#word:focus { outline: none; box-shadow: none; }
 #word::placeholder { color: #8a8378; opacity: .85; }
 #hint { color: #777065; font-size: 15px; }
 footer { position: fixed; bottom: 16px; left: 25px; right: 25px; display: flex; align-items: center; gap: 24px; color: #777065; }
 .signature { font-size: 22px; }
-.save-reminder { font-size: 12px; }
 nav { margin-left: auto; display: flex; gap: 14px; align-items: center; }
 nav button { font-size: 14px; }
 dialog { border: 1px solid #bcb5aa; background: #eeebe4; color: var(--ink); width: min(520px, 85vw); padding: 35px; max-height: 80svh; overflow: auto; }
@@ -28,9 +28,9 @@ dialog p { color: #4c463e; font-size: 17px; line-height: 1.6; overflow-wrap: any
 dialog .fine-print { font-size: 13px; margin-top: 25px; }
 .close { position: absolute; right: 15px; top: 12px; font-size: 22px; }
 .end-actions { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-left: -10px; font-size: 16px; }
-.end-actions button { text-decoration: underline; text-underline-offset: 5px; }
+.end-actions button { text-decoration: none; text-underline-offset: 5px; }
 .save-menu { position: relative; }
-.save-menu summary { list-style: none; cursor: pointer; padding: 10px; text-decoration: underline; text-underline-offset: 5px; }
+.save-menu summary { list-style: none; cursor: pointer; padding: 10px; text-decoration: none; text-underline-offset: 5px; }
 .save-menu summary::-webkit-details-marker { display: none; }
 .save-menu summary:is(:hover, :focus-visible) { color: #005bd3; }
 .save-options { position: absolute; bottom: 100%; right: 0; display: flex; gap: 6px; padding: 6px; background: #eeebe4; border: 1px solid #bcb5aa; z-index: 1; }
@@ -43,13 +43,12 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
   .word-space { height: 130px; }
   #word-form { transform: translateY(-7vh); }
   footer { left: 16px; right: 12px; bottom: 12px; gap: 12px; flex-wrap: wrap; }
-  .save-reminder { position: absolute; bottom: 45px; left: 0; }
   nav { gap: 3px; }
   nav button { padding: 10px 7px; }
   dialog { padding: 26px; }
 }
 
-/* The collection menu follows the owner's paper sketch. */
+/* Exercise navigation stays separate from collections and accounts. */
 .site-menu { position: fixed; z-index: 5; top: 22px; left: 25px; }
 .site-menu > summary { width: 42px; padding: 10px 6px; cursor: pointer; list-style: none; }
 .site-menu > summary::-webkit-details-marker { display: none; }
@@ -81,7 +80,7 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 .gallery-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
 .gallery-card { display: grid; gap: 8px; color: inherit; text-decoration: none; overflow-wrap: anywhere; }
 .gallery-card img { width: 100%; max-height: 240px; object-fit: contain; object-position: top; border: 1px solid #bcb5aa; }
-.gallery-card small { text-decoration: underline; }
+.gallery-card small { text-decoration: none; }
 .gallery-card:is(:hover, :focus-visible) { color: #005bd3; }
 .empty-state { grid-column: 1 / -1; }
 @media (max-width: 600px) {
@@ -138,3 +137,77 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 #entry-body { white-space: pre-wrap; }
 .account-mode dialog a { color: inherit; text-underline-offset: 4px; }
 .account-mode dialog a:hover, .account-mode dialog a:focus-visible { color: #005bd3; }
+
+/* Quiet, stationary tools: the word remains the main focus in either mode. */
+.site-menu nav { max-height: calc(100svh - 90px); overflow-y: auto; }
+.site-menu nav button[aria-current="page"] { color: #005bd3; }
+#word:focus-visible { outline: none; caret-color: #005bd3; }
+#story-context { width: 100%; margin: 0 auto; }
+.beat-context { display: flex; align-items: center; justify-content: center; gap: clamp(14px, 3vw, 44px); margin: 0; line-height: 1.5; }
+.beat-context strong { min-width: 0; max-width: 44%; max-height: 18svh; overflow: auto; overflow-wrap: anywhere; font-size: clamp(19px, 2.8vw, 32px); font-weight: normal; }
+.beat-arrow { flex: none; font-size: 28px; color: #777065; }
+.story-mode main { padding: 85px 8% 105px; }
+.story-mode #word-form { display: grid; grid-template-rows: auto minmax(170px, 30svh) auto; gap: 16px; }
+.story-mode .word-space { height: auto; min-height: 170px; }
+#story-advance button { font-size: clamp(17px, 2vw, 22px); color: #777065; }
+#story-advance button:is(:hover, :focus-visible) { color: #005bd3; }
+.story-mode.has-art .writing-art { height: 18svh; }
+.story-mode.has-art .writing-art > img { max-height: 18svh; }
+.story-mode.has-art main { gap: 18px; }
+.story-mode.has-art #word-form { grid-template-rows: auto minmax(100px, 18svh) auto; }
+.story-mode.has-art .word-space { min-height: 100px; }
+#story-dialog { width: min(860px, 92vw); padding: clamp(28px, 5vw, 58px); border: 0; background: #fffefa; }
+#story-dialog h1 { font: italic 400 clamp(30px, 4vw, 44px)/1.2 'Times New Roman', Times, serif; margin-bottom: clamp(36px, 6vh, 64px); }
+#story-outline-form { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+#story-outline { display: block; flex-basis: 100%; width: 100%; min-height: 220px; resize: vertical; padding: 4px; border: 0; border-radius: 0; box-shadow: none; background: transparent; color: #4b7fae; caret-color: #376e9e; font: italic clamp(23px, 3.2vw, 36px)/1.45 'Times New Roman', Times, serif; }
+#story-outline::placeholder { color: #4b7fae; opacity: 1; }
+#story-outline:focus-visible { outline: 1px solid #b7d0e5; outline-offset: 8px; }
+#story-outline-form button { font-style: italic; text-decoration: none; }
+#story-start { margin: 24px 0 0 auto; font-size: clamp(25px, 3.2vw, 36px); }
+#new-story { margin-top: 24px; font-size: 18px; }
+#story-outline-note:not(.sr-only) { flex-basis: 100%; margin: 10px 0; }
+#story-outline-status:empty { display: none; }
+@media (max-width: 600px) {
+  #story-dialog { padding: 30px 25px; }
+  #story-outline { min-height: 240px; }
+}
+#chain-summary, #poetry-preview { white-space: pre-wrap; }
+#review-outline { margin: 18px 0; }
+#review-outline summary { cursor: pointer; text-decoration: none; }
+#review-outline li { margin: 10px 0; overflow-wrap: anywhere; }
+.poetry-words { display: flex; flex-wrap: wrap; gap: 6px; margin: 18px 0 24px; max-height: 32svh; overflow: auto; padding: 5px; border: 1px solid #bcb5aa; }
+.poetry-words button { padding: 6px 8px; font-size: 18px; border: 1px solid transparent; overflow-wrap: anywhere; max-width: 100%; }
+.poetry-words button[aria-pressed="true"] { background: #f8df79; color: #28241e; border-color: #8a742b; }
+.poetry-highlight { background: #f8df79; color: #28241e; }
+.poetry-redacted { background: #34312c; color: #34312c; user-select: none; border-radius: 1px; }
+#poetry-style { max-width: 100%; margin: 0 0 0 10px; padding: 7px; font: inherit; background: #eeebe4; color: inherit; border: 1px solid #bcb5aa; }
+#poetry-count { font-size: 13px; }
+@media (max-width: 600px) {
+  .site-menu nav button { padding: 13px 18px; font-size: 20px; }
+  .story-mode main { padding-left: 7%; padding-right: 7%; }
+  .story-mode .word-space { min-height: 110px; }
+  .story-mode #word { font-size: min(var(--word-size), 68px); }
+  .beat-context { gap: 14px; }
+  .beat-context strong { font-size: 19px; max-height: 18svh; }
+}
+@media (max-height: 650px) {
+  main { overflow-y: auto; padding-top: 70px; padding-bottom: 100px; }
+  .story-mode #word-form { margin: auto; }
+}
+
+/* Collections remain reachable while writing, without opening the exercise menu. */
+.collection-nav { position: fixed; top: 22px; right: 25px; z-index: 5; gap: 12px; margin: 0; }
+.collection-nav > a { padding: 10px; color: inherit; font-size: 14px; text-decoration: none; }
+.collection-nav > a:is(:hover, :focus-visible) { color: #005bd3; }
+.profile-control { display: grid; place-items: center; padding: 5px; }
+.profile-control svg { display: block; }
+@media (max-width: 600px) {
+  .collection-nav { top: 12px; right: 12px; gap: 0; }
+  .collection-nav > a, .collection-nav > button { font-size: 13px; padding: 10px 7px; }
+  .collection-nav > .profile-control { padding: 4px 7px; }
+  .story-mode footer .signature { display: none; }
+  .story-mode footer nav { width: 100%; justify-content: flex-end; }
+}
+
+.gallery-caption { margin: 2px 0 8px; white-space: pre-wrap; font-size: 17px; line-height: 1.5; color: var(--ink); }
+#story-advance button:disabled { color: #777065; cursor: default; }

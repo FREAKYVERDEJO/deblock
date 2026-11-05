@@ -5,6 +5,8 @@
   if (!store?.accountMode) return;
   const get = id => document.getElementById(id);
   document.body.classList.add('account-mode');
+  get('guest-sign-up').hidden = true;
+  get('guest-sign-in').hidden = true;
   for (const element of document.querySelectorAll('[data-account-only]')) element.hidden = false;
   get('profile-email').readOnly = true;
   get('email-note').replaceChildren();
@@ -13,7 +15,7 @@
   const password = get('profile-form').querySelector('[aria-describedby="password-note"]');
   const passwordLink = document.createElement('a'); passwordLink.href = '/accounts/password/change/'; passwordLink.textContent = 'change password';
   password.replaceWith(passwordLink); get('password-note').hidden = true;
-  get('info-dialog').querySelector('.fine-print').textContent = 'Save to keep an entry in your account. PNG exports also appear in Gallery. Unsaved writing stays in this tab until you close it.';
+  get('draft-privacy').textContent = 'Unsaved writing disappears on reload or close. Library saves stay in your private account.';
   get('import-browser').addEventListener('click', async () => {
     const button = get('import-browser'), status = get('profile-status');
     button.disabled = true;

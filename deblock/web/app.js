@@ -6,22 +6,66 @@ const space = byId('word-space');
 let exercise = null;
 let composing = false;
 let showArrows = true;
-const defaultTitle = 'leave it here.';
+const defaultTitle = 'Untitled';
 let entryId = null;
 let entryCreatedAt = null;
+let entryRevision = null;
+let story = null;
+let blackout = null;
 window.DeblockDocument = {
   snapshot() {
     entryId ||= crypto.randomUUID();
     entryCreatedAt ||= new Date().toISOString();
+    if (story) story = window.DeblockWritingTools.captureStory(story, words, input.value);
+    if (blackout) {
+      const count = window.DeblockWritingTools.poetryTokens({ words, draft: input.value }).length;
+      blackout.kept = blackout.kept.filter(index => index < count);
+    }
     return { id: entryId, createdAt: entryCreatedAt, updatedAt: new Date().toISOString(),
-      title: byId('document-title').textContent.trim(), words: [...words], draft: input.value, arrows: showArrows, artwork: window.DeblockArt?.snapshot() || null };
+      title: byId('document-title').textContent.trim(),
+      words: story ? window.DeblockWritingTools.storyWords(story) : [...words],
+      draft: story ? '' : input.value, arrows: showArrows, artwork: window.DeblockArt?.snapshot(true) || null,
+      story: story ? window.DeblockWritingTools.copy(story) : null,
+      blackout: blackout ? window.DeblockWritingTools.copy(blackout) : null,
+      ...(entryRevision ? { revision: entryRevision } : {}) };
   },
+  async load(entry) {
+    story = entry.story ? window.DeblockWritingTools.copy(entry.story) : null;
+    blackout = entry.blackout ? window.DeblockWritingTools.copy(entry.blackout) : null;
+    const passage = story ? story.passages[story.active] : entry;
+    words.splice(0, words.length, ...passage.words);
+    input.value = passage.draft || '';
+    input.placeholder = words.length ? '' : 'a word…';
+    entryId = entry.id || null; entryCreatedAt = entry.createdAt || null;
+    entryRevision = entry.revision || null;
+    byId('document-title').textContent = entry.title || defaultTitle;
+    showArrows = entry.arrows ?? true;
+    byId('arrows-toggle').ariaPressed = String(showArrows);
+    byId('arrows-toggle').textContent = showArrows ? 'arrows on' : 'arrows off';
+    byId('export-status').textContent = '';
+    composing = false;
+    fitWords();
+    window.DeblockModes?.refresh();
+    await window.DeblockArt?.restore(entry.artwork || null);
+  },
+  movePassage(active) {
+    if (!story || composing) return;
+    story = window.DeblockWritingTools.moveStory(window.DeblockWritingTools.captureStory(story, words, input.value), active);
+    words.splice(0, words.length, ...story.passages[active].words);
+    input.value = story.passages[active].draft;
+    input.placeholder = words.length ? '' : 'a word…';
+    fitWords(); window.DeblockModes?.refresh(); input.focus({ preventScroll: true });
+  },
+  setPoetry(value) { blackout = value ? window.DeblockWritingTools.copy(value) : null; renderSummary(); },
+  saved(entry) { if (entry.id === entryId) entryRevision = entry.revision || null; },
+  review() { renderSummary(); showDialog(byId('finish-dialog')); },
 };
 
 function documentBody() {
+  if (story) return window.DeblockWritingTools.storyText(window.DeblockWritingTools.captureStory(story, words, input.value), showArrows);
   const summary = [...words];
   if (input.value.trim()) {
-    summary.push(showArrows ? `(${input.value} — unfinished)` : input.value.trim());
+    summary.push(input.value.trim());
   }
   return summary.join(showArrows ? ' → ' : ' ');
 }
@@ -29,6 +73,8 @@ function documentBody() {
 function renderSummary() {
   window.DeblockArt?.renderDocument(byId('finish-art'));
   byId('chain-summary').textContent = documentBody() || 'Nothing to finish. You can just be here.';
+  if (blackout) window.DeblockPoetry?.render(byId('chain-summary'), window.DeblockDocument.snapshot());
+  window.DeblockModes?.reviewState();
 }
 
 function fitWords() {
@@ -84,12 +130,14 @@ input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') event.preventDefault();
     return;
   }
-  if (event.key === 'Tab') finishWord(); // Preserve normal keyboard navigation.
+  if (event.key === 'Tab' && !story) finishWord(); // Story navigation retains unfinished input.
 });
 byId('word-form').addEventListener('submit', (event) => {
   event.preventDefault();
+  if (composing || !exercise) return;
   finishWord();
-  input.focus();
+  if (story) byId('next-beat').click();
+  else input.focus();
 });
 // Compatibility for older embedded markup; the current page has one plain style.
 byId('theme')?.addEventListener('change', (event) => {
@@ -98,6 +146,16 @@ byId('theme')?.addEventListener('change', (event) => {
   fitWords();
 });
 window.addEventListener('resize', fitWords);
+const siteMenu = byId('site-menu');
+window.addEventListener('click', event => {
+  if (siteMenu && !siteMenu.contains(event.target)) siteMenu.open = false;
+});
+window.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && siteMenu?.open) {
+    siteMenu.open = false;
+    siteMenu.querySelector('summary').focus();
+  }
+});
 
 function showDialog(dialog) {
   dialog.showModal();
@@ -124,6 +182,13 @@ byId('arrows-toggle').addEventListener('click', () => {
 byId('reset').addEventListener('click', () => showDialog(byId('reset-dialog')));
 byId('cancel-reset').addEventListener('click', () => byId('reset-dialog').close());
 byId('confirm-reset').addEventListener('click', () => {
+  if (story) {
+    story = window.DeblockWritingTools.copy(story);
+    story.active = 0;
+    for (const passage of story.passages) { passage.words = []; passage.draft = ''; }
+  }
+  blackout = null;
+  entryRevision = null;
   words.length = 0;
   entryId = null;
   entryCreatedAt = null;
@@ -137,10 +202,11 @@ byId('confirm-reset').addEventListener('click', () => {
   fitWords();
   byId('reset-dialog').close();
   input.focus({ preventScroll: true });
+  window.DeblockModes?.refresh();
 });
 byId('resume').addEventListener('click', () => byId('finish-dialog').close());
 window.addEventListener('beforeunload', (event) => {
-  if (words.length || input.value || byId('document-title').textContent !== defaultTitle) {
+  if (words.length || input.value || story || window.DeblockModes?.hasDrafts() || byId('document-title').textContent !== defaultTitle) {
     event.preventDefault(); event.returnValue = '';
   }
 });
