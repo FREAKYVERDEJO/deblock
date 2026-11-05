@@ -9,7 +9,7 @@ const items = [
   { id: 'painting-two', src: '/assets/art/painting-two.jpg', license: 'CC0' },
 ];
 function element() {
-  return { dataset: {}, children: [], handlers: {}, classList: { remove() {}, toggle() {} },
+  return { dataset: {}, children: [], handlers: {}, decode: async () => {}, classList: { remove() {}, toggle() {} },
     replaceChildren(...children) { this.children = children; }, append(...children) { this.children.push(...children); },
     addEventListener(event, fn) { this.handlers[event] = fn; }, setAttribute() {},
   };

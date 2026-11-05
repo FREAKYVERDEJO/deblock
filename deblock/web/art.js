@@ -21,6 +21,7 @@
   if (typeof document === 'undefined') return;
   const get = id => document.getElementById(id);
   let catalogPromise, next, selected = null, enabled = false, busy = false;
+  let selectedImage = null, upcoming = null, requestId = 0;
   let infoId = 0;
   function catalog() {
     if (!catalogPromise) catalogPromise = fetch('/assets/art/catalog.json').then(response => {
@@ -60,13 +61,31 @@
     button.addEventListener('focus', () => container.classList.remove('info-dismissed'));
     container.append(button, info);
   }
-  function render(container, item) {
+  async function prepare(item) {
+    const image = document.createElement('img');
+    image.alt = `${item.title} — ${item.artist}`;
+    image.src = item.src;
+    try {
+      await image.decode();
+      return { item, image };
+    } catch {
+      // Keep background preload failures quiet until this image is requested.
+      return { error: 'Image unavailable. Try another image, or switch images off.' };
+    }
+  }
+  function preloadNext() {
+    if (!upcoming) {
+      const item = next();
+      if (item) upcoming = prepare(item);
+    }
+  }
+  function render(container, item, preparedImage = null) {
     container.replaceChildren(); container.hidden = !item;
     delete container.dataset.artError;
     container.classList.remove('info-open', 'info-dismissed');
     if (!item) return;
-    const image = document.createElement('img');
-    image.src = item.src; image.alt = `${item.title} — ${item.artist}`;
+    const image = preparedImage || document.createElement('img');
+    if (!preparedImage) { image.src = item.src; image.alt = `${item.title} — ${item.artist}`; }
     image.addEventListener('error', () => { get('art-status').textContent = 'Image unavailable. Try another image, or switch images off.'; });
     container.append(image); addInfo(container, item);
   }
@@ -75,19 +94,42 @@
     get('art-toggle').textContent = enabled ? 'image on' : 'image off';
     get('art-next').hidden = !enabled;
     document.body.classList.toggle('has-art', enabled);
-    render(get('writing-art'), enabled ? selected : null);
+    render(get('writing-art'), enabled ? selected : null, selectedImage);
     render(get('finish-art'), enabled ? selected : null);
   }
   async function change(shuffle) {
+    if (!shuffle && (enabled || busy)) {
+      requestId++; busy = false; enabled = false;
+      get('art-next').setAttribute('aria-disabled', 'false');
+      get('art-status').textContent = '';
+      refresh(); return;
+    }
     if (busy) return;
-    if (!shuffle && enabled) { enabled = false; refresh(); return; }
-    busy = true; get('art-status').textContent = 'Loading image…';
+    const request = ++requestId;
+    busy = true;
+    get('art-next').setAttribute('aria-disabled', 'true');
+    get('art-status').textContent = '';
     try {
       await catalog();
-      if (shuffle || !selected) selected = next();
+      if (request !== requestId) return;
+      if (shuffle || !selected) {
+        preloadNext();
+        if (!upcoming) throw new Error('No images are available.');
+        const prepared = await upcoming;
+        if (request !== requestId) return;
+        upcoming = null;
+        if (prepared.error) throw new Error(prepared.error);
+        selected = prepared.item; selectedImage = prepared.image;
+      }
       enabled = true; refresh(); get('art-status').textContent = '';
-    } catch (error) { get('art-status').textContent = error.message; }
-    finally { busy = false; }
+      preloadNext();
+    } catch (error) {
+      if (request === requestId) get('art-status').textContent = error.message;
+    } finally {
+      if (request === requestId) {
+        busy = false; get('art-next').setAttribute('aria-disabled', 'false');
+      }
+    }
   }
   get('art-toggle').addEventListener('click', () => change(false));
   get('art-next').addEventListener('click', () => change(true));

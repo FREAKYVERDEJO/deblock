@@ -5,7 +5,7 @@ const { createDeck } = require('../deblock/web/art.js');
 const catalog = JSON.parse(fs.readFileSync(require('node:path').join(__dirname, '../deblock/web/assets/art/catalog.json'), 'utf8'));
 function element() {
   const classes = new Set();
-  return { dataset: {}, hidden: false, children: [], handlers: {},
+  return { dataset: {}, hidden: false, children: [], handlers: {}, decode: async () => {},
     classList: { remove(name) { classes.delete(name); }, toggle(name, force) { const add = force ?? !classes.has(name); add ? classes.add(name) : classes.delete(name); return add; } },
     replaceChildren(...children) { this.children = children; }, append(...children) { this.children.push(...children); },
     addEventListener(name, fn) { this.handlers[name] = fn; }, setAttribute(name, value) { this[name] = value; }, blur() {},
