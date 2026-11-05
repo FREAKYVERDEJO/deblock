@@ -45,7 +45,6 @@
     <form id="word-form" autocomplete="off">
       <header id="aphorism-heading" hidden><h1>Aphorism of the Day</h1></header>
       <figure id="aphorism-prompt" class="aphorism-prompt" hidden></figure>
-      <p id="aphorism-privacy" hidden>Follow a word, or write freely. Unsaved writing stays in this tab until you reload or close it.</p>
       <section id="story-context" aria-label="Current story passage" hidden>
         <p id="story-progress" class="sr-only"></p>
         <p class="beat-context"><strong id="beat-from"></strong><span class="beat-arrow" aria-label="toward">→</span><strong id="beat-to"></strong></p>
@@ -55,7 +54,7 @@
         <input id="word" type="text" placeholder="a word…" spellcheck="false" autocomplete="off" autocapitalize="off" disabled>
       </div>
       <label for="aphorism-text" class="sr-only">Your response to the aphorism</label>
-      <textarea id="aphorism-text" rows="6" spellcheck="false" aria-describedby="aphorism-privacy" hidden></textarea>
+      <textarea id="aphorism-text" rows="6" spellcheck="false" hidden></textarea>
       <div id="story-advance" hidden><button id="next-beat" type="button">press ↵ for next beat</button></div>
       <p id="hint" role="status" hidden></p>
     </form>

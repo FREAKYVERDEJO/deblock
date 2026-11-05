@@ -41,7 +41,6 @@
     await window.DeblockAphorisms.render(get('entry-aphorism'), entry.aphorism);
     window.DeblockPoetry?.render(get('entry-body'), entry);
     get('edit-entry').hidden = Boolean(entry.story || entry.blackout || entry.aphorism);
-    get('entry-dialog').querySelector('[data-save-gallery]').hidden = Boolean(entry.aphorism);
     get('entry-status').textContent = '';
     await window.DeblockArt?.renderSaved(get('entry-art'), entry.artwork);
     showDialog(get('entry-dialog'));

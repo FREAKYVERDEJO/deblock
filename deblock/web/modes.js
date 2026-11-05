@@ -64,7 +64,7 @@
     const story = entry.story;
     const aphorism = entry.aphorism;
     const textMode = aphorism?.mode === 'text';
-    for (const id of ['aphorism-heading', 'aphorism-prompt', 'aphorism-toggle', 'aphorism-privacy']) get(id).hidden = !aphorism;
+    for (const id of ['aphorism-heading', 'aphorism-prompt', 'aphorism-toggle']) get(id).hidden = !aphorism;
     get('aphorism-text').hidden = !textMode;
     get('word-space').hidden = textMode;
     get('aphorism-toggle').ariaPressed = String(textMode);
@@ -101,7 +101,6 @@
     const entry = root.DeblockDocument.snapshot();
     get('open-poetry').hidden = Boolean(entry.story || entry.aphorism);
     get('arrows-toggle').hidden = Boolean(entry.aphorism);
-    get('finish-dialog').querySelector('[data-save-gallery]').hidden = Boolean(entry.aphorism);
     get('review-outline').hidden = !entry.story;
     get('review-outline-list').replaceChildren();
     if (entry.story) for (const beat of entry.story.beats) {

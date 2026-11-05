@@ -125,7 +125,8 @@
         // Resolve the piece's attached artwork even if its writing prompt was hidden.
         if (entry) await root.DeblockArt?.renderSaved(dialog.querySelector('.document-art'), entry.artwork);
         if (galleryOnly) {
-          const artwork = await artworkPng(dialog);
+          // Aphorism entries save the quote and response together, without an artwork prompt.
+          const artwork = entry?.aphorism ? await createExport('png', dialog) : await artworkPng(dialog);
           await root.DeblockShelf.saveImage(artwork, entry);
           status.textContent = 'Saved to Gallery.';
           return;

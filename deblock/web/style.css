@@ -240,10 +240,10 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 .aphorism-prompt figcaption { font-size: clamp(17px, 2vw, 23px); line-height: 1.45; }
 .aphorism-prompt a { color: inherit; text-decoration: none; }
 .aphorism-prompt a:hover { text-decoration: underline; text-underline-offset: 4px; }
-#aphorism-privacy { margin: 26px 0 20px; color: #665e53; font-size: 13px; line-height: 1.5; }
+.aphorism-mode .word-space, #aphorism-text { margin-top: 36px; }
 .aphorism-mode .word-space { height: 240px; }
 #aphorism-text { display: block; width: 100%; height: 240px; padding: 8px 0; resize: vertical; border: 0; border-radius: 0; background: transparent; color: var(--ink); font: 400 clamp(24px, 2.8vw, 32px)/1.55 'Times New Roman', Times, serif; }
-#aphorism-text:focus-visible, .aphorism-mode #word:focus-visible { outline: 1px solid #bcb5aa; outline-offset: 8px; }
+#aphorism-text:focus-visible, .aphorism-mode #word:focus-visible { outline: none; }
 #finish-aphorism, #entry-aphorism { margin: 24px 0 32px; }
 dialog .aphorism-prompt blockquote { font-size: 25px; }
 dialog .aphorism-prompt figcaption { font-size: 15px; }
