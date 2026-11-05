@@ -1,5 +1,23 @@
 """Validate optional, versioned writing documents without changing their authorship."""
+import json
 import re
+from pathlib import Path
+
+
+_APHORISM_IDS = {item["id"] for item in json.loads(
+    (Path(__file__).parents[1] / "web/assets/deblock_aotd_100_curated.json").read_text()
+)["items"]}
+
+
+def validate_aphorism(value: object) -> dict | None:
+    """Keep a known prompt and editor choice; quote text stays in the catalog."""
+    if value is None:
+        return None
+    if (not isinstance(value, dict) or type(value.get("version")) is not int
+            or value["version"] != 1 or not isinstance(value.get("id"), str)
+            or value["id"] not in _APHORISM_IDS or value.get("mode") not in ("word", "text")):
+        raise ValueError("Choose a known aphorism and word or text mode.")
+    return {"version": 1, "id": value["id"], "mode": value["mode"]}
 
 
 def _text(value: object, maximum: int) -> bool:

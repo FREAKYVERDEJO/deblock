@@ -37,6 +37,7 @@ class Entry(models.Model):
     title = models.CharField(max_length=300, blank=True)
     words = models.JSONField(default=list)
     draft = models.TextField(blank=True)
+    aphorism = models.JSONField(null=True, blank=True)
     story = models.JSONField(null=True, blank=True)
     blackout = models.JSONField(null=True, blank=True)
     arrows = models.BooleanField(default=True)

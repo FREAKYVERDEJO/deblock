@@ -21,7 +21,7 @@ from PIL import Image, UnidentifiedImageError
 from deblock.exercises import get_exercise
 from deblock.server import ASSETS, WEB_ROOT
 from .models import Entry, GalleryImage, User
-from .writing import validate_story, validate_blackout
+from .writing import validate_story, validate_blackout, validate_aphorism
 
 ARTWORK = {item['id']: item for item in json.loads((WEB_ROOT / 'assets/art/catalog.json').read_text())}
 BACKEND_ASSETS = {
@@ -114,7 +114,7 @@ def profile_json(user) -> dict:
 
 def entry_json(entry) -> dict:
     return {'id': str(entry.pk), 'title': entry.title, 'words': entry.words, 'draft': entry.draft,
-            'story': entry.story, 'blackout': entry.blackout,
+            'story': entry.story, 'blackout': entry.blackout, 'aphorism': entry.aphorism,
             'arrows': entry.arrows, 'artwork': ARTWORK.get(entry.artwork_id), 'revision': entry.revision,
             'createdAt': entry.created_at.isoformat(), 'updatedAt': entry.updated_at.isoformat()}
 
@@ -207,12 +207,15 @@ def entry(request, key):
         raise InvalidInput('Words must be a list of at most 20,000 text items.')
     draft = text(value.get('draft', ''), 'Draft', 250000)
     try:
+        aphorism = validate_aphorism(value.get('aphorism'))
         story = validate_story(value.get('story'))
         if story:
             words = [word for passage in story['passages'] for word in
                      [*passage['words'], *([passage['draft']] if passage['draft'] else [])]]
             draft = ''
         blackout = validate_blackout(value.get('blackout'), words, draft)
+        if aphorism and (story or blackout or value.get('artwork')):
+            raise ValueError('Aphorism writing uses word or text mode without images.')
         if story and blackout:
             raise ValueError('Blackout poetry is available for free-association chains.')
     except ValueError as exc:
@@ -235,13 +238,15 @@ def entry(request, key):
                 return error('Your library is full. Delete an entry before saving another.', 409)
             record = Entry(id=key, owner=user)
         else:
+            if record.aphorism and (not aphorism or record.aphorism['id'] != aphorism['id']):
+                raise InvalidInput('Continue this entry in Aphorism of the Day to keep its prompt.')
             if record.story and not story:
                 raise InvalidInput('Open this story in Story Beats to preserve its outline and passages.')
             if type(value.get('revision')) is not int or value['revision'] != record.revision:
                 return error('This entry changed in another tab. Reopen it before saving your edits.', 409)
             record.revision += 1
         record.title, record.words, record.draft, record.arrows, record.artwork_id = title, words, draft, arrows, art
-        record.story, record.blackout = story, blackout
+        record.story, record.blackout, record.aphorism = story, blackout, aphorism
         record.save()
     return JsonResponse(entry_json(record), status=201 if created else 200)
 

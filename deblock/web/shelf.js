@@ -28,6 +28,7 @@
     return element;
   }
   function entryText(entry) {
+    if (entry.aphorism) return entry.words.join('') + entry.draft;
     if (entry.story) return window.DeblockWritingTools.storyText(entry.story, entry.arrows);
     const links = [...entry.words];
     if (entry.draft.trim()) links.push(entry.draft.trim());
@@ -37,8 +38,10 @@
     viewedEntry = entry;
     get('entry-title').textContent = entry.title || 'Untitled';
     get('entry-body').textContent = entryText(entry);
+    await window.DeblockAphorisms.render(get('entry-aphorism'), entry.aphorism);
     window.DeblockPoetry?.render(get('entry-body'), entry);
-    get('edit-entry').hidden = Boolean(entry.story || entry.blackout);
+    get('edit-entry').hidden = Boolean(entry.story || entry.blackout || entry.aphorism);
+    get('entry-dialog').querySelector('[data-save-gallery]').hidden = Boolean(entry.aphorism);
     get('entry-status').textContent = '';
     await window.DeblockArt?.renderSaved(get('entry-art'), entry.artwork);
     showDialog(get('entry-dialog'));
@@ -132,7 +135,7 @@
     const status = get('export-status');
     try {
       const entry = window.DeblockDocument.snapshot();
-      if (!entry.story && !entry.words.length && !entry.draft.trim()) { status.textContent = 'Write something first.'; return; }
+      if (!entry.story && !entry.words.join('').trim() && !entry.draft.trim()) { status.textContent = 'Write something first.'; return; }
       await localProfile();
       // Bind this draft to its own last save, even if Library refreshes another revision.
       if (store.accountMode && !entry.revision && savedDraft?.id === entry.id) entry.revision = savedDraft.revision;

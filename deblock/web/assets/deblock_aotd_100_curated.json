@@ -1,0 +1,2191 @@
+{
+  "dataset": "deblock-aphorism-of-the-day",
+  "version": "2.0-curated",
+  "compiled_on": "2026-11-05",
+  "count": 100,
+  "language": "en",
+  "usage_note": "English Nietzsche additions #051-068 are NEW renderings from cited German originals and not verbatim published English quotations. Items #069-100 use public-domain historical English editions, some marked excerpt=true, not new translations. Every item retains a source URL and locator; inspect regional copyright and translation rights before production use. Original entries #001-050 retained unchanged.",
+  "licensing": {
+    "us": "Project Gutenberg lists the source editions as public domain in the USA; consult each ebook notice.",
+    "spain_eu": "Not independently cleared. Spanish transitional term rules for authors who died before 1987, translator rights, and edition rights must be checked before deployment.",
+    "cioran": "Not included. Cioran died in 1995; original works remain protected under the usual EU life-plus-70 term through 2065. Modern translations can have separate copyrights.",
+    "new_english_renderings": "Entries aotd-021–aotd-050 are newly written English renderings of the German originals, rather than quotations from a third-party English translation. The historical German texts are public domain in the usual EU/US terms. Verify any use of website metadata/formatting separately.",
+    "new_nietzsche_renderings": "Entries aotd-051–aotd-068 independently translated from Nietzsche’s German original, sourced from Project Gutenberg eBook 7204.",
+    "featured_pd_translations": "Entries aotd-069–aotd-100 use short text from historical translations or original English. Public domain must be verified in the deployment jurisdiction; attribution still recommended."
+  },
+  "items": [
+    {
+      "id": "aotd-001",
+      "text": "What is done out of love always takes place beyond good and evil.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§153",
+      "translator": "Helen Zimmern",
+      "language": "en",
+      "tags": [
+        "love",
+        "morality"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/4363/pg4363-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-002",
+      "text": "Most people are too much absorbed in themselves to be bad.",
+      "author": "Friedrich Nietzsche",
+      "work": "Human, All Too Human",
+      "source_locator": "§85",
+      "translator": "Alexander Harvey",
+      "language": "en",
+      "tags": [
+        "self",
+        "morality"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/38145/38145-h/38145-h.htm"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-003",
+      "text": "He that humbleth himself wisheth to be exalted.",
+      "author": "Friedrich Nietzsche",
+      "work": "Human, All Too Human",
+      "source_locator": "§87",
+      "translator": "Alexander Harvey",
+      "language": "en",
+      "tags": [
+        "pride",
+        "contradiction"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/38145/38145-h/38145-h.htm"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-004",
+      "text": "Does not the true historian constantly contradict?",
+      "author": "Friedrich Nietzsche",
+      "work": "The Dawn of Day",
+      "source_locator": "Book I, §1",
+      "translator": "J. M. Kennedy",
+      "language": "en",
+      "tags": [
+        "knowledge",
+        "history"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/39955/pg39955-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-005",
+      "text": "I should only believe in a God that would know how to dance.",
+      "author": "Friedrich Nietzsche",
+      "work": "Thus Spake Zarathustra",
+      "source_locator": "Part I, Of Reading and Writing",
+      "translator": "Thomas Common",
+      "language": "en",
+      "tags": [
+        "faith",
+        "art"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/1998/pg1998-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-006",
+      "text": "Of a truth, need and boredom are the two poles of human life.",
+      "author": "Arthur Schopenhauer",
+      "work": "Studies in Pessimism",
+      "source_locator": "On the Sufferings of the World",
+      "translator": "T. Bailey Saunders",
+      "language": "en",
+      "tags": [
+        "boredom",
+        "desire"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/10732/pg10732.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-007",
+      "text": "In every kind of enjoyment, for instance, the pleasure depends principally upon the man himself.",
+      "author": "Arthur Schopenhauer",
+      "work": "The Wisdom of Life",
+      "source_locator": "Chapter II: Personality, or What a Man Is",
+      "translator": "T. Bailey Saunders",
+      "language": "en",
+      "tags": [
+        "happiness",
+        "self"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/10741/pg10741-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-008",
+      "text": "The heart has its reasons, which reason does not know.",
+      "author": "Blaise Pascal",
+      "work": "Pensées",
+      "source_locator": "Fragment 277",
+      "translator": "W. F. Trotter",
+      "language": "en",
+      "tags": [
+        "love",
+        "reason"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/18269/pg18269-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-009",
+      "text": "We never, then, love a person, but only qualities.",
+      "author": "Blaise Pascal",
+      "work": "Pensées",
+      "source_locator": "Fragment 323",
+      "translator": "W. F. Trotter",
+      "language": "en",
+      "tags": [
+        "love",
+        "identity"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/18269/pg18269-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-010",
+      "text": "We are never so happy or so unhappy as we suppose.",
+      "author": "François de La Rochefoucauld",
+      "work": "Reflections; or Sentences and Moral Maxims",
+      "source_locator": "Maxim 49",
+      "translator": "J. W. Willis Bund and J. Hain Friswell",
+      "language": "en",
+      "tags": [
+        "happiness",
+        "self-deception"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/9105/pg9105-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-011",
+      "text": "Hypocrisy is the homage vice pays to virtue.",
+      "author": "François de La Rochefoucauld",
+      "work": "Reflections; or Sentences and Moral Maxims",
+      "source_locator": "Maxim 218",
+      "translator": "J. W. Willis Bund and J. Hain Friswell",
+      "language": "en",
+      "tags": [
+        "hypocrisy",
+        "virtue"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/9105/pg9105-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-012",
+      "text": "The worst wasted of all days is that during which one has not laughed.",
+      "author": "Nicolas de Chamfort",
+      "work": "The Cynic’s Breviary",
+      "source_locator": "Maxims, p. 20",
+      "translator": "William G. Hutchison",
+      "language": "en",
+      "tags": [
+        "humor",
+        "time"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/69632/pg69632-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-013",
+      "text": "The road of excess leads to the palace of wisdom.",
+      "author": "William Blake",
+      "work": "The Marriage of Heaven and Hell",
+      "source_locator": "Proverbs of Hell",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "excess",
+        "wisdom"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/45315/pg45315-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-014",
+      "text": "The fox condemns the trap, not himself.",
+      "author": "William Blake",
+      "work": "The Marriage of Heaven and Hell",
+      "source_locator": "Proverbs of Hell",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "self-deception",
+        "responsibility"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/45315/pg45315-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-015",
+      "text": "The mystery of love is greater than the mystery of death.",
+      "author": "Oscar Wilde",
+      "work": "Miscellaneous Aphorisms",
+      "source_locator": "Opening aphorisms",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "love",
+        "mystery"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/33979/pg33979-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-016",
+      "text": "Questions are never indiscreet; answers sometimes are.",
+      "author": "Oscar Wilde",
+      "work": "Miscellaneous Aphorisms",
+      "source_locator": "Opening aphorisms",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "language",
+        "truth"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/33979/pg33979-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-017",
+      "text": "No, we are all in the gutter, but some of us are looking at the stars.",
+      "author": "Oscar Wilde",
+      "work": "Lady Windermere’s Fan",
+      "source_locator": "Act III, Lord Darlington",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "hope",
+        "perspective"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/790/790-h/790-h"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-018",
+      "text": "Men are disturbed not by things, but by the views which they take of things.",
+      "author": "Epictetus",
+      "work": "The Enchiridion",
+      "source_locator": "Chapter V",
+      "translator": "Thomas Wentworth Higginson",
+      "language": "en",
+      "tags": [
+        "perception",
+        "stoicism"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/45109/45109-h/45109-h.htm"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-019",
+      "text": "The best kind of revenge is, not to become like unto them.",
+      "author": "Marcus Aurelius",
+      "work": "Meditations",
+      "source_locator": "Book VI, V",
+      "translator": "Meric Casaubon",
+      "language": "en",
+      "tags": [
+        "character",
+        "revenge"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/2680/pg2680-images.html"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-020",
+      "text": "One can survive everything nowadays, except death, and live down anything except a good reputation.",
+      "author": "Oscar Wilde",
+      "work": "A Woman of No Importance",
+      "source_locator": "Act II, Lord Illingworth",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "reputation",
+        "death"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/854/854-h/854-h.htm"
+      },
+      "verification": "matched_to_source_text",
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-021",
+      "text": "Knowledge would have little charm if reaching it did not require overcoming so much shame.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§65",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "knowledge",
+        "shame"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-022",
+      "text": "Memory says, “I did that.” Pride insists, “I could not have.” In the end, memory gives way.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§68",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "memory",
+        "pride",
+        "self-deception"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-023",
+      "text": "If you have character, you also have a characteristic experience that keeps returning.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§70",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "character",
+        "repetition"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-024",
+      "text": "Whoever achieves an ideal goes beyond it in the very act.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§73",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "ideals",
+        "ambition"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-025",
+      "text": "In peaceful circumstances, the warlike person turns against themself.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§76",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "conflict",
+        "self"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-026",
+      "text": "Even someone who despises themself still respects the despiser.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§78",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "pride",
+        "self",
+        "paradox"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-027",
+      "text": "Must you salt your truth so heavily that it no longer quenches thirst?",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§81",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "truth",
+        "language"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-028",
+      "text": "A heart held tightly captive can give the mind many freedoms.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§87",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "freedom",
+        "desire",
+        "paradox"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-029",
+      "text": "Who has never sacrificed themself for a good reputation?",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§92",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "reputation",
+        "identity"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-030",
+      "text": "Maturity means recovering the seriousness you had at play as a child.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§94",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "play",
+        "childhood",
+        "maturity"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-031",
+      "text": "A great person? I see only an actor performing their own ideal.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§97",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "identity",
+        "performance",
+        "ideals"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-032",
+      "text": "Train your conscience, and it will kiss you even as it bites.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§98",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "conscience",
+        "paradox"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-033",
+      "text": "Through music, the passions take pleasure in themselves.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§106",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "music",
+        "feeling",
+        "art"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-034",
+      "text": "There are no moral phenomena, only moral interpretations of phenomena.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§108",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "morality",
+        "interpretation"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-035",
+      "text": "The great turning points of our lives come when we dare rename our worst as our best.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§116",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "transformation",
+        "values",
+        "self"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204.html"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-036",
+      "text": "Even in identical surroundings, each person inhabits a different world.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter I — Basic Division",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "perception",
+        "perspective"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/3/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-037",
+      "text": "Your individuality follows you everywhere and colors everything you experience.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter II — What One Is",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "identity",
+        "experience"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/4/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-038",
+      "text": "Anyone who is cheerful has at least one reason to be so: their cheerfulness itself.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter II — What One Is",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "happiness",
+        "mood"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/4/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-039",
+      "text": "Wealth is like seawater: the more you drink, the thirstier you become.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter III — What One Has",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "wealth",
+        "desire",
+        "paradox"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/5/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-040",
+      "text": "Contentment depends not simply on what we own, but on the relation between possessions and expectations.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter III — What One Has",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "desire",
+        "expectations"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/5/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-041",
+      "text": "Those who place great value on other people’s opinions grant them too much honor.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter IV — What One Represents",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "reputation",
+        "judgment"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/6/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-042",
+      "text": "Vanity makes us talkative; pride makes us silent.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter IV — What One Represents",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "pride",
+        "vanity",
+        "speech"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/6/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-043",
+      "text": "Every nation mocks the others, and all of them are right.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter IV — What One Represents",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "society",
+        "perspective",
+        "irony"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/6/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-044",
+      "text": "Distance shrinks things to the eye but enlarges them to the mind.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter V — Counsels and Maxims",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "distance",
+        "memory",
+        "perception"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/7/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-045",
+      "text": "Today comes only once and never returns.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter V — Counsels and Maxims",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "time",
+        "present"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/7/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-046",
+      "text": "We live through our beautiful days without noticing them.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter V — Counsels and Maxims",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "memory",
+        "happiness",
+        "time"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/7/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-047",
+      "text": "No one can see beyond themselves.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter V, maxim 23",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "perception",
+        "self",
+        "limits"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/7/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-048",
+      "text": "Change alone is constant.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter V, maxim 49",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "change",
+        "time"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/7/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-049",
+      "text": "Memory gathers things into a picture more beautiful than the original.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter V — Counsels and Maxims",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "memory",
+        "beauty"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/7/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-050",
+      "text": "The years of childhood are an unbroken poetry.",
+      "author": "Arthur Schopenhauer",
+      "work": "Aphorisms on the Wisdom of Life",
+      "source_locator": "Chapter VI — Differences Between the Ages",
+      "translator": "deblock (new English rendering from the original German)",
+      "language": "en",
+      "tags": [
+        "childhood",
+        "art",
+        "memory"
+      ],
+      "citation": {
+        "publisher": "Projekt Gutenberg (German original)",
+        "source_url": "https://projekt-gutenberg.org/authors/arthur-schopenhauer/books/aphorismen/chapter/8/"
+      },
+      "verification": "checked_against_original_german; English rendering is not a published translation",
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-051",
+      "text": "When you fight monsters, take care not to become one. Gaze into an abyss long enough, and it gazes back.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§146",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "monsters",
+        "identity",
+        "darkness"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-052",
+      "text": "Talent is not enough; apparently you also need everyone else’s permission to have it.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§151",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "talent",
+        "recognition",
+        "irony"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-053",
+      "text": "Madness is rare in individuals, but among groups, parties, peoples, and eras it is the rule.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§156",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "crowds",
+        "madness",
+        "society"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-054",
+      "text": "Even our conscience submits to the strongest drive in us.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§158",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "desire",
+        "conscience",
+        "power"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-055",
+      "text": "Poets are shameless toward their experiences: they exploit them.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§161",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "creativity",
+        "shame",
+        "art"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-056",
+      "text": "You can lie with your mouth, but your face still tells the truth.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§166",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "lies",
+        "body",
+        "truth"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-057",
+      "text": "Christianity gave Eros poison to drink. It did not kill him; it turned him into a vice.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§168",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "eros",
+        "religion",
+        "desire"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-058",
+      "text": "Talking a great deal about yourself can also be a way of hiding.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§169",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "self-deception",
+        "language",
+        "secrets"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-059",
+      "text": "Praise can be more intrusive than criticism.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§170",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "praise",
+        "power",
+        "intimacy"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-060",
+      "text": "We hate only those we regard as our equals or our superiors.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§173",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "hatred",
+        "envy",
+        "status"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-061",
+      "text": "In the end, we love our desire—not the thing we desire.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§175",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "desire",
+        "love",
+        "longing"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-062",
+      "text": "Other people’s vanity offends us only when it collides with our own.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§176",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "vanity",
+        "hypocrisy",
+        "ego"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-063",
+      "text": "The consequences of our actions grab us by the hair, indifferent to how much we have since improved.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§179",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "consequences",
+        "regret",
+        "change"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-064",
+      "text": "What shook me was not that you lied, but that I can no longer believe you.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§183",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "betrayal",
+        "trust",
+        "truth"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-065",
+      "text": "Every philosophy hides another philosophy; every opinion is a hiding place, every word a mask.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§289",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "secrets",
+        "language",
+        "masks"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": true,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-066",
+      "text": "A deep thinker fears being understood more than being misunderstood.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§290",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "vulnerability",
+        "knowledge",
+        "understanding"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-067",
+      "text": "Even while awake, as in dreams, we first invent the people we deal with—and immediately forget that we invented them.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§138",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "projection",
+        "identity",
+        "relationships"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-068",
+      "text": "Objections, detours, cheerful suspicion and mockery can signal health; the unconditional belongs to pathology.",
+      "author": "Friedrich Nietzsche",
+      "work": "Beyond Good and Evil",
+      "source_locator": "§154",
+      "translator": "New independent English rendering from the German original",
+      "language": "en",
+      "tags": [
+        "doubt",
+        "morality",
+        "certainty"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "new_english_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-069",
+      "text": "We are like lambs in a field, disporting themselves under the eye of the butcher.",
+      "author": "Arthur Schopenhauer",
+      "work": "Studies in Pessimism",
+      "source_locator": "On the Sufferings of the World",
+      "translator": "T. Bailey Saunders",
+      "language": "en",
+      "tags": [
+        "mortality",
+        "innocence",
+        "dread"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/10732/pg10732.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "excerpt_pd_translation",
+      "excerpt": true,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-070",
+      "text": "A ship without ballast is unstable and will not go straight.",
+      "author": "Arthur Schopenhauer",
+      "work": "Studies in Pessimism",
+      "source_locator": "On the Sufferings of the World",
+      "translator": "T. Bailey Saunders",
+      "language": "en",
+      "tags": [
+        "suffering",
+        "purpose",
+        "metaphor"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/10732/pg10732.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": false,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-071",
+      "text": "Life is a task to be done.",
+      "author": "Arthur Schopenhauer",
+      "work": "Studies in Pessimism",
+      "source_locator": "On the Sufferings of the World",
+      "translator": "T. Bailey Saunders",
+      "language": "en",
+      "tags": [
+        "life",
+        "duty",
+        "mortality"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/10732/pg10732.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": false,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-072",
+      "text": "Melancholy attracts, while bad humor repels.",
+      "author": "Arthur Schopenhauer",
+      "work": "Studies in Pessimism",
+      "source_locator": "Further Psychological Observations",
+      "translator": "T. Bailey Saunders",
+      "language": "en",
+      "tags": [
+        "melancholy",
+        "mood",
+        "others"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/10732/pg10732.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-073",
+      "text": "In my head there is a permanent opposition-party.",
+      "author": "Arthur Schopenhauer",
+      "work": "Studies in Pessimism",
+      "source_locator": "Further Psychological Observations",
+      "translator": "T. Bailey Saunders",
+      "language": "en",
+      "tags": [
+        "self-criticism",
+        "doubt",
+        "mind"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/10732/pg10732.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "excerpt_pd_translation",
+      "excerpt": true,
+      "featured": false,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-074",
+      "text": "A man can be himself only so long as he is alone.",
+      "author": "Arthur Schopenhauer",
+      "work": "Counsels and Maxims",
+      "source_locator": "On Solitude",
+      "translator": "T. Bailey Saunders",
+      "language": "en",
+      "tags": [
+        "solitude",
+        "self",
+        "freedom"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/10715/pg10715-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "excerpt_pd_translation",
+      "excerpt": true,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-075",
+      "text": "The more a man has in himself, the less others can be to him.",
+      "author": "Arthur Schopenhauer",
+      "work": "Counsels and Maxims",
+      "source_locator": "On Solitude",
+      "translator": "T. Bailey Saunders",
+      "language": "en",
+      "tags": [
+        "relationships",
+        "self-sufficiency",
+        "independence"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/10715/pg10715-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": false,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-076",
+      "text": "Every man takes the limits of his own field of vision for the limits of the world.",
+      "author": "Arthur Schopenhauer",
+      "work": "Studies in Pessimism",
+      "source_locator": "Further Psychological Observations",
+      "translator": "T. Bailey Saunders",
+      "language": "en",
+      "tags": [
+        "perception",
+        "arrogance",
+        "ignorance"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/10732/pg10732.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": false,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-077",
+      "text": "The tricks were meant to be seen only once.",
+      "author": "Arthur Schopenhauer",
+      "work": "Studies in Pessimism",
+      "source_locator": "On the Sufferings of the World",
+      "translator": "T. Bailey Saunders",
+      "language": "en",
+      "tags": [
+        "illusion",
+        "aging",
+        "experience"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/10732/pg10732.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "excerpt_pd_translation",
+      "excerpt": true,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-078",
+      "text": "No one shows himself as he is, but wears his mask and plays his part.",
+      "author": "Arthur Schopenhauer",
+      "work": "Studies in Pessimism",
+      "source_locator": "Further Psychological Observations",
+      "translator": "T. Bailey Saunders",
+      "language": "en",
+      "tags": [
+        "social-masks",
+        "identity",
+        "performance"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/10732/pg10732.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "excerpt_pd_translation",
+      "excerpt": true,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-079",
+      "text": "He who desires, but acts not, breeds pestilence.",
+      "author": "William Blake",
+      "work": "The Marriage of Heaven and Hell",
+      "source_locator": "Proverbs of Hell",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "desire",
+        "inaction",
+        "provocation"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/45315/45315-h/45315-h.htm"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_original_english",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-080",
+      "text": "A fool sees not the same tree that a wise man sees.",
+      "author": "William Blake",
+      "work": "The Marriage of Heaven and Hell",
+      "source_locator": "Proverbs of Hell",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "perception",
+        "wisdom",
+        "nature"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/45315/45315-h/45315-h.htm"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_original_english",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-081",
+      "text": "Prisons are built with stones of law, brothels with bricks of religion.",
+      "author": "William Blake",
+      "work": "The Marriage of Heaven and Hell",
+      "source_locator": "Proverbs of Hell",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "religion",
+        "law",
+        "hypocrisy"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/45315/45315-h/45315-h.htm"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_original_english",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-082",
+      "text": "The tigers of wrath are wiser than the horses of instruction.",
+      "author": "William Blake",
+      "work": "The Marriage of Heaven and Hell",
+      "source_locator": "Proverbs of Hell",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "anger",
+        "learning",
+        "wildness"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/45315/45315-h/45315-h.htm"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_original_english",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-083",
+      "text": "You never know what is enough unless you know what is more than enough.",
+      "author": "William Blake",
+      "work": "The Marriage of Heaven and Hell",
+      "source_locator": "Proverbs of Hell",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "excess",
+        "desire",
+        "limits"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/45315/45315-h/45315-h.htm"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_original_english",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-084",
+      "text": "What is now proved was once only imagined.",
+      "author": "William Blake",
+      "work": "The Marriage of Heaven and Hell",
+      "source_locator": "Proverbs of Hell",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "creativity",
+        "knowledge",
+        "possibility"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/45315/45315-h/45315-h.htm"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_original_english",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-085",
+      "text": "The eagle never lost so much time as when he submitted to learn of the crow.",
+      "author": "William Blake",
+      "work": "The Marriage of Heaven and Hell",
+      "source_locator": "Proverbs of Hell",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "conformity",
+        "independence",
+        "learning"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/45315/45315-h/45315-h.htm"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_original_english",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-086",
+      "text": "If the fool would persist in his folly he would become wise.",
+      "author": "William Blake",
+      "work": "The Marriage of Heaven and Hell",
+      "source_locator": "Proverbs of Hell",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "foolishness",
+        "wisdom",
+        "paradox"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/45315/45315-h/45315-h.htm"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_original_english",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-087",
+      "text": "We have all sufficient strength to support the misfortunes of others.",
+      "author": "François de La Rochefoucauld",
+      "work": "Reflections; or Sentences and Moral Maxims",
+      "source_locator": "Maxim 19",
+      "translator": "J. W. Willis Bund and J. Hain Friswell",
+      "language": "en",
+      "tags": [
+        "compassion",
+        "hypocrisy",
+        "suffering"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/9105/pg9105-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-088",
+      "text": "If we had no faults we should not take so much pleasure in noting those of others.",
+      "author": "François de La Rochefoucauld",
+      "work": "Reflections; or Sentences and Moral Maxims",
+      "source_locator": "Maxim 31",
+      "translator": "J. W. Willis Bund and J. Hain Friswell",
+      "language": "en",
+      "tags": [
+        "judgment",
+        "projection",
+        "hypocrisy"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/9105/pg9105-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-089",
+      "text": "The refusal of praise is only the wish to be praised twice.",
+      "author": "François de La Rochefoucauld",
+      "work": "Reflections; or Sentences and Moral Maxims",
+      "source_locator": "Maxim 149",
+      "translator": "J. W. Willis Bund and J. Hain Friswell",
+      "language": "en",
+      "tags": [
+        "vanity",
+        "praise",
+        "self-deception"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/9105/pg9105-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-090",
+      "text": "No one should be praised for his goodness if he has not strength enough to be wicked.",
+      "author": "François de La Rochefoucauld",
+      "work": "Reflections; or Sentences and Moral Maxims",
+      "source_locator": "Maxim 237",
+      "translator": "J. W. Willis Bund and J. Hain Friswell",
+      "language": "en",
+      "tags": [
+        "virtue",
+        "power",
+        "morality"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/9105/pg9105-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": false,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-091",
+      "text": "In all professions we affect a part and an appearance to seem what we wish to be. Thus the world is merely composed of actors.",
+      "author": "François de La Rochefoucauld",
+      "work": "Reflections; or Sentences and Moral Maxims",
+      "source_locator": "Maxim 256",
+      "translator": "J. W. Willis Bund and J. Hain Friswell",
+      "language": "en",
+      "tags": [
+        "performance",
+        "identity",
+        "society"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/9105/pg9105-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": false,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-092",
+      "text": "Gravity is a mysterious carriage of the body invented to conceal the want of mind.",
+      "author": "François de La Rochefoucauld",
+      "work": "Reflections; or Sentences and Moral Maxims",
+      "source_locator": "Maxim 257",
+      "translator": "J. W. Willis Bund and J. Hain Friswell",
+      "language": "en",
+      "tags": [
+        "performance",
+        "intellect",
+        "deception"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/9105/pg9105-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-093",
+      "text": "The truth is rarely pure and never simple.",
+      "author": "Oscar Wilde",
+      "work": "The Importance of Being Earnest",
+      "source_locator": "Act I, Algernon",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "truth",
+        "irony",
+        "language"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/844/844-h/844-h.htm"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_original_english",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-094",
+      "text": "The only way to get rid of a temptation is to yield to it.",
+      "author": "Oscar Wilde",
+      "work": "The Picture of Dorian Gray",
+      "source_locator": "Chapter 2, Lord Henry",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "temptation",
+        "desire",
+        "morality"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/174/174-h/174-h.htm"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_original_english",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-095",
+      "text": "The only difference between the saint and the sinner is that every saint has a past, and every sinner has a future.",
+      "author": "Oscar Wilde",
+      "work": "A Woman of No Importance",
+      "source_locator": "Act III, Lord Illingworth",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "morality",
+        "forgiveness",
+        "time"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/854/854-h/854-h.htm"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_original_english",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-096",
+      "text": "It is absurd to divide people into good and bad. People are either charming or tedious.",
+      "author": "Oscar Wilde",
+      "work": "Lady Windermere’s Fan",
+      "source_locator": "Act I, Lord Darlington",
+      "translator": "Original English",
+      "language": "en",
+      "tags": [
+        "judgment",
+        "charm",
+        "morality"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/files/790/790-h/790-h"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_original_english",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": false
+    },
+    {
+      "id": "aotd-097",
+      "text": "We never seek things for themselves, but for the search.",
+      "author": "Blaise Pascal",
+      "work": "Pensées",
+      "source_locator": "Fragment 135",
+      "translator": "W. F. Trotter",
+      "language": "en",
+      "tags": [
+        "desire",
+        "search",
+        "satisfaction"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/18269/pg18269-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-098",
+      "text": "All the unhappiness of men arises from one single fact, that they cannot stay quietly in their own chamber.",
+      "author": "Blaise Pascal",
+      "work": "Pensées",
+      "source_locator": "Fragment 139",
+      "translator": "W. F. Trotter",
+      "language": "en",
+      "tags": [
+        "solitude",
+        "distraction",
+        "self"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/18269/pg18269-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "excerpt_pd_translation",
+      "excerpt": true,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-099",
+      "text": "Cleopatra’s nose: had it been shorter, the whole aspect of the world would have been altered.",
+      "author": "Blaise Pascal",
+      "work": "Pensées",
+      "source_locator": "Fragment 162",
+      "translator": "W. F. Trotter",
+      "language": "en",
+      "tags": [
+        "chance",
+        "history",
+        "beauty"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/18269/pg18269-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    },
+    {
+      "id": "aotd-100",
+      "text": "Man is neither angel nor brute, and the unfortunate thing is that he who would act the angel acts the brute.",
+      "author": "Blaise Pascal",
+      "work": "Pensées",
+      "source_locator": "Fragment 358",
+      "translator": "W. F. Trotter",
+      "language": "en",
+      "tags": [
+        "hypocrisy",
+        "perfection",
+        "human-nature"
+      ],
+      "citation": {
+        "publisher": "Project Gutenberg",
+        "source_url": "https://www.gutenberg.org/cache/epub/18269/pg18269-images.html"
+      },
+      "verification": "checked_primary_work_and_locator",
+      "rendition_type": "verbatim_pd_translation",
+      "excerpt": false,
+      "featured": true,
+      "translation_rights_check_required": true
+    }
+  ],
+  "updated_on": "2026-11-05",
+  "featured_ids": [
+    "aotd-051",
+    "aotd-052",
+    "aotd-053",
+    "aotd-054",
+    "aotd-055",
+    "aotd-056",
+    "aotd-057",
+    "aotd-058",
+    "aotd-059",
+    "aotd-060",
+    "aotd-061",
+    "aotd-062",
+    "aotd-063",
+    "aotd-064",
+    "aotd-065",
+    "aotd-066",
+    "aotd-067",
+    "aotd-068",
+    "aotd-069",
+    "aotd-072",
+    "aotd-074",
+    "aotd-077",
+    "aotd-078",
+    "aotd-079",
+    "aotd-080",
+    "aotd-081",
+    "aotd-082",
+    "aotd-083",
+    "aotd-084",
+    "aotd-085",
+    "aotd-086",
+    "aotd-087",
+    "aotd-088",
+    "aotd-089",
+    "aotd-092",
+    "aotd-093",
+    "aotd-094",
+    "aotd-095",
+    "aotd-096",
+    "aotd-097",
+    "aotd-098",
+    "aotd-099",
+    "aotd-100"
+  ],
+  "featured_count": 43,
+  "curation_note": "Previous 50 entries preserved; 50 new source-checked selections appended. 43 especially provocative new entries are featured for daily rotation. The complete library is available for manual shuffle. AOTD should select from featured_ids until editorial review of the older set. Historical quotations express their authors’ views, not endorsed advice.",
+  "author_counts": {
+    "Arthur Schopenhauer": 27,
+    "Blaise Pascal": 6,
+    "Epictetus": 1,
+    "François de La Rochefoucauld": 8,
+    "Friedrich Nietzsche": 38,
+    "Marcus Aurelius": 1,
+    "Nicolas de Chamfort": 1,
+    "Oscar Wilde": 8,
+    "William Blake": 10
+  }
+}

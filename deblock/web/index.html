@@ -7,6 +7,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
   <script src="/writing-tools.js" defer></script>
+  <script src="/aphorisms.js" defer></script>
   <script src="/app.js" defer></script>
   <script src="/art.js" defer></script>
   <script src="/modes.js" defer></script>
@@ -22,6 +23,7 @@
     <summary aria-label="Open menu"><span></span><span></span><span></span></summary>
     <nav aria-label="Writing modes">
       <button id="open-free" type="button" aria-current="page">Free association</button>
+      <button id="open-aphorism" type="button">Aphorism of the Day</button>
       <button id="open-story" type="button">Story Beats</button>
     </nav>
   </details>
@@ -41,6 +43,9 @@
   <main>
     <figure id="writing-art" class="artwork writing-art" hidden></figure>
     <form id="word-form" autocomplete="off">
+      <header id="aphorism-heading" hidden><h1>Aphorism of the Day</h1></header>
+      <figure id="aphorism-prompt" class="aphorism-prompt" hidden></figure>
+      <p id="aphorism-privacy" hidden>Follow a word, or write freely. Unsaved writing stays in this tab until you reload or close it.</p>
       <section id="story-context" aria-label="Current story passage" hidden>
         <p id="story-progress" class="sr-only"></p>
         <p class="beat-context"><strong id="beat-from"></strong><span class="beat-arrow" aria-label="toward">→</span><strong id="beat-to"></strong></p>
@@ -49,6 +54,8 @@
       <div class="word-space" id="word-space">
         <input id="word" type="text" placeholder="a word…" spellcheck="false" autocomplete="off" autocapitalize="off" disabled>
       </div>
+      <label for="aphorism-text" class="sr-only">Your response to the aphorism</label>
+      <textarea id="aphorism-text" rows="6" spellcheck="false" aria-describedby="aphorism-privacy" hidden></textarea>
       <div id="story-advance" hidden><button id="next-beat" type="button">press ↵ for next beat</button></div>
       <p id="hint" role="status" hidden></p>
     </form>
@@ -79,6 +86,7 @@
     <nav aria-label="Writing controls">
       <button id="art-toggle" type="button" aria-label="Show image" aria-pressed="false">image off</button>
       <button id="art-next" type="button" aria-label="Another image" hidden>another</button>
+      <button id="aphorism-toggle" type="button" aria-pressed="false" aria-controls="aphorism-text word-space" hidden>normal text box off</button>
       <button id="reset" type="button">reset</button>
       <button id="finish" type="button">done</button>
       <button id="previous-beat" type="button" hidden>previous passage</button>
@@ -98,6 +106,7 @@
     <button class="close" type="button" aria-label="Return to writing">×</button>
     <h1 id="document-title" contenteditable="plaintext-only" role="textbox" aria-label="Document title" aria-multiline="true" title="Click to edit the title" spellcheck="false">Untitled</h1>
     <figure id="finish-art" class="artwork document-art" hidden></figure>
+    <figure id="finish-aphorism" class="aphorism-prompt" hidden></figure>
     <p id="chain-summary"></p>
     <details id="review-outline" data-html2canvas-ignore="true" hidden><summary>story outline</summary><ol id="review-outline-list"></ol></details>
     <div class="end-actions">
@@ -175,6 +184,7 @@
     <button class="close" type="button" aria-label="Close entry">×</button>
     <h1 id="entry-title"></h1>
     <figure id="entry-art" class="artwork document-art" hidden></figure>
+    <figure id="entry-aphorism" class="aphorism-prompt" hidden></figure>
     <p id="entry-body"></p>
     <div class="end-actions"><button id="continue-entry" type="button">continue writing</button></div>
     <div class="end-actions"><details class="save-menu"><summary>save</summary><div class="save-options"><button type="button" data-save-gallery>to gallery</button><button type="button" data-export="png">as PNG</button><button type="button" data-export="pdf">as PDF</button></div></details></div>
