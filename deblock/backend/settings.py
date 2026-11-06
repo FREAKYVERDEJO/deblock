@@ -40,7 +40,13 @@ if not origin.hostname or origin.path or origin.query or origin.fragment or orig
     raise ImproperlyConfigured('DEBLOCK_ORIGIN must contain only scheme and host (and optional port).')
 if origin.scheme != ('https' if PRODUCTION else 'http'):
     raise ImproperlyConfigured('Production needs an HTTPS origin; local development uses HTTP.')
-ALLOWED_HOSTS = [origin.hostname] if PRODUCTION else ['127.0.0.1', 'localhost', '[::1]']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'deblock-production.up.railway.app',
+]
+if origin.hostname not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(origin.hostname)
 CSRF_TRUSTED_ORIGINS = [PUBLIC_ORIGIN]
 ROOT_URLCONF = 'deblock.backend.urls'
 WSGI_APPLICATION = 'deblock.backend.wsgi.application'
