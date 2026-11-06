@@ -1,17 +1,17 @@
 {
   "dataset": "deblock-aphorism-of-the-day",
   "version": "2.0-curated",
-  "compiled_on": "2026-11-05",
+  "compiled_on": "2026-11-06",
   "count": 100,
   "language": "en",
-  "usage_note": "English Nietzsche additions #051-068 are NEW renderings from cited German originals and not verbatim published English quotations. Items #069-100 use public-domain historical English editions, some marked excerpt=true, not new translations. Every item retains a source URL and locator; inspect regional copyright and translation rights before production use. Original entries #001-050 retained unchanged.",
+  "usage_note": "English Nietzsche additions #051-063 and #065-068 are NEW renderings from cited German originals and not verbatim published English quotations. Item #064 and items #069-100 use public-domain historical English editions or original English, some marked excerpt=true. Every item retains a source URL and locator; inspect regional copyright and translation rights before production use. Original entries #001-050 retained unchanged.",
   "licensing": {
     "us": "Project Gutenberg lists the source editions as public domain in the USA; consult each ebook notice.",
     "spain_eu": "Not independently cleared. Spanish transitional term rules for authors who died before 1987, translator rights, and edition rights must be checked before deployment.",
     "cioran": "Not included. Cioran died in 1995; original works remain protected under the usual EU life-plus-70 term through 2065. Modern translations can have separate copyrights.",
     "new_english_renderings": "Entries aotd-021–aotd-050 are newly written English renderings of the German originals, rather than quotations from a third-party English translation. The historical German texts are public domain in the usual EU/US terms. Verify any use of website metadata/formatting separately.",
-    "new_nietzsche_renderings": "Entries aotd-051–aotd-068 independently translated from Nietzsche’s German original, sourced from Project Gutenberg eBook 7204.",
-    "featured_pd_translations": "Entries aotd-069–aotd-100 use short text from historical translations or original English. Public domain must be verified in the deployment jurisdiction; attribution still recommended."
+    "new_nietzsche_renderings": "Entries aotd-051–aotd-063 and aotd-065–aotd-068 independently translated from Nietzsche’s German original, sourced from Project Gutenberg eBook 7204.",
+    "featured_pd_translations": "Entry aotd-064 and entries aotd-069–aotd-100 use short text from historical translations or original English. Public domain must be verified in the deployment jurisdiction; attribution still recommended."
   },
   "items": [
     {
@@ -1279,26 +1279,26 @@
     },
     {
       "id": "aotd-064",
-      "text": "What shook me was not that you lied, but that I can no longer believe you.",
-      "author": "Friedrich Nietzsche",
-      "work": "Beyond Good and Evil",
-      "source_locator": "§183",
-      "translator": "New independent English rendering from the German original",
+      "text": "Exuberance is Beauty.",
+      "author": "William Blake",
+      "work": "The Marriage of Heaven and Hell",
+      "source_locator": "Proverbs of Hell",
+      "translator": "Original English",
       "language": "en",
       "tags": [
-        "betrayal",
-        "trust",
-        "truth"
+        "exuberance",
+        "beauty",
+        "energy"
       ],
       "citation": {
         "publisher": "Project Gutenberg",
-        "source_url": "https://www.gutenberg.org/cache/epub/7204/pg7204-images.html"
+        "source_url": "https://www.gutenberg.org/files/45315/45315-h/45315-h.htm"
       },
       "verification": "checked_primary_work_and_locator",
-      "rendition_type": "new_english_translation",
+      "rendition_type": "verbatim_original_english",
       "excerpt": false,
       "featured": true,
-      "translation_rights_check_required": true
+      "translation_rights_check_required": false
     },
     {
       "id": "aotd-065",
@@ -2129,7 +2129,7 @@
       "translation_rights_check_required": true
     }
   ],
-  "updated_on": "2026-11-05",
+  "updated_on": "2026-11-06",
   "featured_ids": [
     "aotd-051",
     "aotd-052",
@@ -2176,16 +2176,16 @@
     "aotd-100"
   ],
   "featured_count": 43,
-  "curation_note": "Previous 50 entries preserved; 50 new source-checked selections appended. 43 especially provocative new entries are featured for daily rotation. The complete library is available for manual shuffle. AOTD should select from featured_ids until editorial review of the older set. Historical quotations express their authors’ views, not endorsed advice.",
+  "curation_note": "Previous 50 entries preserved; 50 source-checked selections appended. 43 especially provocative new entries are featured for daily rotation. The complete library is available for manual shuffle. AOTD should select from featured_ids until editorial review of the older set. Historical quotations express their authors’ views, not endorsed advice.",
   "author_counts": {
     "Arthur Schopenhauer": 27,
     "Blaise Pascal": 6,
     "Epictetus": 1,
     "François de La Rochefoucauld": 8,
-    "Friedrich Nietzsche": 38,
+    "Friedrich Nietzsche": 37,
     "Marcus Aurelius": 1,
     "Nicolas de Chamfort": 1,
     "Oscar Wilde": 8,
-    "William Blake": 10
+    "William Blake": 11
   }
 }
