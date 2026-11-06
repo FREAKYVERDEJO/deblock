@@ -189,12 +189,13 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 #review-outline li { margin: 10px 0; overflow-wrap: anywhere; }
 #poetry-dialog { width: min(960px, 94vw); padding: clamp(28px, 5vw, 58px); border: 0; background: #fffefa; }
 #poetry-title { font-size: clamp(30px, 4vw, 44px); margin-bottom: 32px; }
-.poetry-words { margin: 0 0 48px; min-height: 220px; font-size: clamp(23px, 3.2vw, 32px); line-height: 1.9; user-select: none; touch-action: none; }
-.poetry-words button { display: inline; max-width: 100%; padding: .08em .12em; border: 0; border-radius: 0; font: inherit; line-height: 1.2; color: var(--ink); overflow-wrap: anywhere; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.poetry-words { margin: 0 0 48px; min-height: 220px; font-size: clamp(23px, 3.2vw, 32px); line-height: 1.9; user-select: none; touch-action: none; overflow-wrap: anywhere; }
+.poetry-words button { display: inline-block; min-width: 0; padding: .08em 0; border: 0; border-radius: 0; font: inherit; line-height: 1.2; color: var(--ink); white-space: pre; vertical-align: baseline; }
+.poetry-words .poetry-space { min-width: .3em; }
 .poetry-words button[aria-pressed="true"] { background: #000; color: #000; }
 .poetry-words button:focus-visible { outline: 2px solid #4b7fae; outline-offset: 3px; }
 .poetry-highlight { background: #f8df79; color: #28241e; }
-.poetry-redacted { background: #000; color: #000; user-select: none; border-radius: 0; }
+.poetry-redacted { background: #000; color: #000; user-select: none; border-radius: 0; white-space: pre; }
 .poetry-actions { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
 #poetry-apply { margin-left: auto; font-size: clamp(25px, 3.2vw, 36px); }
 #poetry-help { max-width: 75%; }

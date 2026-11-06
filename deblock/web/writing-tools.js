@@ -35,11 +35,38 @@
   function poetryTokens(entry) {
     return [...entry.words, entry.draft || ''].flatMap(word => word.split(/\s+/u).filter(Boolean));
   }
+  function poetryText(entry) {
+    return poetryTokens(entry).join(' ');
+  }
+  function poetryCharacters(entry) {
+    return Array.from(poetryText(entry));
+  }
+  function characterSelection(entry, selection) {
+    if (!selection || selection.version === 2) {
+      return selection ? copy(selection) : { version: 2, style: 'blackout', covered: [] };
+    }
+    const kept = new Set(selection.kept);
+    const covered = [];
+    let character = 0;
+    poetryTokens(entry).forEach((word, wordIndex, words) => {
+      for (const _ of Array.from(word)) {
+        if (!kept.has(wordIndex)) covered.push(character);
+        character += 1;
+      }
+      if (wordIndex < words.length - 1) character += 1;
+    });
+    return { version: 2, style: 'blackout', covered };
+  }
   function poemText(entry, selection) {
+    if (selection.version === 2) {
+      const covered = new Set(selection.covered);
+      return poetryCharacters(entry).filter((_, index) => !covered.has(index)).join('');
+    }
     const kept = new Set(selection.kept);
     return poetryTokens(entry).filter((_, index) => kept.has(index)).join(' ');
   }
-  const api = { copy, createStory, captureStory, moveStory, passageText, storyText, storyWords, poetryTokens, poemText };
+  const api = { copy, createStory, captureStory, moveStory, passageText, storyText, storyWords,
+    poetryTokens, poetryText, poetryCharacters, characterSelection, poemText };
   root.DeblockWritingTools = api;
   if (typeof module !== 'undefined') module.exports = api;
 })(typeof window === 'undefined' ? globalThis : window);

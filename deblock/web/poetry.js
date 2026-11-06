@@ -8,6 +8,18 @@
   let buttons = [];
   function render(container, entry) {
     if (!entry.blackout) return false;
+    if (entry.blackout.version === 2) {
+      const covered = new Set(entry.blackout.covered);
+      container.replaceChildren();
+      tools.poetryCharacters(entry).forEach((character, index) => {
+        const span = document.createElement('span'); span.textContent = character;
+        if (covered.has(index)) {
+          span.className = 'poetry-redacted'; span.setAttribute('aria-hidden', 'true');
+        }
+        container.append(span);
+      });
+      return true;
+    }
     const kept = new Set(entry.blackout.kept);
     container.replaceChildren();
     tools.poetryTokens(entry).forEach((word, index) => {
@@ -21,22 +33,25 @@
     return true;
   }
   function refresh() {
-    const kept = new Set(selection.kept);
-    buttons.forEach((button, index) => button.setAttribute('aria-pressed', String(!kept.has(index))));
-    get('poetry-count').textContent = `${buttons.length - kept.size} words blacked out. ${kept.size} words kept.`;
+    const covered = new Set(selection.covered);
+    buttons.forEach((button, index) => button.setAttribute('aria-pressed', String(covered.has(index))));
+    get('poetry-count').textContent = `${covered.size} characters blacked out. ${buttons.length - covered.size} characters visible.`;
   }
   function toggle(index) {
-    if (selection.kept.includes(index)) selection.kept = selection.kept.filter(value => value !== index);
-    else selection.kept = [...selection.kept, index].sort((a, b) => a - b);
+    if (selection.covered.includes(index)) selection.covered = selection.covered.filter(value => value !== index);
+    else selection.covered = [...selection.covered, index].sort((a, b) => a - b);
     refresh();
   }
   function indexAt(element) {
-    const button = element?.closest('button[data-word]');
-    return button && surface.contains(button) ? Number(button.dataset.word) : null;
+    const button = element?.closest('button[data-character]');
+    return button && surface.contains(button) ? Number(button.dataset.character) : null;
   }
   function coverRange(end) {
     const first = Math.min(drag.start, end), last = Math.max(drag.start, end);
-    selection.kept = drag.kept.filter(index => index < first || index > last);
+    selection.covered = [...new Set([
+      ...drag.covered,
+      ...Array.from({ length: last - first + 1 }, (_, offset) => first + offset),
+    ])].sort((a, b) => a - b);
     refresh();
   }
   surface.addEventListener('pointerdown', event => {
@@ -44,7 +59,7 @@
     if (start === null || event.button !== 0 || !event.isPrimary) return;
     event.preventDefault();
     buttons[start].focus({ preventScroll: true });
-    drag = { start, end: start, kept: [...selection.kept], id: event.pointerId };
+    drag = { start, end: start, covered: [...selection.covered], id: event.pointerId };
     surface.setPointerCapture(event.pointerId);
     toggle(start);
   });
@@ -62,7 +77,7 @@
   });
   function cancelDrag() {
     if (!drag) return;
-    selection.kept = drag.kept; drag = null; refresh();
+    selection.covered = drag.covered; drag = null; refresh();
   }
   surface.addEventListener('pointercancel', cancelDrag);
   surface.addEventListener('lostpointercapture', cancelDrag);
@@ -73,10 +88,14 @@
   });
   function picker() {
     surface.replaceChildren();
-    buttons = tools.poetryTokens(source).map((word, index) => {
+    buttons = tools.poetryCharacters(source).map((character, index) => {
       const button = document.createElement('button');
-      button.type = 'button'; button.textContent = word; button.dataset.word = index;
-      surface.append(button, document.createTextNode(' '));
+      button.type = 'button'; button.textContent = character; button.dataset.character = index;
+      if (character === ' ') {
+        button.className = 'poetry-space';
+        button.setAttribute('aria-label', `space, character ${index + 1}`);
+      }
+      surface.append(button);
       return button;
     });
     refresh();
@@ -84,10 +103,9 @@
   get('open-poetry').addEventListener('click', () => {
     source = root.DeblockDocument.snapshot();
     if (source.story) return;
-    const tokens = tools.poetryTokens(source);
-    if (!tokens.length) { get('export-status').textContent = 'Write a few words first, then choose a poem from them.'; return; }
-    selection = source.blackout ? tools.copy(source.blackout) : { version: 1, kept: tokens.map((_, index) => index) };
-    selection.style = 'blackout';
+    const characters = tools.poetryCharacters(source);
+    if (!characters.length) { get('export-status').textContent = 'Write a few words first, then choose a poem from them.'; return; }
+    selection = tools.characterSelection(source, source.blackout);
     drag = null;
     get('poetry-help').open = false;
     picker(); showDialog(get('poetry-dialog'));
@@ -98,7 +116,7 @@
     get('save-entry').click();
   });
   get('poetry-original').addEventListener('click', () => {
-    selection.kept = buttons.map((_, index) => index); refresh();
+    selection.covered = []; refresh();
   });
   root.DeblockPoetry = { render };
 })(window);

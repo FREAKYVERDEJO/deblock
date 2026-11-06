@@ -66,10 +66,20 @@ def validate_story(value: object) -> dict | None:
 
 
 def validate_blackout(value: object, words: list[str], draft: str) -> dict | None:
-    """Validate a view over original words; never replace those words with a poem."""
+    """Validate a view over original text; never replace that text with a poem."""
     if value is None:
         return None
-    if not isinstance(value, dict) or type(value.get('version')) is not int or value['version'] != 1:
+    if not isinstance(value, dict) or type(value.get('version')) is not int:
+        raise ValueError('Unsupported poetry format.')
+    if value['version'] == 2:
+        style, covered = value.get('style'), value.get('covered')
+        text = ' '.join(part for word in [*words, draft] for part in word.split())
+        if style != 'blackout' or not isinstance(covered, list) or len(covered) > len(text):
+            raise ValueError('Choose blackout and the characters to cover.')
+        if any(type(index) is not int or not 0 <= index < len(text) for index in covered) or len(set(covered)) != len(covered):
+            raise ValueError('Blackout selections must refer to distinct characters in the original chain.')
+        return {'version': 2, 'style': 'blackout', 'covered': sorted(covered)}
+    if value['version'] != 1:
         raise ValueError('Unsupported poetry format.')
     style, kept = value.get('style'), value.get('kept')
     count = sum(len(word.split()) for word in [*words, draft])

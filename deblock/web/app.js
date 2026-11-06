@@ -27,8 +27,13 @@ window.DeblockDocument = {
     entryCreatedAt ||= new Date().toISOString();
     if (story) story = window.DeblockWritingTools.captureStory(story, words, input.value);
     if (blackout) {
-      const count = window.DeblockWritingTools.poetryTokens({ words, draft: input.value }).length;
-      blackout.kept = blackout.kept.filter(index => index < count);
+      if (blackout.version === 2) {
+        const count = window.DeblockWritingTools.poetryCharacters({ words, draft: input.value }).length;
+        blackout.covered = blackout.covered.filter(index => index < count);
+      } else {
+        const count = window.DeblockWritingTools.poetryTokens({ words, draft: input.value }).length;
+        blackout.kept = blackout.kept.filter(index => index < count);
+      }
     }
     return { id: entryId, createdAt: entryCreatedAt, updatedAt: new Date().toISOString(),
       title: byId('document-title').textContent.trim(),
