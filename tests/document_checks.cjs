@@ -47,7 +47,8 @@ async function run() {
   e.get('confirm-reset').handlers.click();
   assert.equal(e.get('document-title').textContent, 'Untitled');
   e.get('finish').handlers.click();
-  assert.equal(e.get('chain-summary').textContent, 'Nothing to finish. You can just be here.');
+  assert.equal(e.get('chain-summary').textContent, '');
+  assert.equal(e.get('chain-summary').hidden, true);
   console.log('5 document checks passed (toggle, preservation, plain text, arrow text, reset)');
 }
 run().catch(error => { console.error(error); process.exitCode = 1; });

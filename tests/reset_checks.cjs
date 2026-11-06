@@ -35,11 +35,13 @@ async function run() {
   assert.equal(get('word').placeholder, 'a word…');
   assert.equal(get('reset-dialog').open, false);
   get('finish').handlers.click();
-  assert.equal(get('chain-summary').textContent, 'Nothing to finish. You can just be here.');
+  assert.equal(get('chain-summary').textContent, '');
+  assert.equal(get('chain-summary').hidden, true);
   get('word').value = 'new ';
   get('word').handlers.input({});
   get('finish').handlers.click();
   assert.equal(get('chain-summary').textContent, 'new');
+  assert.equal(get('chain-summary').hidden, false);
   console.log('3 reset checks passed (cancel, clear, new chain)');
 }
 run().catch(error => { console.error(error); process.exitCode = 1; });
