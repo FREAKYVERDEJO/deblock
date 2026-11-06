@@ -163,12 +163,12 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 /* The transparent mirror measures wrapped lines; its markers never enter the value. */
 .outline-editor { position: relative; flex-basis: 100%; min-width: 0; }
 #story-outline, #outline-mirror { width: 100%; padding: 4px 4px 4px 1.3em; font: 400 clamp(21px, 2.8vw, 30px)/1.45 'Times New Roman', Times, serif; letter-spacing: normal; white-space: pre-wrap; overflow-wrap: break-word; tab-size: 8; }
-#story-outline { display: block; min-height: 180px; resize: vertical; border: 0; border-radius: 0; box-shadow: none; background: transparent; color: #4b7fae; caret-color: #000; }
+#story-outline { display: block; min-height: 180px; resize: vertical; border: 0; border-radius: 0; box-shadow: none; background: transparent; color: #8a8378; caret-color: #000; }
 .outline-markers { position: absolute; inset: 0; overflow: hidden; pointer-events: none; user-select: none; }
 #outline-mirror { color: transparent; }
 #outline-mirror > div { position: relative; min-height: 1.45em; }
-#outline-mirror > div::before { content: '>'; position: absolute; left: -1.1em; color: #4b7fae; font-style: normal; }
-#story-outline::placeholder { color: #4b7fae; opacity: 1; font-style: italic; }
+#outline-mirror > div::before { content: '>'; position: absolute; left: -1.1em; color: #8a8378; font-style: normal; }
+#story-outline::placeholder { color: #8a8378; opacity: 1; font-style: italic; }
 .outline-editor:has(#story-outline:placeholder-shown) #outline-mirror { font-style: italic; }
 #story-outline:focus-visible { outline: none; }
 #story-outline-form button { font-style: normal; text-decoration: none; }
