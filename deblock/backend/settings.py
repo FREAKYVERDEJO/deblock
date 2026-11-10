@@ -164,3 +164,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGGING = {'version': 1, 'disable_existing_loggers': False, 'handlers': {'null': {'class': 'logging.NullHandler'}},
     'loggers': {'django.request': {'handlers': ['null'], 'propagate': False},
                 'django.server': {'handlers': ['null'], 'propagate': False}}}
+
+RESEARCH_ENABLED = os.environ.get('DEBLOCK_RESEARCH_ENABLED') == '1'
+if RESEARCH_ENABLED and DATABASES['default']['ENGINE'] != 'django.db.backends.postgresql':
+    raise ImproperlyConfigured('Enabled research collection requires a PostgreSQL DATABASE_URL.')
+RESEARCH_APP_VERSION = os.environ.get('RAILWAY_GIT_COMMIT_SHA', 'local-v1')[:80]

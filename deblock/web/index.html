@@ -18,6 +18,7 @@
   <script src="/account.js" defer></script>
   <script src="/vendor/html2canvas-1.4.1.min.js" defer></script>
   <script src="/export.js" defer></script>
+  <!-- research bootstrap -->
 </head>
 <body>
   <details id="site-menu" class="site-menu">
@@ -67,6 +68,28 @@
       <p id="hint" role="status" hidden></p>
     </form>
   </main>
+  <dialog id="research-dialog" aria-labelledby="research-title">
+    <button class="close" type="button" aria-label="Close research settings">×</button>
+    <h1 id="research-title">Privacy &amp; terms</h1>
+    <p>Under the terms of use, deblock saves a short activity summary for future personalization. It includes the exercise, approximate length, time spent and which aphorisms you save.</p>
+    <p><a href="/research-privacy.html" target="_blank" rel="noopener">Read the terms of use and privacy policy</a></p>
+    <button type="button" id="accept-terms">Accept terms of use</button>
+    <p id="terms-accepted" hidden>Terms accepted on this browser.</p>
+    <h2>Writing research</h2>
+    <p id="legacy-research" hidden><label><input type="checkbox" id="research-behavior"> Continue my previously enabled research measurements.</label></p>
+    <p><label><input type="checkbox" id="research-writing"> Share complete new writing. The researcher may personally read and analyze it.</label></p>
+    <button type="button" id="research-save">Save choices</button>
+    <button type="button" id="research-include" hidden>Include this existing draft and its source in research</button>
+    <details><summary>Withdrawal and deletion</summary>
+      <p>Turn off writing research and save to erase your shared writing. Delete all collected data to remove your activity summaries and browser identity too.</p>
+      <button type="button" id="research-delete" hidden>Delete all my collected data</button>
+      <p>Keep this private recovery key somewhere safe if you plan to clear browser storage. Anyone with it can change your choices or delete your records.</p>
+      <label>Recovery key <input id="research-key" type="password" autocomplete="off" spellcheck="false"></label>
+      <label id="other-recovery-key" hidden>Key from another browser <input id="recover-other-key" type="password" autocomplete="off" spellcheck="false"></label>
+      <button type="button" id="research-recover">Use recovery key</button>
+    </details>
+    <p id="research-status" role="status"></p>
+  </dialog>
   <dialog id="story-dialog" aria-labelledby="story-dialog-title">
     <button class="close" type="button" aria-label="Close story outline">×</button>
     <h1 id="story-dialog-title">Story Beats</h1>
@@ -90,6 +113,7 @@
   </dialog>
   <footer>
     <span class="signature">deblock</span>
+    <button id="research-open" type="button" hidden>privacy</button>
     <nav aria-label="Writing controls">
       <button id="art-toggle" type="button" aria-label="Show image" aria-pressed="false">image off</button>
       <button id="art-next" type="button" aria-label="Another image" hidden>another</button>
@@ -130,6 +154,16 @@
         </div>
       </details>
     </div>
+    <fieldset id="pilot-feedback" hidden data-html2canvas-ignore="true">
+      <legend>Optional feedback</legend>
+      <p>This exercise helped me begin or continue writing.</p>
+      <p>1 = strongly disagree · 5 = strongly agree. Choose a number to share your answer.</p>
+      <button type="button" data-rating="1">1</button>
+      <button type="button" data-rating="2">2</button>
+      <button type="button" data-rating="3">3</button>
+      <button type="button" data-rating="4">4</button>
+      <button type="button" data-rating="5">5</button>
+    </fieldset>
     <p id="export-status" role="status" data-export-status data-html2canvas-ignore="true"></p>
   </dialog>
   <dialog id="poetry-dialog" aria-labelledby="poetry-title">
@@ -206,6 +240,7 @@
       <label for="edit-entry-text">Text</label><textarea id="edit-entry-text" rows="10" maxlength="250000"></textarea>
       <button type="submit">save changes</button>
     </form>
+    <button type="button" id="research-share-edit" hidden>Include this library text and my edits in research</button>
     <p id="edit-entry-status" role="status"></p>
   </dialog>
   <dialog id="delete-account-dialog">
