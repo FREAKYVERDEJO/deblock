@@ -10,6 +10,8 @@ fs.mkdirSync(output, { recursive: true });
   try {
     for (const width of [1280, 390]) {
       const context = await browser.newContext({ viewport: { width, height: 900 }, hasTouch: width < 600, reducedMotion: 'reduce', acceptDownloads: true });
+      // This journey asserts the light palette; appearance coverage checks both themes.
+      await context.addInitScript(() => localStorage.setItem('deblock.theme', 'light'));
       const page = await context.newPage();
       const errors = [], writes = [];
       page.on('pageerror', error => errors.push(error.message));
@@ -20,7 +22,8 @@ fs.mkdirSync(output, { recursive: true });
       const word = page.locator('#word');
       await page.locator('#word:not([disabled])').waitFor();
       await word.focus();
-      assert.equal(await word.evaluate(el => getComputedStyle(el).caretColor), 'rgb(0, 0, 0)');
+      const ink = await page.locator('body').evaluate(el => getComputedStyle(el).color);
+      assert.equal(await word.evaluate(el => getComputedStyle(el).caretColor), ink);
       await word.fill('rain glass sea light moon tide shore sky');
       await page.locator('#finish').click();
       await page.locator('#document-title').fill('Blackout example');
@@ -102,7 +105,7 @@ fs.mkdirSync(output, { recursive: true });
       for (const selector of ['#story-dialog h1', '#story-outline', '#story-start']) {
         assert.equal(await page.locator(selector).evaluate(el => getComputedStyle(el).fontStyle), 'normal');
       }
-      assert.equal(await outline.evaluate(el => getComputedStyle(el).caretColor), 'rgb(0, 0, 0)');
+      assert.equal(await outline.evaluate(el => getComputedStyle(el).caretColor), ink);
       await outline.fill('Lily leaves'); await outline.press('End'); await outline.press('Enter');
       assert.equal(await page.locator('#outline-mirror > div').count(), 2);
       await outline.press('Enter');
@@ -139,7 +142,7 @@ fs.mkdirSync(output, { recursive: true });
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
       assert.deepEqual(writes, [], 'writing and guest saves stay local');
       assert.deepEqual(errors, [], 'no browser or console errors');
-      console.log(`PASS ${width}px: character and space drag, toggle/keyboard, save/reload/cancel, PNG/PDF, plain beats, newline/wrap/scroll markers, black carets, stop/review, no writes/errors`);
+      console.log(`PASS ${width}px: character and space drag, toggle/keyboard, save/reload/cancel, PNG/PDF, plain beats, newline/wrap/scroll markers, theme-matched carets, stop/review, no writes/errors`);
       await context.close();
     }
   } finally { await browser.close(); }

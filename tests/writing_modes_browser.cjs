@@ -30,6 +30,11 @@ async function run() {
       if (!process.env.DEBLOCK_TEST_SESSION_FILE) {
         const entries = new Map();
         const profile = { id: 'local', accountId: 'fictional-writer', name: 'Mara', email: 'mara@example.test', avatar: '1', joinedAt: '2026-11-05T10:00:00Z' };
+        // Keep the account entrypoint in mock mode even when Django redirects guests.
+        await page.route(base + '/', async route => {
+          const response = await route.fetch({ url: base + '/guest/' });
+          await route.fulfill({ response, body: fs.readFileSync(path.join(__dirname, '../deblock/web/index.html'), 'utf8') });
+        });
         await page.route('**/storage.js', route => route.fulfill({ contentType: 'text/javascript', body: fs.readFileSync(path.join(__dirname, '../deblock/web/account-storage.js'), 'utf8') }));
         await page.route('**/api/**', route => {
           const request = route.request(), url = new URL(request.url()), method = request.method();
@@ -37,6 +42,7 @@ async function run() {
           if (url.pathname.startsWith('/api/exercises/')) return route.continue();
           if (url.pathname === '/api/session/') return send({ profile, csrfToken: 'fictional-csrf' });
           if (url.pathname === '/api/profile/') return send(profile);
+          if (url.pathname === '/api/aphorisms/') return send({ items: [], nextPage: null });
           if (url.pathname === '/api/entries/') return send({ items: [...entries.values()], nextPage: null });
           if (url.pathname.startsWith('/api/entries/')) {
             const id = url.pathname.split('/')[3];
@@ -100,6 +106,18 @@ async function run() {
       await page.waitForFunction(() => document.getElementById('export-status').textContent.startsWith('Saved to library'));
       const savedStory = await snapshot();
       assert.equal(savedStory.story.active, 0);
+      for (const format of ['png', 'pdf']) {
+        await page.locator('#finish-dialog .save-menu > summary').click();
+        const pendingDownload = page.waitForEvent('download');
+        await page.locator(`#finish-dialog [data-export="${format}"]`).click();
+        const download = await pendingDownload;
+        const file = path.join(output, `${label}-story-export.${format}`);
+        await download.saveAs(file);
+        const bytes = fs.readFileSync(file);
+        assert.ok(bytes.length > 100);
+        assert.equal(bytes.subarray(format === 'png' ? 1 : 0, format === 'png' ? 4 : 5).toString(), format === 'png' ? 'PNG' : '%PDF-');
+        assert.deepEqual((await snapshot()).story, savedStory.story, 'export preserves the complete story');
+      }
       await page.reload();
       await page.locator('#word:not([disabled])').waitFor();
       await menu('#open-library');
@@ -111,16 +129,26 @@ async function run() {
       await page.locator('#word').fill('rain glass sea light');
       await page.locator('#finish').click();
       await page.locator('#document-title').fill(`Poem ${label} ${runTag}`);
-      await page.locator('#open-poetry').click();
-      await page.getByRole('button', { name: 'rain', exact: true }).focus();
-      await page.keyboard.press('Space');
-      await page.getByRole('button', { name: 'sea', exact: true }).click();
-      assert.equal(await page.locator('#poetry-line').innerText(), 'rain sea');
+      // Existing word-based poems still render; the editor now uses characters.
+      await page.evaluate(() => window.DeblockDocument.setPoetry({ version: 1, style: 'highlight', kept: [0, 2] }));
+      assert.equal(await page.locator('#chain-summary .poetry-highlight').count(), 2);
+      assert.deepEqual(await page.locator('#chain-summary .poetry-highlight').allTextContents(), ['rain', 'sea']);
       await shot('highlight');
-      await page.locator('#poetry-style').selectOption('blackout');
-      assert.equal(await page.locator('#poetry-preview .poetry-redacted').count(), 2);
-      await page.locator('#poetry-apply').click();
+      await page.evaluate(() => window.DeblockDocument.setPoetry({ version: 1, style: 'blackout', kept: [0, 2] }));
       assert.equal(await page.locator('#chain-summary .poetry-redacted').count(), 2);
+      await page.locator('#open-poetry').click();
+      const characterButtons = page.locator('#poetry-words button');
+      assert.equal(await characterButtons.count(), 20);
+      const converted = await page.locator('#poetry-words button[aria-pressed="true"]').count();
+      assert.equal(converted, 10, 'legacy blackout converts the two concealed words to characters');
+      await characterButtons.nth(0).focus();
+      await page.keyboard.press('Space');
+      assert.equal(await page.locator('#poetry-words button[aria-pressed="true"]').count(), converted + 1);
+      await page.locator('#poetry-apply').click();
+      await page.waitForFunction(() => document.getElementById('export-status').textContent.startsWith('Saved to library'));
+      assert.equal(await page.locator('#chain-summary .poetry-redacted').count(), converted + 1);
+      const savedPoetry = (await snapshot()).blackout;
+      assert.equal(savedPoetry.version, 2);
       await shot('blackout');
       await page.locator('#finish-dialog .save-menu > summary').click();
       await page.locator('#save-entry').click();
@@ -142,17 +170,23 @@ async function run() {
       await menu('#open-library');
       await page.getByRole('button', { name: new RegExp(`Poem ${label} ${runTag}`) }).click();
       await page.locator('#entry-dialog[open]').waitFor();
-      assert.equal(await page.locator('#entry-body .poetry-redacted').count(), 2);
+      assert.equal(await page.locator('#entry-body .poetry-redacted').count(), converted + 1);
       await page.locator('#continue-entry').click();
-      assert.deepEqual((await snapshot()).blackout, { version: 1, style: 'blackout', kept: [0, 2] });
+      assert.deepEqual((await snapshot()).blackout, savedPoetry);
       await page.locator('#finish').click();
       await page.locator('#open-poetry').click();
-      await page.locator('#poetry-clear').click();
-      await page.locator('#poetry-dialog .close').click();
-      assert.deepEqual((await snapshot()).blackout.kept, [0, 2], 'cancel keeps the applied poem');
-      await page.locator('#open-poetry').click();
+      await page.locator('#poetry-help > summary').click();
       await page.locator('#poetry-original').click();
-      assert.equal(await page.locator('#chain-summary').innerText(), 'rain → glass → sea → light');
+      assert.equal(await page.locator('#poetry-words button[aria-pressed="true"]').count(), 0);
+      await page.locator('#poetry-dialog .close').click();
+      assert.deepEqual((await snapshot()).blackout, savedPoetry, 'cancel keeps the applied poem');
+      await page.locator('#open-poetry').click();
+      await page.locator('#poetry-help > summary').click();
+      await page.locator('#poetry-original').click();
+      await page.locator('#poetry-apply').click();
+      assert.equal(await page.locator('#chain-summary').innerText(), 'rain glass sea light');
+      assert.deepEqual((await snapshot()).words, ['rain', 'glass', 'sea']);
+      assert.equal((await snapshot()).draft, 'light');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
       assert.deepEqual(errors, [], 'no uncaught browser errors');
       assert.deepEqual(consoleErrors, [], 'no unexpected console errors');

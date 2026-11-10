@@ -28,8 +28,9 @@ async function run() {
       assert.equal(await page.locator('#word').evaluate(element => getComputedStyle(element).borderTopWidth), '0px');
       assert.equal(await page.locator('.save-reminder').count(), 0);
       assert.equal(await page.locator('main #draft-privacy').count(), 0);
-      const signup = await page.locator('#guest-sign-up').boundingBox();
-      assert.ok(signup.x > width / 2 && signup.y < 60, 'signup belongs in the top-right corner');
+      await page.locator('#guest-sign-in').waitFor({ state: 'visible' });
+      const signin = await page.locator('#guest-sign-in').boundingBox();
+      assert.ok(signin.x > width / 2 && signin.y < 60, 'sign-in belongs in the top-right corner');
       await page.screenshot({ path: `${output}/${width}-direct.png`, fullPage: true });
       await page.goto(`${base}/accounts/login/?next=/`);
       const skip = page.getByRole('link', { name: 'Continue without signing in' });
@@ -43,8 +44,9 @@ async function run() {
       await page.locator('#word').fill('rain glass sea');
       await page.locator('#finish').click();
       await page.locator('#open-poetry').click();
-      await page.getByRole('button', { name: 'rain', exact: true }).click();
-      await page.locator('#poetry-style').selectOption('blackout');
+      const characters = page.locator('#poetry-words button');
+      for (let index = 0; index < 4; index++) await characters.nth(index).click();
+      assert.equal(await page.locator('#poetry-words button[aria-pressed="true"]').count(), 4);
       await page.locator('#poetry-apply').click();
       await page.locator('#document-title').fill('Guest poem');
       await page.locator('#finish-dialog .save-menu > summary').click();
@@ -56,7 +58,7 @@ async function run() {
       await menu('#open-library');
       await page.getByRole('button', { name: /Guest poem/ }).click();
       await page.locator('#entry-dialog[open]').waitFor();
-      assert.equal(await page.locator('#entry-body .poetry-redacted').count(), 2);
+      assert.equal(await page.locator('#entry-body .poetry-redacted').count(), 4);
       await page.locator('#continue-entry').click();
       await menu('#open-story');
       await page.locator('#story-outline').fill('i go to the store\ni meet a mysterious stranger\ni go home');
@@ -78,12 +80,12 @@ async function run() {
       assert.equal(await page.locator('#word').inputValue(), 'rings');
       assert.equal(await page.locator('#beat-to').innerText(), 'i meet a mysterious stranger');
       await page.screenshot({ path: `${output}/${width}-guest.png`, fullPage: true });
-      assert.equal(await page.locator('#guest-sign-up').getAttribute('href'), '/accounts/signup/');
-      assert.equal(await page.locator('#guest-sign-up').isVisible(), true);
+      assert.equal(await page.locator('#guest-sign-in').getAttribute('href'), '/accounts/login/');
+      assert.equal(await page.locator('#guest-sign-in').isVisible(), true);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
       assert.deepEqual(privateRequests, []);
       assert.deepEqual(errors, []);
-      console.log(`PASS ${width}px: direct writing, top-right signup, no input box/helper clutter, keyboard skip, local poem/story save and reopen, no private API requests or console errors`);
+      console.log(`PASS ${width}px: direct writing, top-right sign-in, no input box/helper clutter, keyboard skip, local poem/story save and reopen, no private API requests or console errors`);
       await context.close();
     }
   } finally { await browser.close(); }
