@@ -20,6 +20,7 @@ WEB_ROOT = Path(__file__).with_name("web")
 EXPORT_STYLE_SOURCE = "'sha256-UP0QZg7irvSMvOBz9mH2PIIE28+57UiavRfeVea0l3g='"
 ASSETS = {
     "/": ("index.html", "text/html; charset=utf-8"),
+    "/theme.js": ("theme.js", "text/javascript; charset=utf-8"),
     "/style.css": ("style.css", "text/css; charset=utf-8"),
     "/app.js": ("app.js", "text/javascript; charset=utf-8"),
     "/writing-tools.js": ("writing-tools.js", "text/javascript; charset=utf-8"),

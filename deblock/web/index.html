@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>deblock</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script src="/theme.js"></script>
   <link rel="stylesheet" href="/style.css">
   <script src="/writing-tools.js" defer></script>
   <script src="/aphorisms.js" defer></script>
@@ -25,6 +26,13 @@
       <button id="open-free" type="button" aria-current="page">Free association</button>
       <button id="open-aphorism" type="button">Aphorism of the Day</button>
       <button id="open-story" type="button">Story Beats</button>
+      <div class="appearance-row" role="group" aria-label="Appearance">
+        <span class="appearance-label" aria-hidden="true">Appearance</span>
+        <div class="appearance-options">
+          <button type="button" data-theme-option="light" aria-pressed="false">Light</button>
+          <button type="button" data-theme-option="dark" aria-pressed="false">Dark</button>
+        </div>
+      </div>
     </nav>
   </details>
   <nav class="collection-nav" aria-label="Your collection and account">
