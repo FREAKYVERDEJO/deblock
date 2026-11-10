@@ -10,6 +10,8 @@ urlpatterns = [
     path('api/session/', views.session),
     path('api/profile/', views.profile),
     path('api/account/', views.delete_account),
+    path('api/aphorisms/', views.saved_aphorisms),
+    path('api/aphorisms/<str:key>/', views.saved_aphorism),
     path('api/entries/', views.entries),
     path('api/entries/<uuid:key>/', views.entry),
     path('api/images/', views.images),

@@ -123,6 +123,22 @@ def participant(request, action):
             if action == 'delete':
                 person.delete()
                 return JsonResponse({'deleted': True})
+            if action == 'aphorism':
+                if not settings.RESEARCH_ENABLED or 'personalize' not in decision(person)['scopes']:
+                    return error('Collection permission required.', 403)
+                if data.get('participant') != str(person.pk) or data.get('generation') != person.generation:
+                    return error('Consent changed.', 403)
+                check(budget(person.pk, 120))
+                check(type(data.get('saved')) is bool)
+                value = validate_aphorism({'version': 1, 'id': data.get('id'), 'mode': 'word'})
+                ids = set(person.saved_aphorisms)
+                if data['saved']:
+                    ids.add(value['id'])
+                else:
+                    ids.discard(value['id'])
+                person.saved_aphorisms = sorted(ids)
+                person.save(update_fields=['saved_aphorisms'])
+                return JsonResponse({'saved': True})
             if action == 'state':
                 return JsonResponse(decision(person))
             check(action in ('enroll', 'consent', 'accept'))
@@ -164,6 +180,7 @@ def participant(request, action):
                 if 'behavior' in removed:
                     ResearchBehavior.objects.filter(session__participant=person).delete()
                 if 'personalize' in removed:
+                    person.saved_aphorisms = []
                     summaries = PersonalizationSummary.objects.filter(session__participant=person)
                     headers = ResearchSession.objects.filter(participant=person,
                         id__in=summaries.values('session_id'), researchwriting__isnull=True, researchbehavior__isnull=True)

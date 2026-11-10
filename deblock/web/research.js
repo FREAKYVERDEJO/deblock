@@ -57,7 +57,7 @@
       if (item.owner !== person.id || item.data.generation !== person.generation) { drop(key); continue; }
       sending.add(key);
       try {
-        await post('sessions/' + key.slice(prefix.length), item.data, person.key);
+        await post(item.path || 'sessions/' + key.slice(prefix.length), item.data, person.key);
         if ((volatile.get(key) ?? localStorage.getItem(key)) === raw) drop(key);
       } catch (e) {
         status('Research save pending. Open settings to check your choices or retry.');
@@ -232,6 +232,15 @@
   });
   get('finish-dialog').addEventListener('close', () => { feedback.hidden = true; reviewSnapshot = null; });
   window.DeblockResearch = {end, loaded, words, observeOpening,
+    bookmark(id, saved) {
+      if (!enabled || !selected('personalize') || stored()?.pending) return;
+      const key = prefix + 'aphorism.' + id;
+      const item = {owner: person.id, path: 'aphorism', data: {
+        participant: person.id, generation: person.generation, personalize: true, id, saved}};
+      const raw = JSON.stringify(item);
+      try { localStorage.setItem(key, raw); } catch { volatile.set(key, raw); }
+      void flush();
+    },
     libraryEdit() {
       if (!ready || !person?.scopes?.length) return;
       end('interrupted');

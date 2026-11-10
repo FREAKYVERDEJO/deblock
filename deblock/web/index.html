@@ -52,7 +52,8 @@
   <main>
     <figure id="writing-art" class="artwork writing-art" hidden></figure>
     <form id="word-form" autocomplete="off">
-      <header id="aphorism-heading" hidden><h1>Aphorism of the Day</h1></header>
+      <header id="aphorism-heading" hidden><h1>Aphorism of the Day</h1><button id="bookmark-aphorism" type="button" aria-label="Save aphorism" aria-pressed="false" title="Save aphorism to library"><svg viewBox="0 0 32 42" aria-hidden="true" focusable="false"><path d="M4 3H28V38L16 28L4 38Z"/></svg></button></header>
+      <p id="bookmark-status" class="sr-only" role="status"></p>
       <figure id="aphorism-prompt" class="aphorism-prompt" hidden></figure>
       <section id="story-context" aria-label="Current story passage" hidden>
         <p id="story-progress" class="sr-only"></p>
@@ -214,7 +215,9 @@
   <dialog id="library-dialog" aria-labelledby="library-title" class="collection-dialog">
     <button class="close" type="button" aria-label="Close library">×</button>
     <h1 id="library-title">Library</h1>
-    <div id="library-list"></div><p id="library-status" class="section-status" role="status"></p>
+    <h2>Your writing</h2>
+    <div id="library-list"></div>
+    <section aria-labelledby="saved-aphorisms-title"><h2 id="saved-aphorisms-title">Saved aphorisms</h2><div id="saved-aphorisms-list"></div></section><p id="library-status" class="section-status" role="status"></p>
   </dialog>
   <dialog id="gallery-dialog" aria-labelledby="gallery-title" class="collection-dialog">
     <button class="close" type="button" aria-label="Close gallery">×</button>

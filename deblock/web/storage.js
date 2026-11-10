@@ -4,9 +4,11 @@
   let opening;
   function database() {
     if (!opening) opening = new Promise((resolve, reject) => {
-      const request = indexedDB.open('deblock-local', 1);
+      const request = indexedDB.open('deblock-local', 2);
       request.onupgradeneeded = () => {
-        for (const name of ['entries', 'images', 'profile']) request.result.createObjectStore(name, { keyPath: 'id' });
+        for (const name of ['entries', 'images', 'profile', 'aphorisms']) {
+          if (!request.result.objectStoreNames.contains(name)) request.result.createObjectStore(name, { keyPath: 'id' });
+        }
       };
       request.onsuccess = () => {
         const db = request.result;
@@ -21,7 +23,7 @@
   async function operation(store, method, value) {
     const db = await database();
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction(store, method === 'put' ? 'readwrite' : 'readonly');
+      const transaction = db.transaction(store, ['put', 'delete'].includes(method) ? 'readwrite' : 'readonly');
       const request = transaction.objectStore(store)[method](value);
       transaction.oncomplete = () => resolve(request.result);
       transaction.onerror = () => reject(transaction.error || request.error);
@@ -29,6 +31,7 @@
     });
   }
   root.DeblockLocalStorage = {
+    remove: (store, id) => operation(store, 'delete', id),
     all: store => operation(store, 'getAll'),
     get: (store, id) => operation(store, 'get', id),
     put: (store, value) => operation(store, 'put', value),

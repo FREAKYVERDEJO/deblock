@@ -46,6 +46,22 @@
     showDialog(get('entry-dialog'));
   }
   async function renderLibrary() {
+    const bookmarks = ordered(await store.all('aphorisms'));
+    const savedList = get('saved-aphorisms-list');
+    savedList.replaceChildren();
+    if (!bookmarks.length) savedList.append(textElement('p', 'No saved aphorisms yet. Use the bookmark on the aphorism page to keep one here.', 'empty-state'));
+    for (const bookmark of bookmarks) {
+      const card = document.createElement('article'); card.className = 'saved-aphorism-card';
+      const figure = document.createElement('figure'); figure.className = 'aphorism-prompt';
+      await window.DeblockAphorisms.render(figure, bookmark);
+      const remove = textElement('button', 'remove bookmark'); remove.type = 'button';
+      remove.addEventListener('click', async () => {
+        remove.disabled = true;
+        try { await window.DeblockAphorisms.setSaved(bookmark.id, false); await renderLibrary(); }
+        catch (error) { get('library-status').textContent = errorText(error); remove.disabled = false; }
+      });
+      card.append(figure, remove); savedList.append(card);
+    }
     const entries = ordered(await store.all('entries'));
     const list = get('library-list');
     list.replaceChildren();
