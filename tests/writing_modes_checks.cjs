@@ -20,6 +20,13 @@ assert.equal(empty.active, 1);
 assert.throws(() => tools.moveStory(original, 2), /passage/i);
 const entry = { words: ['rain', 'glass sea', '<script>'], draft: 'light' };
 assert.deepEqual(tools.poetryTokens(entry), ['rain', 'glass', 'sea', '<script>', 'light']);
+assert.equal(tools.poetryText(entry), 'rain glass sea <script> light');
+assert.deepEqual(tools.poetryCharacters({ words: ['a'], draft: 'b' }), ['a', ' ', 'b']);
 assert.equal(tools.poemText(entry, { kept: [0, 2, 4] }), 'rain sea light');
+assert.equal(tools.poemText({ words: ['rain', 'sea'], draft: '' }, { version: 2, covered: [0, 4] }), 'ainsea');
+assert.deepEqual(
+  tools.characterSelection(entry, { version: 1, style: 'blackout', kept: [0, 2, 4] }),
+  { version: 2, style: 'blackout', covered: [5, 6, 7, 8, 9, 15, 16, 17, 18, 19, 20, 21, 22] },
+);
 assert.deepEqual(entry.words, ['rain', 'glass sea', '<script>']);
-console.log('12 writing-mode state checks passed (CT.11/CT.12)');
+console.log('17 writing-mode state checks passed (CT.11/CT.12)');

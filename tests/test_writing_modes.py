@@ -94,12 +94,25 @@ def test_poetry_roundtrip_and_plain_entry_compatibility(client):
     assert response.json()['blackout'] is None
 
 
+def test_character_blackout_roundtrip_includes_spaces(client):
+    url = f'/api/entries/{uuid.uuid4()}/'
+    selection = {'version': 2, 'style': 'blackout', 'covered': [0, 4, 5]}
+    response = client.put(url, entry(blackout=selection), content_type='application/json')
+    assert response.status_code == 201
+    assert response.json()['blackout'] == selection
+    assert client.get(url).json()['blackout'] == selection
+
+
 @pytest.mark.parametrize('selection', [
     {'version': 1, 'style': 'blackout', 'kept': [3]},
     {'version': 1, 'style': 'blackout', 'kept': [True]},
     {'version': 1, 'style': 'blackout', 'kept': [0, 0]},
     {'version': 1, 'style': 'html', 'kept': [0]},
     {'version': True, 'style': 'highlight', 'kept': [0]},
+    {'version': 2, 'style': 'blackout', 'covered': [14]},
+    {'version': 2, 'style': 'blackout', 'covered': [True]},
+    {'version': 2, 'style': 'blackout', 'covered': [4, 4]},
+    {'version': 2, 'style': 'highlight', 'covered': [0]},
 ])
 def test_invalid_poetry_selection_is_rejected(client, selection):
     response = client.put(f'/api/entries/{uuid.uuid4()}/', entry(blackout=selection), content_type='application/json')
