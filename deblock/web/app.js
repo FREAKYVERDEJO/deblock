@@ -38,7 +38,7 @@ window.DeblockDocument = {
     return { id: entryId, createdAt: entryCreatedAt, updatedAt: new Date().toISOString(),
       title: byId('document-title').textContent.trim(),
       words: story ? window.DeblockWritingTools.storyWords(story) : [...words],
-      draft: story ? '' : input.value, arrows: showArrows, artwork: window.DeblockArt?.snapshot(true) || null,
+      draft: story ? '' : input.value, arrows: showArrows, artwork: window.DeblockArt?.snapshot() || null,
       aphorism: aphorism ? { ...aphorism } : null,
       story: story ? window.DeblockWritingTools.copy(story) : null,
       blackout: blackout ? window.DeblockWritingTools.copy(blackout) : null,
