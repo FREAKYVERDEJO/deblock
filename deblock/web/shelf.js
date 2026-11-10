@@ -155,6 +155,7 @@
       get('edit-entry-text').value = [...viewedEntry.words, viewedEntry.draft].filter(Boolean).join(' ');
       get('edit-entry-status').textContent = '';
       showDialog(get('edit-entry-dialog'));
+      window.DeblockResearch?.libraryEdit();
     });
     get('edit-entry-form').addEventListener('submit', async event => {
       event.preventDefault();
@@ -163,6 +164,7 @@
       try {
         const updated = await store.put('entries', { ...viewedEntry,
           title: get('edit-entry-title').value, words: [get('edit-entry-text').value], draft: '', arrows: false });
+        window.DeblockResearch?.end('completed');
         await viewEntry(updated);
         get('edit-entry-dialog').close();
         await renderLibrary();

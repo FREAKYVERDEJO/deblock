@@ -47,6 +47,7 @@
   function outline(edit) {
     editingOutline = edit;
     const entry = root.DeblockDocument.snapshot();
+    root.DeblockResearch?.outline();
     if (edit) get('story-outline').value = entry.story.beats.map(beat => beat.text).join('\n');
     get('story-outline-note').textContent = edit
       ? 'Edit the wording of each beat. Keep the same order and number of lines so each passage stays in place.'
@@ -130,6 +131,7 @@
         if (current.story && !root.confirm('Start a new story? Save the current story first if you want to keep it.')) return;
         drafts.set(modeOf(current), current);
         await root.DeblockDocument.load(blank(value));
+        root.DeblockResearch?.newStory();
       }
       get('story-dialog').close();
       root.DeblockDocument.focus();
@@ -159,6 +161,7 @@
       if (existing && hasContent(existing) && content(existing) !== content(entry) &&
           !root.confirm('Replace the draft in this writing mode with the saved entry? Cancel to save your draft first.')) return false;
       drafts.set(modeOf(current), current);
+      root.DeblockResearch?.privateEntry(entry.id);
       await root.DeblockDocument.load(entry);
       drafts.set(mode, entry);
       for (const dialog of document.querySelectorAll('dialog[open]')) dialog.close();

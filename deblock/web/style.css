@@ -295,3 +295,11 @@ dialog .aphorism-prompt figcaption { font-size: 15px; }
 dialog:has(.aphorism-prompt:not([hidden])) .end-actions { position: relative; }
 dialog:has(.aphorism-prompt:not([hidden])) .save-menu { position: static; }
 dialog:has(.aphorism-prompt:not([hidden])) .save-options { left: 0; right: auto; max-width: 100%; flex-wrap: wrap; }
+
+#research-dialog label { cursor: pointer; }
+#research-dialog details { margin-top: 1.25rem; }
+#research-dialog #research-key { max-width: 100%; }
+#research-dialog button:not(.close) { border: 1px solid currentColor; padding: .4em .65em; margin: .3em 0; }
+
+#research-open { color: inherit; font: inherit; font-size: .85rem; padding: .5rem .2rem; }
+#research-open:hover, #research-open:focus-visible { text-decoration: underline; }

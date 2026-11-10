@@ -1,10 +1,12 @@
 from django.urls import include, path
-from . import views
+from . import research, views
 
 urlpatterns = [
     path('', views.index, name='writing'),
     path('guest/', views.guest, name='guest-writing'),
     path('accounts/', include('allauth.urls')),
+    path('api/research/sessions/<uuid:key>/', research.save),
+    path('api/research/<str:action>/', research.participant),
     path('api/session/', views.session),
     path('api/profile/', views.profile),
     path('api/account/', views.delete_account),

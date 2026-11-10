@@ -47,6 +47,7 @@ window.DeblockDocument = {
   async load(entry) {
     // Resolve the prompt before replacing the current draft, so failed loads are safe.
     await window.DeblockAphorisms.render(byId('aphorism-prompt'), entry.aphorism);
+    window.DeblockResearch?.end('interrupted');
     aphorism = entry.aphorism ? { ...entry.aphorism } : null;
     story = entry.story ? window.DeblockWritingTools.copy(entry.story) : null;
     blackout = entry.blackout ? window.DeblockWritingTools.copy(entry.blackout) : null;
@@ -65,6 +66,7 @@ window.DeblockDocument = {
     composing = false;
     fitWords();
     window.DeblockModes?.refresh();
+    window.DeblockResearch?.loaded();
     await window.DeblockArt?.restore(entry.artwork || null);
   },
   toggleText() {
@@ -81,6 +83,7 @@ window.DeblockDocument = {
   focus: focusWriter,
   movePassage(active) {
     if (!story || composing) return;
+    window.DeblockResearch?.transition(active);
     story = window.DeblockWritingTools.moveStory(window.DeblockWritingTools.captureStory(story, words, input.value), active);
     words.splice(0, words.length, ...story.passages[active].words);
     input.value = story.passages[active].draft;
@@ -121,9 +124,15 @@ function fitWords() {
 
 function remember(completed) {
   if (!completed.length) return;
+  window.DeblockResearch?.words(completed.length);
   words.push(...(aphorism ? [completed.join(' ') + ' '] : completed));
   input.placeholder = '';
   byId('announcement').textContent = 'Next word.';
+}
+
+function rememberProse(text) {
+  window.DeblockResearch?.words(text.match(/\S+/gu)?.length || 0);
+  words.push(text);
 }
 
 function consumeWhitespace() {
@@ -132,7 +141,10 @@ function consumeWhitespace() {
     // Add a boundary only when new writing follows prose without trailing space.
     if (input.value && words.length && /\S$/u.test(words.at(-1)) && /^\S/u.test(input.value)) words.push(' ');
     const end = input.value.search(/[^\s]*$/u);
-    if (end > 0) { words.push(input.value.slice(0, end)); input.value = input.value.slice(end); }
+    if (end > 0) {
+      rememberProse(input.value.slice(0, end));
+      input.value = input.value.slice(end);
+    }
     fitWords(); return;
   }
   if (/\s/u.test(input.value)) {
@@ -162,10 +174,11 @@ input.addEventListener('paste', (event) => {
   event.preventDefault();
   const text = event.clipboardData.getData('text');
   const combined = input.value.slice(0, input.selectionStart) + text + input.value.slice(input.selectionEnd);
+  window.DeblockResearch?.paste(input, text);
   if (aphorism) {
     if (combined && words.length && /\S$/u.test(words.at(-1)) && /^\S/u.test(combined)) words.push(' ');
     const end = combined.search(/[^\s]*$/u);
-    if (end > 0) words.push(combined.slice(0, end));
+    if (end > 0) rememberProse(combined.slice(0, end));
     input.value = combined.slice(end); fitWords(); return;
   }
   const parts = combined.split(/\s+/u);
@@ -222,6 +235,7 @@ for (const dialog of document.querySelectorAll('dialog')) {
 }
 byId('about').addEventListener('click', () => showDialog(byId('info-dialog')));
 byId('finish').addEventListener('click', () => {
+  window.DeblockResearch?.end('completed');
   renderSummary();
   showDialog(byId('finish-dialog'));
 });
@@ -239,6 +253,7 @@ byId('reset').addEventListener('click', () => {
 });
 byId('cancel-reset').addEventListener('click', () => byId('reset-dialog').close());
 byId('confirm-reset').addEventListener('click', async () => {
+  window.DeblockResearch?.end('interrupted');
   const resetMode = story ? 'story' : aphorism ? 'aphorism' : 'free';
   if (aphorism) aphorism.mode = 'word';
   textInput.value = '';
@@ -258,6 +273,7 @@ byId('confirm-reset').addEventListener('click', async () => {
   fitWords();
   byId('reset-dialog').close();
   await window.DeblockModes?.reset?.(resetMode);
+  window.DeblockResearch?.loaded();
   if (resetMode === 'free') input.focus({ preventScroll: true });
 });
 byId('resume').addEventListener('click', () => byId('finish-dialog').close());
@@ -280,6 +296,7 @@ async function loadExercise() {
     window.DeblockModes?.refresh();
     byId('hint').hidden = true;
     input.disabled = false;
+    window.DeblockResearch?.observeOpening();
     if (document.activeElement === document.body) input.focus({ preventScroll: true });
   } catch {
     byId('hint').hidden = false;
