@@ -141,3 +141,7 @@ FROM outcomes GROUP BY initiation ORDER BY initiation;
 ```
 
 If few participants start, revisit the first action or instructions. If people start quickly but respondents give low ratings, examine the exercise after the first word. These are descriptive pilot results; a causal comparison needs a comparison condition.
+
+### Saved aphorisms
+
+Bookmarks save independently of writing: guests use IndexedDB and signed-in writers use account-owned `SavedAphorism` records. After terms-based personalization permission, bookmark changes also send the catalog ID and saved/removed state to `/api/research/aphorism/`. `ResearchParticipant.saved_aphorisms` contains the current collected IDs. Existing bookmarks are not backfilled on acceptance, and responses are not included. Delivery retries use the existing pending queue. Withdrawing personalization erases these IDs; deleting collected data deletes the participant record. Private library bookmarks remain available. Apply backend migration `0007_saved_aphorisms` before serving this version.

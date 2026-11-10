@@ -21,7 +21,7 @@ from PIL import Image, UnidentifiedImageError
 
 from deblock.exercises import get_exercise
 from deblock.server import ASSETS, WEB_ROOT
-from .models import Entry, GalleryImage, User
+from .models import Entry, GalleryImage, SavedAphorism, User
 from .writing import validate_story, validate_blackout, validate_aphorism
 
 ARTWORK = {item['id']: item for item in json.loads((WEB_ROOT / 'assets/art/catalog.json').read_text())}
@@ -198,6 +198,26 @@ def profile(request):
         request.user.name, request.user.avatar = name, avatar
         request.user.save(update_fields=['name', 'avatar'])
     return JsonResponse(profile_json(request.user))
+
+
+@account_api(['GET'])
+def saved_aphorisms(request):
+    items = SavedAphorism.objects.filter(owner=request.user).order_by('-created_at', 'pk')
+    return JsonResponse({'items': [{'id': item.aphorism_id, 'updatedAt': item.created_at.isoformat()} for item in items], 'nextPage': None})
+
+
+@account_api(['PUT', 'DELETE'])
+def saved_aphorism(request, key):
+    """Save a catalog reference for the authenticated owner, without any writing."""
+    try:
+        validate_aphorism({'version': 1, 'id': key, 'mode': 'word'})
+    except ValueError as exc:
+        raise InvalidInput(str(exc)) from exc
+    if request.method == 'DELETE':
+        SavedAphorism.objects.filter(owner=request.user, aphorism_id=key).delete()
+        return HttpResponse(status=204)
+    item, created = SavedAphorism.objects.get_or_create(owner=request.user, aphorism_id=key)
+    return JsonResponse({'id': key, 'updatedAt': item.created_at.isoformat()}, status=201 if created else 200)
 
 
 @account_api(['GET'])

@@ -50,6 +50,15 @@ class Entry(models.Model):
         indexes = [models.Index(fields=['owner', '-updated_at'])]
 
 
+class SavedAphorism(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_aphorisms')
+    aphorism_id = models.CharField(max_length=80)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['owner', 'aphorism_id'], name='unique_saved_aphorism')]
+
+
 class GalleryImage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='images')
@@ -68,6 +77,7 @@ class ResearchParticipant(models.Model):
     """Possession of a separate random recovery key authorizes research writes."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     key_digest = models.CharField(max_length=64, unique=True)
+    saved_aphorisms = models.JSONField(default=list)
     created_at = models.DateTimeField(auto_now_add=True)
     generation = models.PositiveIntegerField(default=0)
     withdrawn_at = models.DateTimeField(null=True)

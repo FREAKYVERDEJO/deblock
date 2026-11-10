@@ -303,3 +303,14 @@ dialog:has(.aphorism-prompt:not([hidden])) .save-options { left: 0; right: auto;
 
 #research-open { color: inherit; font: inherit; font-size: .85rem; padding: .5rem .2rem; }
 #research-open:hover, #research-open:focus-visible { text-decoration: underline; }
+
+/* The bookmark sits beside the heading, clear of the writing area. */
+#aphorism-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+#bookmark-aphorism { color: #702c1b; flex: 0 0 44px; width: 44px; min-height: 48px; padding: 0 6px; }
+#bookmark-aphorism svg { display: block; width: 32px; height: 42px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; }
+#bookmark-aphorism[aria-pressed="true"] svg { fill: currentColor; }
+#bookmark-aphorism:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+:root[data-theme="dark"] #bookmark-aphorism { color: var(--ink); }
+.saved-aphorism-card { padding: 24px 0; border-bottom: 1px solid currentColor; }
+.saved-aphorism-card figure { margin: 0 0 20px; }
+.saved-aphorism-card button { text-decoration: underline; text-underline-offset: 4px; }
