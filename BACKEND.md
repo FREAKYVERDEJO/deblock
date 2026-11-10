@@ -119,6 +119,14 @@ random secret, HTTPS canonical origin, PostgreSQL URL, Redis URL, and SMTP
 credentials/sender. Debugging is disabled; Secure cookies, HTTPS redirect, HSTS,
 and canonical email links are enabled. Keep the secret stable across restarts.
 
+For the Railway deployment, set
+`DEBLOCK_ORIGIN=https://deblock-production.up.railway.app` so verification and
+reset links point to the public site. This exact HTTPS origin is also trusted
+for CSRF checks when Railway forwards requests over HTTP; other Railway sites
+are not trusted. Use `DEBLOCK_ENV=production` with all required services above
+to disable debug pages and enable production cookies. Redeploy after changing
+the code or environment, then reload the account form before submitting it.
+
 Use TLS with certificate verification for PostgreSQL (`verify-full`, provider CA
 via `PGSSLROOTCERT`) and a private authenticated Redis service (`rediss://`).
 Use least-privilege database credentials. Do not expose database/cache ports.

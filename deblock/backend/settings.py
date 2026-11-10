@@ -47,7 +47,9 @@ ALLOWED_HOSTS = [
 ]
 if origin.hostname not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append(origin.hostname)
-CSRF_TRUSTED_ORIGINS = [PUBLIC_ORIGIN]
+# Railway terminates HTTPS before forwarding requests to Django. Trust only
+# this deployed site's HTTPS origin in addition to the configured canonical one.
+CSRF_TRUSTED_ORIGINS = [PUBLIC_ORIGIN, 'https://deblock-production.up.railway.app']
 ROOT_URLCONF = 'deblock.backend.urls'
 WSGI_APPLICATION = 'deblock.backend.wsgi.application'
 INSTALLED_APPS = [
