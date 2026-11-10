@@ -18,7 +18,7 @@ function element() {
 async function run() {
   const elements = new Map();
   const get = id => { if (!elements.has(id)) elements.set(id, element()); return elements.get(id); };
-  const records = { entries: new Map(), images: new Map(), profile: new Map() };
+  const records = { entries: new Map(), images: new Map(), profile: new Map(), aphorisms: new Map() };
   let failSave = false;
   const store = {
     async get(name, id) { return records[name].get(id); },
@@ -26,7 +26,7 @@ async function run() {
     async put(name, value) { if (failSave) throw new Error('Quota'); records[name].set(value.id, structuredClone(value)); },
   };
   const draft = { id: 'entry-one', title: '<b>Sample</b>', words: ['moon', 'tide'], draft: 'shore', arrows: false, updatedAt: new Date().toISOString() };
-  const window = { DeblockStorage: store, DeblockDocument: { snapshot: () => structuredClone(draft) } };
+  const window = { DeblockStorage: store, DeblockDocument: { snapshot: () => structuredClone(draft) }, DeblockAphorisms: { render: async () => {} } };
   const context = vm.createContext({ window, document: { getElementById: get, createElement: element },
     showDialog(dialog) { dialog.open = true; }, crypto: { randomUUID }, URL: { createObjectURL: () => 'blob:sample', revokeObjectURL() {} },
   });
