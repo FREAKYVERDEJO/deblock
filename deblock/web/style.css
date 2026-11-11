@@ -1,4 +1,4 @@
-/* Light retains the original paper palette; dark follows the sepia reference. */
+/* Light retains the paper palette; dark pairs honey amber with warm book tones. */
 :root {
   color-scheme: light;
   --ink: #34312c;
@@ -15,16 +15,16 @@
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --paper: #19170c;
-  --surface: #211e13;
-  --ink: #fff9e8;
-  --prose: #ded5bf;
-  --muted: #b4a990;
-  --placeholder: #a99e85;
-  --border: #6f634b;
-  --divider: #48402f;
-  --accent: #e6bd78;
-  --focus: #e6bd78;
+  --paper: #211711;
+  --surface: #2a1e16;
+  --ink: #e3b363;
+  --prose: #d1b382;
+  --muted: #bca078;
+  --placeholder: #bca078;
+  --border: #765537;
+  --divider: #4a3424;
+  --accent: #e9c58a;
+  --focus: #e9c58a;
 }
 * { box-sizing: border-box; }
 body { margin: 0; height: 100svh; overflow: hidden; background: var(--paper); color: var(--ink); font-family: 'Times New Roman', Times, serif; }
@@ -46,12 +46,12 @@ main { position: relative; height: 100%; display: grid; place-items: center; pad
 #hint { color: var(--muted); font-size: 15px; }
 footer { position: fixed; bottom: 16px; left: 25px; right: 25px; display: flex; align-items: center; gap: 24px; color: var(--muted); }
 .signature { font-size: 22px; }
-.site-menu .appearance-row { border-top: 1px solid var(--border); padding: 18px 20px; }
-.appearance-label { display: block; color: var(--muted); font-size: 13px; margin-bottom: 7px; }
-.appearance-options { display: flex; gap: 18px; }
-.site-menu nav .appearance-options button { padding: 8px 0; min-height: 44px; border: 0; font-size: 16px; color: var(--muted); }
-.site-menu nav .appearance-options button[aria-pressed="true"] { color: var(--ink); text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; }
-.site-menu nav .appearance-options button:is(:hover, :focus-visible) { color: var(--accent); }
+.site-menu .appearance-row { border-top: 1px solid var(--border); }
+.appearance-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.site-menu nav .appearance-options button { position: relative; padding: 14px 12px 18px; min-height: 58px; border: 0; border-radius: 0; font-family: 'Times New Roman', Times, serif; font-size: 22px; line-height: 1.1; text-align: center; }
+.site-menu nav .appearance-options [data-theme-option="light"] { background: #eeebe4; color: #34312c; }
+.site-menu nav .appearance-options [data-theme-option="dark"] { background: #211711; color: #fff9e8; border-left: 1px solid #8a7d69; }
+.site-menu nav .appearance-options button:focus-visible { outline: 1px solid currentColor; outline-offset: -5px; }
 ::selection { background: var(--ink); color: var(--paper); }
 nav { margin-left: auto; display: flex; gap: 14px; align-items: center; }
 nav button { font-size: 14px; }
@@ -191,16 +191,17 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 .story-mode.has-art main { gap: 18px; }
 .story-mode.has-art #word-form { grid-template-rows: auto minmax(100px, 18svh) auto; }
 .story-mode.has-art .word-space { min-height: 100px; }
-#story-dialog { width: min(720px, 90vw); padding: clamp(24px, 4vw, 44px); border: 0; background: var(--surface); }
+#story-dialog { width: min(720px, 90vw); padding: clamp(24px, 4vw, 44px); border: 0; background: var(--paper); }
 #story-dialog h1 { font: 400 clamp(28px, 3.5vw, 38px)/1.2 'Times New Roman', Times, serif; margin-bottom: 32px; }
 #story-outline-form { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 /* The transparent mirror measures wrapped lines; its markers never enter the value. */
 .outline-editor { position: relative; flex-basis: 100%; min-width: 0; }
-#story-outline, #outline-mirror { width: 100%; padding: 4px 4px 4px 1.3em; font: 400 clamp(21px, 2.8vw, 30px)/1.45 'Times New Roman', Times, serif; letter-spacing: normal; white-space: pre-wrap; overflow-wrap: break-word; tab-size: 8; }
-#story-outline { display: block; min-height: 180px; resize: vertical; border: 0; border-radius: 0; box-shadow: none; background: transparent; color: var(--placeholder); caret-color: var(--ink); }
+/* Center the three starter beats within the existing four-row input height. */
+#story-outline, #outline-mirror { --outline-height: max(180px, calc(5.8em + 8px)); width: 100%; padding: calc((var(--outline-height) - 4.35em) / 2) 1.3em 4px; font: 400 clamp(21px, 2.8vw, 30px)/1.45 'Times New Roman', Times, serif; letter-spacing: normal; white-space: pre-wrap; overflow-wrap: break-word; tab-size: 8; text-align: center; }
+#story-outline { display: block; height: var(--outline-height); min-height: 180px; resize: vertical; border: 0; border-radius: 0; box-shadow: none; background: transparent; color: var(--ink); caret-color: var(--ink); }
 .outline-markers { position: absolute; inset: 0; overflow: hidden; pointer-events: none; user-select: none; }
 #outline-mirror { color: transparent; }
-#outline-mirror > div { position: relative; min-height: 1.45em; }
+#outline-mirror > div { position: relative; min-height: 1.45em; width: fit-content; max-width: 100%; margin-inline: auto; }
 #outline-mirror > div::before { content: '>'; position: absolute; left: -1.1em; color: var(--placeholder); font-style: normal; }
 #story-outline::placeholder { color: var(--placeholder); opacity: 1; font-style: italic; }
 .outline-editor:has(#story-outline:placeholder-shown) #outline-mirror { font-style: italic; }
@@ -211,16 +212,17 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 #new-story { font-size: 18px; }
 #story-help > summary { list-style: none; cursor: pointer; padding: 10px; font-size: 25px; }
 #story-help > summary::-webkit-details-marker { display: none; }
-#story-help > p { position: absolute; z-index: 1; bottom: 100%; left: 0; width: min(380px, 100%); margin: 0 0 8px; padding: 16px; background: var(--surface); box-shadow: 0 2px 16px #0002; font-size: 16px; }
+#story-help > p { position: absolute; z-index: 1; bottom: 100%; left: 0; width: min(380px, 100%); margin: 0 0 8px; padding: 16px; background: var(--paper); border: 1px solid var(--border); font-size: 16px; }
 #story-outline-note:not(.sr-only) { flex-basis: 100%; margin: 10px 0; }
 #story-outline-status:empty { display: none; }
 @media (max-width: 600px) {
   #story-dialog { padding: 26px 22px; }
 }
-#chain-summary { white-space: pre-wrap; }
-#review-outline { margin: 18px 0; }
-#review-outline summary { cursor: pointer; text-decoration: none; }
-#review-outline li { margin: 10px 0; overflow-wrap: anywhere; }
+#chain-summary, #entry-body { white-space: pre-wrap; color: var(--prose); font-size: 17px; line-height: 1.6; overflow-wrap: anywhere; margin: 17px 0; }
+#chain-summary.story-chapters, #entry-body.story-chapters { white-space: normal; }
+.story-chapter + .story-chapter { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--divider); }
+.story-chapter h2 { margin: 0 0 12px; color: var(--ink); font-size: 23px; line-height: 1.35; font-weight: 400; overflow-wrap: anywhere; }
+.story-chapter .story-passage { margin: 0; color: var(--prose); white-space: pre-wrap; }
 #poetry-dialog { width: min(960px, 94vw); padding: clamp(28px, 5vw, 58px); border: 0; background: var(--surface); }
 #poetry-title { font-size: clamp(30px, 4vw, 44px); margin-bottom: 32px; }
 .poetry-words { margin: 0 0 48px; min-height: 220px; font-size: clamp(23px, 3.2vw, 32px); line-height: 1.9; user-select: none; touch-action: none; overflow-wrap: anywhere; }
@@ -269,10 +271,12 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 /* A fixed prompt row keeps the quote still when the editor changes. */
 .aphorism-mode main { display: block; overflow-y: auto; padding: 100px 10% 100px; }
 .aphorism-mode #word-form { margin: 0 auto; text-align: left; }
-#aphorism-heading h1 { margin: 0 0 clamp(30px, 7svh, 80px); font-size: 24px; font-weight: 400; }
+#aphorism-heading { font-size: 24px; line-height: 1.2; }
+#aphorism-heading h1 { margin: 0 0 clamp(30px, 7svh, 80px); font-size: inherit; font-weight: 400; }
 .aphorism-prompt { margin: 0; }
 .aphorism-prompt blockquote { margin: 0 0 20px; font-size: clamp(28px, 3.7vw, 52px); line-height: 1.25; overflow-wrap: anywhere; }
 .aphorism-prompt figcaption { font-size: clamp(17px, 2vw, 23px); line-height: 1.45; }
+:root[data-theme="dark"] .aphorism-prompt figcaption { color: var(--prose); }
 .aphorism-prompt a { color: inherit; text-decoration: none; }
 .aphorism-prompt a:hover { text-decoration: underline; text-underline-offset: 4px; }
 .aphorism-mode .word-space, #aphorism-text { margin-top: 36px; }
@@ -287,7 +291,8 @@ dialog .aphorism-prompt figcaption { font-size: 15px; }
 .aphorism-mode footer { background: var(--paper); }
 @media (max-width: 600px) {
   .aphorism-mode main { padding: 80px 7% 120px; }
-  #aphorism-heading h1 { font-size: 20px; margin-bottom: 32px; }
+  #aphorism-heading { font-size: 20px; }
+  #aphorism-heading h1 { margin-bottom: 32px; }
   .aphorism-mode footer .signature { display: none; }
   .aphorism-mode footer nav { flex-wrap: wrap; justify-content: flex-end; gap: 0; }
 }
@@ -304,13 +309,17 @@ dialog:has(.aphorism-prompt:not([hidden])) .save-options { left: 0; right: auto;
 #research-open { color: inherit; font: inherit; font-size: .85rem; padding: .5rem .2rem; }
 #research-open:hover, #research-open:focus-visible { text-decoration: underline; }
 
-/* The bookmark sits beside the heading, clear of the writing area. */
-#aphorism-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
-#bookmark-aphorism { color: #702c1b; flex: 0 0 44px; width: 44px; min-height: 48px; padding: 0 6px; }
-#bookmark-aphorism svg { display: block; width: 32px; height: 42px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; }
+/* Matching outer margins let the heading and bookmark frame the aphorism. */
+#aphorism-heading { --aphorism-outset: clamp(12px, 6vw, 72px); position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+#aphorism-heading h1 { margin-inline-start: calc(-1 * var(--aphorism-outset)); }
+#bookmark-aphorism { position: absolute; top: 0; inset-inline-end: calc(-1 * var(--aphorism-outset)); color: #702c1b; width: 44px; min-height: 44px; padding: 0; display: grid; place-items: center; font-size: inherit; margin-top: calc((1.2em - 44px) / 2); }
+#bookmark-aphorism svg { display: block; width: auto; height: 1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; }
 #bookmark-aphorism[aria-pressed="true"] svg { fill: currentColor; }
 #bookmark-aphorism:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
 :root[data-theme="dark"] #bookmark-aphorism { color: var(--ink); }
+@media (max-width: 600px) {
+  #aphorism-heading { --aphorism-outset: calc(7vw - 8px); }
+}
 .saved-aphorism-card { padding: 24px 0; border-bottom: 1px solid currentColor; }
 .saved-aphorism-card figure { margin: 0 0 20px; }
 .saved-aphorism-card button { text-decoration: underline; text-underline-offset: 4px; }

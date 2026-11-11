@@ -52,10 +52,11 @@ function element() {
   assert.equal(window.DeblockDocument.snapshot().story.active,1);
   get('word').value='final word';get('word').handlers.input({});enter();
   assert.equal(window.DeblockDocument.snapshot().story.active,1);
-  assert.equal(Boolean(get('finish-dialog').open),false);
-  assert.equal(get('next-beat').textContent,'press ↵ for next beat');
-  get('finish').handlers.click();
-  assert.equal(get('chain-summary').textContent,'first → passage\n\nfinal → word');
+  assert.equal(Boolean(get('finish-dialog').open),true);
+  assert.equal(get('next-beat').textContent,'press ↵ to finish story');
+  const chapters=get('chain-summary').children;
+  assert.deepEqual(chapters.map(chapter=>chapter.children[0].textContent),['one → two','two → three']);
+  assert.deepEqual(chapters.map(chapter=>chapter.children[1].textContent),['first → passage','final → word']);
   assert.equal(get('finish-dialog').open,true);
-  console.log('PASS: Untitled, final word, image-off omission, selection restored, no artwork leakage, Enter advances but never finishes');
+  console.log('PASS: Untitled, final word, image-off omission, selection restored, no artwork leakage, final Enter finishes with chapters');
 })().catch(error=>{console.error(error);process.exitCode=1;});

@@ -110,8 +110,8 @@ function renderSummary() {
   window.DeblockAphorisms.render(byId('finish-aphorism'), aphorism).catch(error => { byId('export-status').textContent = error.message; });
   window.DeblockArt?.renderDocument(byId('finish-art'));
   const summary = byId('chain-summary');
-  summary.textContent = documentBody();
-  summary.hidden = !summary.textContent;
+  if (!window.DeblockModes?.renderStory(summary, window.DeblockDocument.snapshot())) summary.textContent = documentBody();
+  summary.hidden = !story && !summary.textContent;
   if (blackout) window.DeblockPoetry?.render(summary, window.DeblockDocument.snapshot());
   window.DeblockModes?.reviewState();
 }

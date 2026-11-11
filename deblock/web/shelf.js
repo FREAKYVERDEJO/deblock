@@ -37,7 +37,7 @@
   async function viewEntry(entry) {
     viewedEntry = entry;
     get('entry-title').textContent = entry.title || 'Untitled';
-    get('entry-body').textContent = entryText(entry);
+    if (!window.DeblockModes.renderStory(get('entry-body'), entry)) get('entry-body').textContent = entryText(entry);
     await window.DeblockAphorisms.render(get('entry-aphorism'), entry.aphorism);
     window.DeblockPoetry?.render(get('entry-body'), entry);
     get('edit-entry').hidden = Boolean(entry.story || entry.blackout || entry.aphorism);

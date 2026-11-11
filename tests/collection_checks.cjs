@@ -26,7 +26,7 @@ async function run() {
     async put(name, value) { if (failSave) throw new Error('Quota'); records[name].set(value.id, structuredClone(value)); },
   };
   const draft = { id: 'entry-one', title: '<b>Sample</b>', words: ['moon', 'tide'], draft: 'shore', arrows: false, updatedAt: new Date().toISOString() };
-  const window = { DeblockStorage: store, DeblockDocument: { snapshot: () => structuredClone(draft) }, DeblockAphorisms: { render: async () => {} } };
+  const window = { DeblockStorage: store, DeblockDocument: { snapshot: () => structuredClone(draft) }, DeblockAphorisms: { render: async () => {} }, DeblockModes: { renderStory: () => false } };
   const context = vm.createContext({ window, document: { getElementById: get, createElement: element },
     showDialog(dialog) { dialog.open = true; }, crypto: { randomUUID }, URL: { createObjectURL: () => 'blob:sample', revokeObjectURL() {} },
   });

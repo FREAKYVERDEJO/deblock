@@ -79,6 +79,10 @@ async function run() {
       await page.locator('#next-beat').click();
       assert.equal(await page.locator('#word').inputValue(), '');
       await page.locator('#word').fill('I walk home');
+      await page.locator('#word').press('Enter');
+      assert.equal(await page.locator('#finish-dialog').evaluate(element => element.open), true);
+      assert.deepEqual(await page.locator('#chain-summary .story-passage').allTextContents(), ['The bell rings', 'I walk home']);
+      await page.locator('#resume').click();
       await page.locator('#previous-beat').click();
       assert.equal(await page.locator('#word').inputValue(), 'rings');
       await page.locator('#word').press('Tab');
@@ -90,7 +94,8 @@ async function run() {
       assert.equal(await page.locator('#word').inputValue(), 'rings');
       assert.equal(writes.length, 0, 'mode changes must not upload');
       await page.locator('#finish').click();
-      assert.equal(await page.locator('#chain-summary').innerText(), 'The bell rings\n\nI walk home');
+      assert.deepEqual(await page.locator('#chain-summary .story-passage').allTextContents(), ['The bell rings', 'I walk home']);
+      assert.equal(await page.locator('#chain-summary .story-chapter h2').count(), 2);
       await page.locator('#document-title').fill(`Story ${label} ${runTag}`);
       await shot('story-review');
       const failSave = route => route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: 'Saving is temporarily unavailable. Try again.' }) });

@@ -28,10 +28,9 @@
       <button id="open-aphorism" type="button">Aphorism of the Day</button>
       <button id="open-story" type="button">Story Beats</button>
       <div class="appearance-row" role="group" aria-label="Appearance">
-        <span class="appearance-label" aria-hidden="true">Appearance</span>
         <div class="appearance-options">
-          <button type="button" data-theme-option="light" aria-pressed="false">Light</button>
-          <button type="button" data-theme-option="dark" aria-pressed="false">Dark</button>
+          <button type="button" data-theme-option="light" aria-pressed="false">light</button>
+          <button type="button" data-theme-option="dark" aria-pressed="false">dark</button>
         </div>
       </div>
     </nav>
@@ -98,7 +97,7 @@
       <label for="story-outline" class="sr-only">Your story skeleton</label>
       <div class="outline-editor">
         <div class="outline-markers" aria-hidden="true"><div id="outline-mirror"></div></div>
-        <textarea id="story-outline" rows="4" maxlength="100100" placeholder="Lily decides to see Matt&#10;Matt waits for her by the pier&#10;Lily arrives at the pier …" aria-describedby="story-outline-note" required></textarea>
+        <textarea id="story-outline" rows="4" maxlength="100100" placeholder="Event 1&#10;Event 2&#10;Event 3" aria-describedby="story-outline-note" required></textarea>
       </div>
       <p id="story-outline-note" class="fine-print sr-only"></p>
       <div class="story-outline-actions">
@@ -139,8 +138,7 @@
     <h1 id="document-title" contenteditable="plaintext-only" role="textbox" aria-label="Document title" aria-multiline="true" title="Click to edit the title" spellcheck="false">Untitled</h1>
     <figure id="finish-art" class="artwork document-art" hidden></figure>
     <figure id="finish-aphorism" class="aphorism-prompt" hidden></figure>
-    <p id="chain-summary"></p>
-    <details id="review-outline" data-html2canvas-ignore="true" hidden><summary>story outline</summary><ol id="review-outline-list"></ol></details>
+    <div id="chain-summary"></div>
     <div class="end-actions">
       <button id="resume" type="button">keep writing</button>
       <button id="arrows-toggle" type="button" aria-label="Show arrows" aria-pressed="true">arrows on</button>
@@ -229,7 +227,7 @@
     <h1 id="entry-title"></h1>
     <figure id="entry-art" class="artwork document-art" hidden></figure>
     <figure id="entry-aphorism" class="aphorism-prompt" hidden></figure>
-    <p id="entry-body"></p>
+    <div id="entry-body"></div>
     <div class="end-actions"><button id="continue-entry" type="button">continue writing</button></div>
     <div class="end-actions"><details class="save-menu"><summary>save</summary><div class="save-options"><button type="button" data-save-gallery>to gallery</button><button type="button" data-export="png">as PNG</button><button type="button" data-export="pdf">as PDF</button></div></details></div>
     <div class="end-actions" data-account-only hidden><button id="edit-entry" type="button">edit</button><button id="delete-entry" type="button">delete</button></div>
