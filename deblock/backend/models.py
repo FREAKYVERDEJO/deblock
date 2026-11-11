@@ -50,6 +50,15 @@ class Entry(models.Model):
         indexes = [models.Index(fields=['owner', '-updated_at'])]
 
 
+class SavedAphorism(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_aphorisms')
+    aphorism_id = models.CharField(max_length=80)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['owner', 'aphorism_id'], name='unique_saved_aphorism')]
+
+
 class GalleryImage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='images')
@@ -62,3 +71,88 @@ class GalleryImage(models.Model):
 
     class Meta:
         indexes = [models.Index(fields=['owner', '-created_at'])]
+
+
+class ResearchParticipant(models.Model):
+    """Possession of a separate random recovery key authorizes research writes."""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    key_digest = models.CharField(max_length=64, unique=True)
+    saved_aphorisms = models.JSONField(default=list)
+    created_at = models.DateTimeField(auto_now_add=True)
+    generation = models.PositiveIntegerField(default=0)
+    withdrawn_at = models.DateTimeField(null=True)
+
+    class Meta:
+        db_table = 'research_participants'
+
+
+class ResearchConsent(models.Model):
+    participant = models.ForeignKey(ResearchParticipant, on_delete=models.CASCADE)
+    scope = models.CharField(max_length=12)
+    version = models.CharField(max_length=20)
+    source = models.CharField(max_length=10, default='explicit')
+    granted_at = models.DateTimeField(auto_now_add=True)
+    withdrawn_at = models.DateTimeField(null=True)
+
+    class Meta:
+        db_table = 'research_consent'
+        constraints = [models.UniqueConstraint(fields=['participant', 'scope'],
+            condition=models.Q(withdrawn_at=None), name='one_current_scope')]
+
+
+class ResearchSession(models.Model):
+    id = models.UUIDField(primary_key=True)
+    participant = models.ForeignKey(ResearchParticipant, on_delete=models.CASCADE)
+    mode = models.CharField(max_length=12)
+    generation = models.PositiveIntegerField()
+    revision = models.PositiveIntegerField()
+    schema_version = models.PositiveSmallIntegerField(default=1)
+    app_version = models.CharField(max_length=80)
+    started_at = models.DateTimeField()
+    ended_at = models.DateTimeField(null=True)
+    outcome = models.CharField(max_length=12)
+    received_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'research_sessions'
+        indexes = [models.Index(fields=['participant', 'started_at'])]
+
+
+class ResearchBehavior(models.Model):
+    session = models.OneToOneField(ResearchSession, primary_key=True, on_delete=models.CASCADE)
+    metrics = models.JSONField()
+    events = models.JSONField()
+    configuration = models.JSONField()
+
+    class Meta:
+        db_table = 'research_behavior'
+
+
+class ResearchWriting(models.Model):
+    session = models.OneToOneField(ResearchSession, primary_key=True, on_delete=models.CASCADE)
+    consent = models.ForeignKey(ResearchConsent, on_delete=models.CASCADE)
+    text = models.TextField()
+    structure = models.JSONField()
+    word_count = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'research_writing'
+
+
+class PersonalizationSummary(models.Model):
+    """Coarse session totals for future personalization, separate from research writing."""
+    session = models.OneToOneField(ResearchSession, primary_key=True, on_delete=models.CASCADE)
+    word_band = models.PositiveSmallIntegerField()
+    duration_band = models.PositiveSmallIntegerField()
+    start_within_two_minutes = models.BooleanField(null=True)
+    usefulness_rating = models.PositiveSmallIntegerField(null=True)
+
+    class Meta:
+        db_table = 'personalization_summaries'
+        constraints = [
+            models.CheckConstraint(condition=models.Q(word_band__lte=4), name='valid_word_band'),
+            models.CheckConstraint(condition=models.Q(duration_band__lte=4), name='valid_duration_band'),
+            models.CheckConstraint(condition=models.Q(usefulness_rating__range=(1, 5)), name='valid_personal_rating'),
+        ]

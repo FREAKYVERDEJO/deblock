@@ -15,7 +15,7 @@ const get = id => {
 };
 const context = vm.createContext({
   document: { body: {}, getElementById: get, querySelectorAll: () => [] },
-  window: { addEventListener() {}, dispatchEvent() {} },
+  window: { addEventListener() {}, dispatchEvent() {}, DeblockAphorisms: { render: async () => {} } },
   CustomEvent: class {},
   fetch: async () => ({ ok: true, json: async () => ({ title: 'Test', instructions: 'Test' }) }),
 });

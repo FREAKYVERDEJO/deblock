@@ -98,7 +98,7 @@
     get('art-next').hidden = !available || !enabled;
     document.body.classList.toggle('has-art', available && enabled);
     render(get('writing-art'), available && enabled ? selected : null, selectedImage);
-    render(get('finish-art'), selected);
+    root.DeblockArt.renderDocument(get('finish-art'));
   }
   async function change(shuffle) {
     if (!available) return;
@@ -169,11 +169,11 @@
         }
       } finally { if (request === requestId) busy = false; }
     },
-    // Hiding the prompt does not detach it from the piece being saved.
-    snapshot: (includeHidden = false) => (enabled || includeHidden) && failedRestore ? { id: failedRestore.id } : (enabled || includeHidden) && selected ? { ...selected } : null,
+    // Keep the selection for toggling back on, but omit it from image-off saves.
+    snapshot: () => enabled && failedRestore ? { id: failedRestore.id } : enabled && selected ? { ...selected } : null,
     renderDocument(container) {
-      render(container, selected);
-      if (failedRestore) {
+      render(container, enabled ? selected : null);
+      if (enabled && failedRestore) {
         container.hidden = false; container.textContent = failedRestore.error;
         container.dataset.artError = 'true';
       }

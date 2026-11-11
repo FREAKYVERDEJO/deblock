@@ -47,6 +47,7 @@
   function outline(edit) {
     editingOutline = edit;
     const entry = root.DeblockDocument.snapshot();
+    root.DeblockResearch?.outline();
     if (edit) get('story-outline').value = entry.story.beats.map(beat => beat.text).join('\n');
     get('story-outline-note').textContent = edit
       ? 'Edit the wording of each beat. Keep the same order and number of lines so each passage stays in place.'
@@ -74,6 +75,9 @@
     if (aphorism) {
       get('exercise-title').textContent = 'Aphorism of the Day';
       get('instructions').textContent = 'Read today’s aphorism. Follow the first word it brings to mind, or switch to the normal text box to write freely. You can stop whenever you like. Your quote stays with this draft.';
+    } else if (story) {
+      get('exercise-title').textContent = 'Story Beats';
+      get('instructions').textContent = 'Write the connection between your two events, one word at a time. Press Enter when you are ready to move on. Enter on the final connection opens your finished story. You can revisit a passage, edit your outline, or stop whenever you like.';
     } else if (exercise) {
       get('exercise-title').textContent = exercise.title;
       get('instructions').textContent = exercise.instructions;
@@ -82,7 +86,7 @@
     get('keyboard-help').textContent = textMode
       ? 'Write with spaces and paragraphs. Switch the normal text box off to return to one word at a time. Find your response under done.'
       : story
-      ? 'Space moves to the next word. Enter moves to the next beat. Open outline to see your beats, or done to read your story.'
+      ? 'Space moves to the next word. Enter moves to the next connection, then opens your finished story after the last one. Choose done to read your story at any time.'
       : 'Space or Enter moves to the next word. Find your chain under done.';
     get('open-story').setAttribute('aria-current', story ? 'page' : 'false');
     get('open-free').setAttribute('aria-current', story || aphorism ? 'false' : 'page');
@@ -94,19 +98,33 @@
     get('beat-from').textContent = story.beats[story.active].text;
     get('beat-to').textContent = story.beats[story.active + 1].text;
     get('previous-beat').disabled = story.active === 0;
-    get('next-beat').textContent = 'press ↵ for next beat';
-    get('next-beat').disabled = story.active === story.passages.length - 1;
+    get('next-beat').textContent = story.active === story.passages.length - 1
+      ? 'press ↵ to finish story' : 'press ↵ for next beat';
+    get('next-beat').disabled = false;
+  }
+  function renderStory(container, entry) {
+    container.classList.toggle('story-chapters', Boolean(entry.story));
+    if (!entry.story) return false;
+    const beats = new Map(entry.story.beats.map(beat => [beat.id, beat.text]));
+    container.replaceChildren();
+    for (const passage of entry.story.passages) {
+      const chapter = document.createElement('section');
+      chapter.className = 'story-chapter';
+      const heading = document.createElement('h2');
+      heading.textContent = `${beats.get(passage.from)} → ${beats.get(passage.to)}`;
+      const text = document.createElement('p');
+      text.className = 'story-passage';
+      text.textContent = tools.passageText(passage, entry.arrows);
+      text.hidden = !text.textContent;
+      chapter.append(heading, text);
+      container.append(chapter);
+    }
+    return true;
   }
   function reviewState() {
     const entry = root.DeblockDocument.snapshot();
     get('open-poetry').hidden = Boolean(entry.story || entry.aphorism);
     get('arrows-toggle').hidden = Boolean(entry.aphorism);
-    get('review-outline').hidden = !entry.story;
-    get('review-outline-list').replaceChildren();
-    if (entry.story) for (const beat of entry.story.beats) {
-      const item = document.createElement('li'); item.textContent = beat.text;
-      get('review-outline-list').append(item);
-    }
   }
   get('open-aphorism').addEventListener('click', () => switchMode('aphorism'));
   get('open-story').addEventListener('click', () => switchMode('story'));
@@ -130,6 +148,7 @@
         if (current.story && !root.confirm('Start a new story? Save the current story first if you want to keep it.')) return;
         drafts.set(modeOf(current), current);
         await root.DeblockDocument.load(blank(value));
+        root.DeblockResearch?.newStory();
       }
       get('story-dialog').close();
       root.DeblockDocument.focus();
@@ -139,9 +158,10 @@
   get('next-beat').addEventListener('click', () => {
     const story = root.DeblockDocument.snapshot().story;
     if (story.active < story.passages.length - 1) root.DeblockDocument.movePassage(story.active + 1);
+    else get('finish').click();
   });
   root.DeblockModes = {
-    refresh, reviewState,
+    refresh, reviewState, renderStory,
     async reset(mode) {
       drafts.delete(mode);
       if (mode === 'story') {
@@ -159,6 +179,7 @@
       if (existing && hasContent(existing) && content(existing) !== content(entry) &&
           !root.confirm('Replace the draft in this writing mode with the saved entry? Cancel to save your draft first.')) return false;
       drafts.set(modeOf(current), current);
+      root.DeblockResearch?.privateEntry(entry.id);
       await root.DeblockDocument.load(entry);
       drafts.set(mode, entry);
       for (const dialog of document.querySelectorAll('dialog[open]')) dialog.close();

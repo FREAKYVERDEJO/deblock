@@ -37,7 +37,7 @@
   async function viewEntry(entry) {
     viewedEntry = entry;
     get('entry-title').textContent = entry.title || 'Untitled';
-    get('entry-body').textContent = entryText(entry);
+    if (!window.DeblockModes.renderStory(get('entry-body'), entry)) get('entry-body').textContent = entryText(entry);
     await window.DeblockAphorisms.render(get('entry-aphorism'), entry.aphorism);
     window.DeblockPoetry?.render(get('entry-body'), entry);
     get('edit-entry').hidden = Boolean(entry.story || entry.blackout || entry.aphorism);
@@ -46,6 +46,22 @@
     showDialog(get('entry-dialog'));
   }
   async function renderLibrary() {
+    const bookmarks = ordered(await store.all('aphorisms'));
+    const savedList = get('saved-aphorisms-list');
+    savedList.replaceChildren();
+    if (!bookmarks.length) savedList.append(textElement('p', 'No saved aphorisms yet. Use the bookmark on the aphorism page to keep one here.', 'empty-state'));
+    for (const bookmark of bookmarks) {
+      const card = document.createElement('article'); card.className = 'saved-aphorism-card';
+      const figure = document.createElement('figure'); figure.className = 'aphorism-prompt';
+      await window.DeblockAphorisms.render(figure, bookmark);
+      const remove = textElement('button', 'remove bookmark'); remove.type = 'button';
+      remove.addEventListener('click', async () => {
+        remove.disabled = true;
+        try { await window.DeblockAphorisms.setSaved(bookmark.id, false); await renderLibrary(); }
+        catch (error) { get('library-status').textContent = errorText(error); remove.disabled = false; }
+      });
+      card.append(figure, remove); savedList.append(card);
+    }
     const entries = ordered(await store.all('entries'));
     const list = get('library-list');
     list.replaceChildren();
@@ -155,6 +171,7 @@
       get('edit-entry-text').value = [...viewedEntry.words, viewedEntry.draft].filter(Boolean).join(' ');
       get('edit-entry-status').textContent = '';
       showDialog(get('edit-entry-dialog'));
+      window.DeblockResearch?.libraryEdit();
     });
     get('edit-entry-form').addEventListener('submit', async event => {
       event.preventDefault();
@@ -163,6 +180,7 @@
       try {
         const updated = await store.put('entries', { ...viewedEntry,
           title: get('edit-entry-title').value, words: [get('edit-entry-text').value], draft: '', arrows: false });
+        window.DeblockResearch?.end('completed');
         await viewEntry(updated);
         get('edit-entry-dialog').close();
         await renderLibrary();

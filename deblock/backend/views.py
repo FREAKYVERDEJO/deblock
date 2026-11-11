@@ -16,11 +16,12 @@ from django.http import HttpResponse, JsonResponse, Http404
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_GET
+from django.utils.html import escape
 from PIL import Image, UnidentifiedImageError
 
 from deblock.exercises import get_exercise
 from deblock.server import ASSETS, WEB_ROOT
-from .models import Entry, GalleryImage, User
+from .models import Entry, GalleryImage, SavedAphorism, User
 from .writing import validate_story, validate_blackout, validate_aphorism
 
 ARTWORK = {item['id']: item for item in json.loads((WEB_ROOT / 'assets/art/catalog.json').read_text())}
@@ -29,6 +30,9 @@ BACKEND_ASSETS = {
     '/local-storage.js': ('storage.js', 'text/javascript; charset=utf-8'),
     '/account.js': ('account.js', 'text/javascript; charset=utf-8'),
     '/account.css': ('account.css', 'text/css; charset=utf-8'),
+    '/research.js': ('research.js', 'text/javascript; charset=utf-8'),
+    '/research-metrics.js': ('research-metrics.js', 'text/javascript; charset=utf-8'),
+    '/research-privacy.html': ('research-privacy.html', 'text/html; charset=utf-8'),
     '/guest.js': ('guest.js', 'text/javascript; charset=utf-8'),
 }
 
@@ -79,10 +83,10 @@ def account_api(methods):
     return decorate
 
 
-def body(request) -> dict:
+def body(request, maximum=1024 * 1024) -> dict:
     if request.content_type != 'application/json':
         raise InvalidInput('Expected a JSON request.')
-    if len(request.body) > 1024 * 1024:
+    if len(request.body) > maximum:
         raise InvalidInput('This entry is too large.')
     try:
         value = json.loads(request.body)
@@ -135,18 +139,26 @@ def page(request, query, serialize) -> JsonResponse:
     return JsonResponse({'items': [serialize(item) for item in items[:50]], 'nextPage': number+1 if len(items)>50 else None})
 
 
+def writer_html(request):
+    html = (WEB_ROOT / 'index.html').read_text()
+    enabled = int(settings.RESEARCH_ENABLED)
+    return html.replace('<!-- research bootstrap -->',
+        f'<meta name="research" data-enabled="{enabled}" data-app="{escape(settings.RESEARCH_APP_VERSION)}" content="{get_token(request)}">'
+        '<script src="/research-metrics.js" defer></script><script src="/research.js" defer></script>')
+
+
 @require_GET
 def index(request):
     if not request.user.is_authenticated or not EmailAddress.objects.filter(
             user=request.user, email__iexact=request.user.email, verified=True).exists():
         return redirect('guest-writing')
-    return HttpResponse((WEB_ROOT / 'index.html').read_text(), content_type='text/html; charset=utf-8')
+    return HttpResponse(writer_html(request), content_type='text/html; charset=utf-8')
 
 
 @require_GET
 def guest(request):
     """Open the shared writer with explicit browser-only storage, without changing identity."""
-    html = (WEB_ROOT / 'index.html').read_text()
+    html = writer_html(request)
     html = html.replace('src="/storage.js"', 'src="/local-storage.js"')
     html = html.replace('src="/account.js"', 'src="/guest.js"')
     return HttpResponse(html, content_type='text/html; charset=utf-8')
@@ -186,6 +198,26 @@ def profile(request):
         request.user.name, request.user.avatar = name, avatar
         request.user.save(update_fields=['name', 'avatar'])
     return JsonResponse(profile_json(request.user))
+
+
+@account_api(['GET'])
+def saved_aphorisms(request):
+    items = SavedAphorism.objects.filter(owner=request.user).order_by('-created_at', 'pk')
+    return JsonResponse({'items': [{'id': item.aphorism_id, 'updatedAt': item.created_at.isoformat()} for item in items], 'nextPage': None})
+
+
+@account_api(['PUT', 'DELETE'])
+def saved_aphorism(request, key):
+    """Save a catalog reference for the authenticated owner, without any writing."""
+    try:
+        validate_aphorism({'version': 1, 'id': key, 'mode': 'word'})
+    except ValueError as exc:
+        raise InvalidInput(str(exc)) from exc
+    if request.method == 'DELETE':
+        SavedAphorism.objects.filter(owner=request.user, aphorism_id=key).delete()
+        return HttpResponse(status=204)
+    item, created = SavedAphorism.objects.get_or_create(owner=request.user, aphorism_id=key)
+    return JsonResponse({'id': key, 'updatedAt': item.created_at.isoformat()}, status=201 if created else 200)
 
 
 @account_api(['GET'])

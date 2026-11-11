@@ -122,7 +122,7 @@
       const format = galleryOnly ? 'gallery' : button.dataset.export;
       try {
         const entry = root.DeblockShelf?.snapshotFor(dialog);
-        // Resolve the piece's attached artwork even if its writing prompt was hidden.
+        // Resolve the current snapshot; image-off drafts omit artwork.
         if (entry) await root.DeblockArt?.renderSaved(dialog.querySelector('.document-art'), entry.artwork);
         if (galleryOnly) {
           // Aphorism entries save the quote and response together, without an artwork prompt.

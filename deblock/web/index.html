@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>deblock</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script src="/theme.js"></script>
   <link rel="stylesheet" href="/style.css">
   <script src="/writing-tools.js" defer></script>
   <script src="/aphorisms.js" defer></script>
@@ -17,6 +18,7 @@
   <script src="/account.js" defer></script>
   <script src="/vendor/html2canvas-1.4.1.min.js" defer></script>
   <script src="/export.js" defer></script>
+  <!-- research bootstrap -->
 </head>
 <body>
   <details id="site-menu" class="site-menu">
@@ -25,6 +27,12 @@
       <button id="open-free" type="button" aria-current="page">Free association</button>
       <button id="open-aphorism" type="button">Aphorism of the Day</button>
       <button id="open-story" type="button">Story Beats</button>
+      <div class="appearance-row" role="group" aria-label="Appearance">
+        <div class="appearance-options">
+          <button type="button" data-theme-option="light" aria-pressed="false">light</button>
+          <button type="button" data-theme-option="dark" aria-pressed="false">dark</button>
+        </div>
+      </div>
     </nav>
   </details>
   <nav class="collection-nav" aria-label="Your collection and account">
@@ -43,7 +51,8 @@
   <main>
     <figure id="writing-art" class="artwork writing-art" hidden></figure>
     <form id="word-form" autocomplete="off">
-      <header id="aphorism-heading" hidden><h1>Aphorism of the Day</h1></header>
+      <header id="aphorism-heading" hidden><h1>Aphorism of the Day</h1><button id="bookmark-aphorism" type="button" aria-label="Save aphorism" aria-pressed="false" title="Save aphorism to library"><svg viewBox="0 0 32 42" aria-hidden="true" focusable="false"><path d="M4 3H28V38L16 28L4 38Z"/></svg></button></header>
+      <p id="bookmark-status" class="sr-only" role="status"></p>
       <figure id="aphorism-prompt" class="aphorism-prompt" hidden></figure>
       <section id="story-context" aria-label="Current story passage" hidden>
         <p id="story-progress" class="sr-only"></p>
@@ -59,6 +68,28 @@
       <p id="hint" role="status" hidden></p>
     </form>
   </main>
+  <dialog id="research-dialog" aria-labelledby="research-title">
+    <button class="close" type="button" aria-label="Close research settings">×</button>
+    <h1 id="research-title">Privacy &amp; terms</h1>
+    <p>Under the terms of use, deblock saves a short activity summary for future personalization. It includes the exercise, approximate length, time spent and which aphorisms you save.</p>
+    <p><a href="/research-privacy.html" target="_blank" rel="noopener">Read the terms of use and privacy policy</a></p>
+    <button type="button" id="accept-terms">Accept terms of use</button>
+    <p id="terms-accepted" hidden>Terms accepted on this browser.</p>
+    <h2>Writing research</h2>
+    <p id="legacy-research" hidden><label><input type="checkbox" id="research-behavior"> Continue my previously enabled research measurements.</label></p>
+    <p><label><input type="checkbox" id="research-writing"> Share complete new writing. The researcher may personally read and analyze it.</label></p>
+    <button type="button" id="research-save">Save choices</button>
+    <button type="button" id="research-include" hidden>Include this existing draft and its source in research</button>
+    <details><summary>Withdrawal and deletion</summary>
+      <p>Turn off writing research and save to erase your shared writing. Delete all collected data to remove your activity summaries and browser identity too.</p>
+      <button type="button" id="research-delete" hidden>Delete all my collected data</button>
+      <p>Keep this private recovery key somewhere safe if you plan to clear browser storage. Anyone with it can change your choices or delete your records.</p>
+      <label>Recovery key <input id="research-key" type="password" autocomplete="off" spellcheck="false"></label>
+      <label id="other-recovery-key" hidden>Key from another browser <input id="recover-other-key" type="password" autocomplete="off" spellcheck="false"></label>
+      <button type="button" id="research-recover">Use recovery key</button>
+    </details>
+    <p id="research-status" role="status"></p>
+  </dialog>
   <dialog id="story-dialog" aria-labelledby="story-dialog-title">
     <button class="close" type="button" aria-label="Close story outline">×</button>
     <h1 id="story-dialog-title">Story Beats</h1>
@@ -66,7 +97,7 @@
       <label for="story-outline" class="sr-only">Your story skeleton</label>
       <div class="outline-editor">
         <div class="outline-markers" aria-hidden="true"><div id="outline-mirror"></div></div>
-        <textarea id="story-outline" rows="4" maxlength="100100" placeholder="Lily decides to see Matt&#10;Matt waits for her by the pier&#10;Lily arrives at the pier …" aria-describedby="story-outline-note" required></textarea>
+        <textarea id="story-outline" rows="4" maxlength="100100" placeholder="Event 1&#10;Event 2&#10;Event 3" aria-describedby="story-outline-note" required></textarea>
       </div>
       <p id="story-outline-note" class="fine-print sr-only"></p>
       <div class="story-outline-actions">
@@ -82,6 +113,7 @@
   </dialog>
   <footer>
     <span class="signature">deblock</span>
+    <button id="research-open" type="button" hidden>privacy</button>
     <nav aria-label="Writing controls">
       <button id="art-toggle" type="button" aria-label="Show image" aria-pressed="false">image off</button>
       <button id="art-next" type="button" aria-label="Another image" hidden>another</button>
@@ -106,8 +138,7 @@
     <h1 id="document-title" contenteditable="plaintext-only" role="textbox" aria-label="Document title" aria-multiline="true" title="Click to edit the title" spellcheck="false">Untitled</h1>
     <figure id="finish-art" class="artwork document-art" hidden></figure>
     <figure id="finish-aphorism" class="aphorism-prompt" hidden></figure>
-    <p id="chain-summary"></p>
-    <details id="review-outline" data-html2canvas-ignore="true" hidden><summary>story outline</summary><ol id="review-outline-list"></ol></details>
+    <div id="chain-summary"></div>
     <div class="end-actions">
       <button id="resume" type="button">keep writing</button>
       <button id="arrows-toggle" type="button" aria-label="Show arrows" aria-pressed="true">arrows on</button>
@@ -122,6 +153,16 @@
         </div>
       </details>
     </div>
+    <fieldset id="pilot-feedback" hidden data-html2canvas-ignore="true">
+      <legend>Optional feedback</legend>
+      <p>This exercise helped me begin or continue writing.</p>
+      <p>1 = strongly disagree · 5 = strongly agree. Choose a number to share your answer.</p>
+      <button type="button" data-rating="1">1</button>
+      <button type="button" data-rating="2">2</button>
+      <button type="button" data-rating="3">3</button>
+      <button type="button" data-rating="4">4</button>
+      <button type="button" data-rating="5">5</button>
+    </fieldset>
     <p id="export-status" role="status" data-export-status data-html2canvas-ignore="true"></p>
   </dialog>
   <dialog id="poetry-dialog" aria-labelledby="poetry-title">
@@ -172,7 +213,9 @@
   <dialog id="library-dialog" aria-labelledby="library-title" class="collection-dialog">
     <button class="close" type="button" aria-label="Close library">×</button>
     <h1 id="library-title">Library</h1>
-    <div id="library-list"></div><p id="library-status" class="section-status" role="status"></p>
+    <h2>Your writing</h2>
+    <div id="library-list"></div>
+    <section aria-labelledby="saved-aphorisms-title"><h2 id="saved-aphorisms-title">Saved aphorisms</h2><div id="saved-aphorisms-list"></div></section><p id="library-status" class="section-status" role="status"></p>
   </dialog>
   <dialog id="gallery-dialog" aria-labelledby="gallery-title" class="collection-dialog">
     <button class="close" type="button" aria-label="Close gallery">×</button>
@@ -184,7 +227,7 @@
     <h1 id="entry-title"></h1>
     <figure id="entry-art" class="artwork document-art" hidden></figure>
     <figure id="entry-aphorism" class="aphorism-prompt" hidden></figure>
-    <p id="entry-body"></p>
+    <div id="entry-body"></div>
     <div class="end-actions"><button id="continue-entry" type="button">continue writing</button></div>
     <div class="end-actions"><details class="save-menu"><summary>save</summary><div class="save-options"><button type="button" data-save-gallery>to gallery</button><button type="button" data-export="png">as PNG</button><button type="button" data-export="pdf">as PDF</button></div></details></div>
     <div class="end-actions" data-account-only hidden><button id="edit-entry" type="button">edit</button><button id="delete-entry" type="button">delete</button></div>
@@ -198,6 +241,7 @@
       <label for="edit-entry-text">Text</label><textarea id="edit-entry-text" rows="10" maxlength="250000"></textarea>
       <button type="submit">save changes</button>
     </form>
+    <button type="button" id="research-share-edit" hidden>Include this library text and my edits in research</button>
     <p id="edit-entry-status" role="status"></p>
   </dialog>
   <dialog id="delete-account-dialog">

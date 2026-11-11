@@ -33,6 +33,7 @@
     return true;
   }
   function refresh() {
+    root.DeblockResearch?.selection(selection);
     const covered = new Set(selection.covered);
     buttons.forEach((button, index) => button.setAttribute('aria-pressed', String(covered.has(index))));
     get('poetry-count').textContent = `${covered.size} characters blacked out. ${buttons.length - covered.size} characters visible.`;
@@ -108,9 +109,11 @@
     selection = tools.characterSelection(source, source.blackout);
     drag = null;
     get('poetry-help').open = false;
+    root.DeblockResearch?.blackout(source, selection);
     picker(); showDialog(get('poetry-dialog'));
   });
   get('poetry-apply').addEventListener('click', () => {
+    root.DeblockResearch?.end('completed');
     root.DeblockDocument.setPoetry(selection);
     get('poetry-dialog').close(); get('open-poetry').focus();
     get('save-entry').click();

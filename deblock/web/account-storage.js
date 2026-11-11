@@ -32,7 +32,7 @@
     return response.status === 204 ? null : response.json();
   }
   async function all(store) {
-    if (!['entries', 'images'].includes(store)) throw new Error('Unknown collection.');
+    if (!['entries', 'images', 'aphorisms'].includes(store)) throw new Error('Unknown collection.');
     const items = []; let page = 1;
     do {
       const result = await request(`/api/${store}/?page=${page}`);
@@ -45,6 +45,7 @@
     accountMode: true, session, request, all,
     async get(store, id) {
       if (store === 'profile') return request('/api/profile/');
+      if (store === 'aphorisms') return (await all(store)).find(item => item.id === id);
       if (store !== 'entries') throw new Error('Unknown collection.');
       const item = await request(`/api/entries/${encodeURIComponent(id)}/`);
       revisions.set(item.id, item.revision); return item;
@@ -56,6 +57,7 @@
           { ...value, revision: value.revision ?? revisions.get(value.id) });
         revisions.set(item.id, item.revision); return item;
       }
+      if (store === 'aphorisms') return request(`/api/aphorisms/${encodeURIComponent(value.id)}/`, 'PUT', {});
       if (store === 'images') {
         const form = new FormData();
         form.set('id', value.id); form.set('title', value.title || '');
@@ -66,7 +68,7 @@
       throw new Error('Unknown collection.');
     },
     async remove(store, id) {
-      if (!['entries', 'images'].includes(store)) throw new Error('Unknown collection.');
+      if (!['entries', 'images', 'aphorisms'].includes(store)) throw new Error('Unknown collection.');
       await request(`/api/${store}/${encodeURIComponent(id)}/`, 'DELETE');
       revisions.delete(id);
     },

@@ -21,7 +21,7 @@ async function editor() {
   };
   const context = vm.createContext({
     document,
-    window: { addEventListener() {}, dispatchEvent(event) { events.push(event); } },
+    window: { addEventListener() {}, dispatchEvent(event) { events.push(event); }, DeblockAphorisms: { render: async () => {} } },
     CustomEvent: class { constructor(type, options) { this.type = type; this.detail = options.detail; } },
     fetch: async () => ({ ok: true, json: async () => ({ title: 'Test', instructions: 'Test' }) }),
   });

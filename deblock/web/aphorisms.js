@@ -38,7 +38,44 @@
     caption.append(source);
     container.replaceChildren(quote, caption);
     container.hidden = false;
+    if (container.id === 'aphorism-prompt') {
+      try { await refreshBookmark(value.id); }
+      catch { document.getElementById('bookmark-status').textContent = 'Bookmarks are unavailable. Try again when storage is accessible.'; }
+    }
   }
-  root.DeblockAphorisms = { create, render, daily };
+  let activeId, bookmarkBusy = false;
+  async function refreshBookmark(id = activeId) {
+    activeId = id;
+    const button = document.getElementById('bookmark-aphorism');
+    if (!button || !id) return;
+    const saved = Boolean(await root.DeblockStorage.get('aphorisms', id));
+    if (id !== activeId) return;
+    button.setAttribute('aria-pressed', String(saved));
+    button.setAttribute('aria-label', saved ? 'Remove saved aphorism' : 'Save aphorism');
+    button.title = saved ? 'Remove aphorism from library' : 'Save aphorism to library';
+  }
+  async function setSaved(id, saved) {
+    const store = root.DeblockStorage;
+    if (saved) await store.put('aphorisms', {id, updatedAt: new Date().toISOString()});
+    else await store.remove('aphorisms', id);
+    root.DeblockResearch?.bookmark(id, saved);
+    await refreshBookmark();
+  }
+  if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded', () => {
+    const button = document.getElementById('bookmark-aphorism');
+    button.addEventListener('click', async () => {
+      if (bookmarkBusy || !activeId) return;
+      bookmarkBusy = true; button.disabled = true;
+      const id = activeId;
+      const status = document.getElementById('bookmark-status');
+      try {
+        const saved = !await root.DeblockStorage.get('aphorisms', id);
+        await setSaved(id, saved);
+        status.textContent = saved ? 'Aphorism saved to library.' : 'Aphorism removed from library.';
+      } catch (error) { status.textContent = 'Couldn’t save the aphorism. ' + error.message; }
+      finally { bookmarkBusy = false; button.disabled = false; }
+    });
+  });
+  root.DeblockAphorisms = { create, render, daily, setSaved };
   if (typeof module !== 'undefined') module.exports = { daily };
 })(typeof window === 'undefined' ? globalThis : window);
