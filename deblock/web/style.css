@@ -130,11 +130,19 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 
 .artwork { position: relative; margin: 0; }
 .artwork > img { display: block; max-width: 100%; height: auto; margin: 0 auto; object-fit: contain; }
-/* Reserve the same space for every aspect ratio so the word never jumps. */
-.writing-art { width: min(520px, 80vw); height: 35svh; flex-shrink: 0; display: grid; place-items: center; }
-.writing-art > img { max-height: 35svh; }
-.has-art main { display: flex; flex-direction: column; justify-content: center; gap: 26px; padding: 70px 10% 95px; }
-.has-art .word-space { height: 110px; }
+/* Full-color artwork fills the viewport; contrast belongs to text and controls. */
+.writing-art { position: fixed; inset: 0; display: grid; place-items: center; }
+.writing-art > img { width: 100%; height: 100%; min-height: 0; max-height: 100%; object-fit: cover; }
+.has-art #word-form { position: relative; z-index: 1; pointer-events: none; }
+.has-art #word-form :is(input, textarea, button, a) { pointer-events: auto; }
+.has-art #word, .has-art #word:focus-visible, .has-art footer .signature, .has-art footer button, .has-art .collection-nav > :is(button, a), .has-art .site-menu > summary, .has-art .art-status { color: var(--art-ink, #fff); caret-color: var(--art-ink, #fff); }
+.has-art #word::placeholder { color: inherit; opacity: 1; }
+.has-art #word::selection { color: #fff; background: #111; }
+.has-art :is(footer, .collection-nav) :is(button, a):is(:hover, :focus-visible) { text-decoration: underline; text-underline-offset: 4px; }
+.has-art :focus-visible { outline-color: currentColor; }
+.has-art footer, .has-art .art-status:not(:empty) { z-index: 4; }
+.writing-art > img:focus-visible { outline: 2px solid #fff; outline-offset: -5px; }
+.writing-art > .art-credit { z-index: 2; }
 .document-art { margin: 0 0 24px; }
 .document-art > img { max-height: 360px; }
 .art-info { position: absolute; right: 6px; bottom: 6px; padding: 4px 8px; background: var(--paper); border: 1px solid var(--border); border-radius: 50%; font-size: 15px; line-height: 1.2; }
@@ -142,15 +150,11 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 .art-credit strong, .art-credit span { display: block; margin-bottom: 8px; white-space: pre-line; }
 .art-credit a { color: inherit; text-underline-offset: 3px; }
 .art-credit a:hover { color: var(--accent); }
-.artwork:hover > .art-credit, .artwork:focus-within > .art-credit, .artwork.info-open > .art-credit { display: block; }
+.artwork:not(.writing-art):hover > .art-credit, .artwork:focus-within > .art-credit, .artwork.info-open > .art-credit { display: block; }
 .art-status { position: fixed; bottom: 58px; left: 25px; right: 25px; text-align: center; font-size: 14px; }
 .art-status:empty { display: none; }
 @media (max-width: 600px) {
   footer { gap: 8px; }
-  .has-art main { gap: 16px; padding: 70px 8% 100px; }
-  .has-art .word-space { height: 90px; }
-  .writing-art { height: 30svh; }
-  .writing-art > img { max-height: 30svh; }
   footer nav { gap: 0; flex-wrap: wrap; justify-content: flex-end; }
   footer nav button { padding: 10px 5px; font-size: 13px; }
 }
@@ -186,11 +190,6 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 .story-mode .word-space { height: auto; min-height: 170px; }
 #story-advance button { font-size: clamp(17px, 2vw, 22px); color: var(--muted); }
 #story-advance button:is(:hover, :focus-visible) { color: var(--accent); }
-.story-mode.has-art .writing-art { height: 18svh; }
-.story-mode.has-art .writing-art > img { max-height: 18svh; }
-.story-mode.has-art main { gap: 18px; }
-.story-mode.has-art #word-form { grid-template-rows: auto minmax(100px, 18svh) auto; }
-.story-mode.has-art .word-space { min-height: 100px; }
 #story-dialog { width: min(720px, 90vw); padding: clamp(24px, 4vw, 44px); border: 0; background: var(--paper); }
 #story-dialog h1 { font: 400 clamp(28px, 3.5vw, 38px)/1.2 'Times New Roman', Times, serif; margin-bottom: 32px; }
 #story-outline-form { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }

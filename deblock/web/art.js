@@ -28,7 +28,23 @@
       return decks.get(shape)();
     };
   }
-  if (typeof module !== 'undefined') module.exports = { createDeck, createResponsiveDeck };
+  function textSampleBounds(field, textWidth, fontSize) {
+    const width = Math.min(field.width, Math.max(1, textWidth));
+    const height = Math.min(field.height, fontSize * .8);
+    return { left: field.left + (field.width - width) / 2,
+      top: field.top + (field.height - height) / 2, width, height };
+  }
+  function chooseTextInk(luminances, preferWhite = false) {
+    if (!luminances.length) return '#fff';
+    const score = white => luminances.reduce((sum, light) => {
+      const ratio = white ? 1.05 / (light + .05) : (light + .05) / .05;
+      return sum + Math.min(ratio, 7);
+    }, 0);
+    // Thin writing looks clearer in white on busy midtones. Keep white for
+    // close choices; use black when it provides a substantial contrast gain.
+    return score(true) >= score(false) * (preferWhite ? .8 : 1) ? '#fff' : '#000';
+  }
+  if (typeof module !== 'undefined') module.exports = { createDeck, createResponsiveDeck, textSampleBounds, chooseTextInk };
   if (typeof document === 'undefined') return;
   const get = id => document.getElementById(id);
   let catalogPromise, next, selected = null, enabled = false, busy = false;
@@ -37,6 +53,52 @@
   const screenOrientation = () => root.matchMedia?.('(orientation: portrait)').matches ? 'portrait' : 'landscape';
   let failedRestore = null;
   let infoId = 0;
+  const contrastCanvas = document.createElement('canvas');
+  const contrastContext = contrastCanvas.getContext?.('2d', { willReadFrequently: true });
+  let contrastFrame = 0;
+  function updateContrast() {
+    contrastFrame = 0;
+    const image = get('writing-art').querySelector('img');
+    if (!enabled || !available || !image?.naturalWidth || !contrastContext) return;
+    // Sample only the local artwork. Text is measured for layout only; its
+    // contents and the image samples are never retained or transmitted.
+    // Match the centered object-fit: cover crop at the current viewport size.
+    const bounds = image.getBoundingClientRect();
+    const width = 240, height = Math.max(1, Math.round(width * bounds.height / bounds.width));
+    contrastCanvas.width = width; contrastCanvas.height = height;
+    const scale = Math.max(bounds.width / image.naturalWidth, bounds.height / image.naturalHeight);
+    const cropWidth = bounds.width / scale, cropHeight = bounds.height / scale;
+    contrastContext.drawImage(image, (image.naturalWidth - cropWidth) / 2, (image.naturalHeight - cropHeight) / 2,
+      cropWidth, cropHeight, 0, 0, width, height);
+    const pixels = contrastContext.getImageData(0, 0, width, height).data;
+    const linear = value => { const c = value / 255; return c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4; };
+    const targets = document.querySelectorAll('#word, footer .signature, footer button, .collection-nav > button, .collection-nav > a, .site-menu > summary, #art-status');
+    for (const target of targets) {
+      let rect = target.getBoundingClientRect();
+      if (!rect.width || !rect.height) continue;
+      if (target.id === 'word') {
+        const style = getComputedStyle(target);
+        contrastContext.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+        const textWidth = contrastContext.measureText(target.value || target.placeholder || 'M').width;
+        rect = textSampleBounds(rect, textWidth, parseFloat(style.fontSize));
+      }
+      const luminances = [];
+      for (let row = 0; row < 5; row++) for (let col = 0; col < 25; col++) {
+        const x = Math.max(0, Math.min(width - 1, Math.floor((rect.left + rect.width * (col + .5) / 25 - bounds.left) / bounds.width * width)));
+        const y = Math.max(0, Math.min(height - 1, Math.floor((rect.top + rect.height * (row + .5) / 5 - bounds.top) / bounds.height * height)));
+        const i = (y * width + x) * 4;
+        luminances.push(.2126 * linear(pixels[i]) + .7152 * linear(pixels[i + 1]) + .0722 * linear(pixels[i + 2]));
+      }
+      target.style.setProperty('--art-ink', chooseTextInk(luminances, target.id === 'word'));
+    }
+  }
+  function scheduleContrast() {
+    if (contrastContext && !contrastFrame && root.requestAnimationFrame) contrastFrame = root.requestAnimationFrame(updateContrast);
+  }
+  root.addEventListener?.('resize', scheduleContrast);
+  get('word').addEventListener('input', scheduleContrast);
+  document.fonts?.ready.then(scheduleContrast);
+  document.addEventListener?.('visibilitychange', () => { if (!document.hidden) scheduleContrast(); });
   function catalog() {
     if (!catalogPromise) catalogPromise = fetch('/assets/art/catalog.json').then(response => {
       if (!response.ok) throw new Error('The image pool could not load.');
@@ -115,6 +177,7 @@
     get('art-next').hidden = !available || !enabled;
     document.body.classList.toggle('has-art', available && enabled);
     render(get('writing-art'), available && enabled ? selected : null, selectedImage);
+    scheduleContrast();
     root.DeblockArt.renderDocument(get('finish-art'));
   }
   async function change(shuffle) {
