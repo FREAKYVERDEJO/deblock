@@ -111,31 +111,38 @@
     return catalogPromise;
   }
   function addInfo(container, item) {
-    const button = document.createElement('button');
-    button.type = 'button'; button.className = 'art-info'; button.textContent = 'ⓘ';
-    button.setAttribute('aria-label', 'About this image'); button.setAttribute('aria-expanded', 'false');
-    button.dataset.html2canvasIgnore = 'true';
     const info = document.createElement('figcaption');
     info.className = 'art-credit'; info.id = `art-credit-${++infoId}`;
     info.dataset.html2canvasIgnore = 'true';
-    button.setAttribute('aria-controls', info.id);
     const title = document.createElement('strong'); title.textContent = item.title;
     const text = document.createElement('span');
     text.textContent = `${item.artist} · ${item.date}\n${item.culture}\n${item.museum}\nCC0 · ${item.credit}`;
     const source = document.createElement('a'); source.href = item.sourceUrl; source.textContent = 'museum record ↗'; source.target = '_blank'; source.rel = 'noopener noreferrer';
     info.append(title, text, source);
-    button.addEventListener('click', () => {
-      container.classList.remove('info-dismissed');
-      const open = container.classList.toggle('info-open');
-      button.setAttribute('aria-expanded', String(open));
-      if (!open) { container.classList.toggle('info-dismissed', true); button.blur(); }
-    });
-    container.addEventListener('keydown', event => {
-      if (event.key === 'Escape') { container.classList.remove('info-open'); button.setAttribute('aria-expanded', 'false'); container.classList.toggle('info-dismissed', true); button.blur(); event.stopPropagation(); }
-    });
-    container.addEventListener('pointerleave', () => container.classList.remove('info-dismissed'));
-    button.addEventListener('focus', () => container.classList.remove('info-dismissed'));
-    container.append(button, info);
+    if (container.id === 'writing-art') {
+      info.id = 'painting-info';
+      info.popover = 'auto';
+      info.setAttribute('aria-label', 'Painting information');
+      container.append(info);
+    } else {
+      const button = document.createElement('button');
+      button.type = 'button'; button.className = 'art-info'; button.textContent = 'ⓘ';
+      button.setAttribute('aria-label', 'About this image'); button.setAttribute('aria-expanded', 'false');
+      button.dataset.html2canvasIgnore = 'true';
+      button.setAttribute('aria-controls', info.id);
+      button.addEventListener('click', () => {
+        container.classList.remove('info-dismissed');
+        const open = container.classList.toggle('info-open');
+        button.setAttribute('aria-expanded', String(open));
+        if (!open) { container.classList.toggle('info-dismissed', true); button.blur(); }
+      });
+      container.addEventListener('keydown', event => {
+        if (event.key === 'Escape') { container.classList.remove('info-open'); button.setAttribute('aria-expanded', 'false'); container.classList.toggle('info-dismissed', true); button.blur(); event.stopPropagation(); }
+      });
+      container.addEventListener('pointerleave', () => container.classList.remove('info-dismissed'));
+      button.addEventListener('focus', () => container.classList.remove('info-dismissed'));
+      container.append(button, info);
+    }
   }
   async function prepare(item) {
     const image = document.createElement('img');
@@ -175,6 +182,7 @@
     get('art-toggle').ariaPressed = String(enabled);
     get('art-toggle').textContent = enabled ? 'image on' : 'image off';
     get('art-next').hidden = !available || !enabled;
+    get('art-info').hidden = !available || !enabled || !selected;
     document.body.classList.toggle('has-art', available && enabled);
     render(get('writing-art'), available && enabled ? selected : null, selectedImage);
     scheduleContrast();

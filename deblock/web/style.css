@@ -129,6 +129,10 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 }
 
 .artwork { position: relative; margin: 0; }
+.image-controls { display: inline-flex; align-items: center; }
+.image-controls:has(#art-toggle[hidden]) { display: none; }
+.image-controls #art-toggle { padding-right: 3px; }
+footer nav #art-info { min-width: 30px; min-height: 38px; padding: 6px; font-size: 19px; line-height: 1; text-decoration: none; }
 .artwork > img { display: block; max-width: 100%; height: auto; margin: 0 auto; object-fit: contain; }
 /* Full-color artwork fills the viewport; contrast belongs to text and controls. */
 .writing-art { position: fixed; inset: 0; display: grid; place-items: center; }
@@ -150,11 +154,13 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 .art-credit strong, .art-credit span { display: block; margin-bottom: 8px; white-space: pre-line; }
 .art-credit a { color: inherit; text-underline-offset: 3px; }
 .art-credit a:hover { color: var(--accent); }
-.artwork:not(.writing-art):hover > .art-credit, .artwork:focus-within > .art-credit, .artwork.info-open > .art-credit { display: block; }
+.artwork:not(.writing-art):is(:hover, :focus-within) > .art-credit, .artwork.info-open > .art-credit { display: block; }
+.writing-art > .art-credit:popover-open { display: block; position: fixed; inset: auto 25px 75px auto; width: min(340px, calc(100vw - 32px)); max-height: min(350px, calc(100svh - 150px)); margin: 0; }
 .art-status { position: fixed; bottom: 58px; left: 25px; right: 25px; text-align: center; font-size: 14px; }
 .art-status:empty { display: none; }
 @media (max-width: 600px) {
   footer { gap: 8px; }
+  .writing-art > .art-credit:popover-open { right: 16px; bottom: 105px; max-height: calc(100svh - 145px); }
   footer nav { gap: 0; flex-wrap: wrap; justify-content: flex-end; }
   footer nav button { padding: 10px 5px; font-size: 13px; }
 }
