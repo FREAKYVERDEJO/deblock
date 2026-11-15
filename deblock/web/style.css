@@ -131,7 +131,7 @@ dialog .fine-print { font-size: 13px; margin-top: 25px; }
 .artwork { position: relative; margin: 0; }
 .image-controls { display: inline-flex; align-items: center; }
 .image-controls:has(#art-toggle[hidden]) { display: none; }
-.image-controls #art-toggle { padding-right: 3px; }
+.image-controls #art-toggle { padding-left: 3px; }
 footer nav #art-info { min-width: 30px; min-height: 38px; padding: 6px; font-size: 19px; line-height: 1; text-decoration: none; }
 .artwork > img { display: block; max-width: 100%; height: auto; margin: 0 auto; object-fit: contain; }
 /* Full-color artwork fills the viewport; contrast belongs to text and controls. */
