@@ -17,12 +17,24 @@
       return item;
     };
   }
-  if (typeof module !== 'undefined') module.exports = { createDeck };
+  function createResponsiveDeck(items, orientation, random = Math.random) {
+    const decks = new Map();
+    return () => {
+      const shape = orientation();
+      if (!decks.has(shape)) {
+        decks.set(shape, createDeck(items.filter(item => item.inRotation !== false &&
+          (!item.orientation || item.orientation === shape)), random));
+      }
+      return decks.get(shape)();
+    };
+  }
+  if (typeof module !== 'undefined') module.exports = { createDeck, createResponsiveDeck };
   if (typeof document === 'undefined') return;
   const get = id => document.getElementById(id);
   let catalogPromise, next, selected = null, enabled = false, busy = false;
   let available = true;
-  let selectedImage = null, upcoming = null, requestId = 0;
+  let selectedImage = null, upcoming = null, upcomingOrientation = null, requestId = 0;
+  const screenOrientation = () => root.matchMedia?.('(orientation: portrait)').matches ? 'portrait' : 'landscape';
   let failedRestore = null;
   let infoId = 0;
   function catalog() {
@@ -32,7 +44,7 @@
     }).then(items => {
       if (!Array.isArray(items) || !items.length || items.some(item => item.license !== 'CC0' || !/^\/assets\/art\/[a-z0-9-]+\.jpg$/.test(item.src))) throw new Error('The image pool is invalid.');
       // Retired prompts stay resolvable for previously saved documents.
-      next = createDeck(items.filter(item => item.inRotation !== false)); return items;
+      next = createResponsiveDeck(items, screenOrientation); return items;
     }).catch(error => { catalogPromise = null; throw error; });
     return catalogPromise;
   }
@@ -76,6 +88,11 @@
     }
   }
   function preloadNext() {
+    // A resize changes the next prompt, while the chosen artwork stays with the writing.
+    const orientation = screenOrientation();
+    if (upcomingOrientation !== orientation) {
+      upcoming = null; upcomingOrientation = orientation;
+    }
     if (!upcoming) {
       const item = next();
       if (item) upcoming = prepare(item);
